@@ -24,6 +24,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector,useDispatch } from "react-redux";
+import { setUser } from "../../Assets/Features/User/userSlice";
 
 const drawerWidth = 240;
 const navItems = ["LIVE", "PROFILE", "COMPANY", "ACCOUNT", "BULK UPLOAD"];
@@ -31,15 +33,22 @@ const navItems = ["LIVE", "PROFILE", "COMPANY", "ACCOUNT", "BULK UPLOAD"];
 export default function NavBar(props) {
   // Navigating and Access Control
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const {employeeType,username,userMail,userid} = useSelector((state)=>state.user)
+  
   const access = !["Recruiter", "Teamlead", "Intern"].includes(
-    props.user.employeeType
+    employeeType
   );
 
   // Dropdown JSX
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(false);
   const [openpop, setOpenPop] = React.useState(false);
+  const [openpopDrawer, setOpenPopDrawer] = React.useState(false);
   const handleClickOpen = () => {
     setOpenPop(true);
+  };
+  const handleClickOpenDrawer = () => {
+    setOpenPopDrawer(true);
   };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,8 +62,11 @@ export default function NavBar(props) {
   const handleClosePop = () => {
     setOpenPop(false);
   };
+  const handleClosePopDrawer = () => {
+    setOpenPopDrawer(false);
+  };
   const handleLogout = () => {
-    props.setUser();
+    dispatch(setUser({employeeType:'', username:'', userMail:'', userid:''}))
     localStorage.setItem("user", JSON.stringify({ token: "" }));
     navigate("/login");
   };
@@ -105,66 +117,28 @@ export default function NavBar(props) {
               Account
             </Button>
           )}
-          <Button color="inherit" onClick={handleClicker}>
-            {props.user.username}
+          <Button color="inherit" onClick={handleClickOpenDrawer}>
+            {username}
           </Button>
-          <BootstrapDialog
-            onClose={handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={openDeleteDrawer}
+          <Dialog
+            open={openpopDrawer}
+            onClose={handleClosePopDrawer}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
           >
-            <DialogTitle
-              sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
-              id="customized-dialog-title"
-            >
-              Confirm Delete
-            </DialogTitle>
-            <IconButton
-              aria-label="close"
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                right: 8,
-                top: 8,
-                color: (theme) => theme.palette.grey[500],
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <DialogContent dividers>
-              <Typography
-                gutterBottom
-                sx={{
-                  wordBreak: "break-word",
-                  textTransform: "capitalize",
-                  fontWeight: "bold",
-                }}
-              >
-                Are you Sure that you want to Delete ?
-              </Typography>
+            <DialogTitle id="alert-dialog-title">{"Logout"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Do You Want to Logout?
+              </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button
-                autoFocus
-                margin="normal"
-                variant="outlined"
-                size="medium"
-                color="error"
-                onClick={handleLogout}
-              >
-                Delete
-              </Button>
-              <Button
-                autoFocus
-                margin="normal"
-                variant="outlined"
-                size="medium"
-                onClick={handleClose}
-              >
-                Cancel
+              <Button onClick={handleLogout}>Yes</Button>
+              <Button onClick={handleClosePopDrawer} autoFocus>
+                No
               </Button>
             </DialogActions>
-          </BootstrapDialog>
+          </Dialog>
         </Stack>
       </Box>
     </Box>
@@ -225,7 +199,7 @@ export default function NavBar(props) {
                     Account
                   </Button>
                 )}
-                {props.user.employeeType === "Admin" && (
+                {employeeType === "Admin" && (
                   <>
                     <Divider
                       orientation="vertical"
@@ -251,7 +225,7 @@ export default function NavBar(props) {
                   aria-expanded={open ? "true" : undefined}
                   endIcon={<KeyboardDoubleArrowDown />}
                 >
-                  {props.user.username}
+                  {username}
                 </Button>
                 <Menu
                   id="AddOns-Menu"
@@ -264,7 +238,7 @@ export default function NavBar(props) {
                   <MenuItem onClick={() => navigate("/ChangePassword")}>
                     Change Password
                   </MenuItem>
-                  {props.user.employeeType === "Admin" && (
+                  {employeeType === "Admin" && (
                     <MenuItem onClick={() => navigate("/AddExtras")}>
                       Add Extras
                     </MenuItem>

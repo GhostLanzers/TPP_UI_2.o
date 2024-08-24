@@ -21,11 +21,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import image from "../../Assets/Placement.jpeg";
-
-export default function Login({ setUser }) {
+import { useDispatch } from "react-redux";
+import { setUser } from "../../Assets/Features/User/userSlice";
+export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const handleLogin = () => {
     axios
       .post("http://localhost:5000/api/v1/auth/login", {
@@ -37,7 +39,16 @@ export default function Login({ setUser }) {
           "user",
           JSON.stringify({ username, token: "Bearer " + res.data.token })
         );
-        setUser({ userMail: username });
+        
+        dispatch(
+          setUser({
+            userMail: res.data.userMail,
+            employeeType: res.data.employeeType,
+            userid: res.data.userid,
+            username: res.data.username,
+          })
+        );
+        
         navigate("/");
       })
       .catch((err) => {

@@ -21,25 +21,25 @@ function App() {
 }
 
 function Layout() {
-  const [user, setUser] = React.useState();
+  
   const location = useLocation();
   return (
     <>
       {location.pathname !== "/login" && (
-        <ProtectedRoute user={user} setUser={setUser}>
-          <NavBar user={user} setUser={setUser} />
+        <ProtectedRoute>
+          <NavBar  />
         </ProtectedRoute>
       )}
       <Routes>
-        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/login" element={<Login/>} />
         {/* Navigation Bar Routes */}
-        <Route path="/live" element={<Login setUser={setUser} />} />
-        <Route path="/" element={<ProfileDashboard user={user} />} />
-        <Route path="/company" element={<Company user={user} />} />
-        <Route path="/account" element={<Account user={user} />} />
-        <Route path="/bulkupload" element={<BulkUpload user={user} />} />
+        <Route path="/live" element={<Login/>} />
+        <Route path="/" element={<ProfileDashboard  />} />
+        <Route path="/company" element={<Company />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/bulkupload" element={<BulkUpload />} />
         {/* Candidate Routes */}
-        <Route path="/addcandidate" element={<AddCandidate user={user}/>} />
+        <Route path="/addcandidate" element={<AddCandidate/>} />
       </Routes>
     </>
   );
