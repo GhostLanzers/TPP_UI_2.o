@@ -1,27 +1,28 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route,useLocation } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "./App.css";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./Components/Main/NavBar";
 import Login from "./Components/Main/Login";
 import ProtectedRoute from "./Components/Main/ProtectedRoute";
 import ProfileDashboard from "./Components/Profile/ProfileDashboard";
+import AddCandidate from "./Components/Profile/AddCandidate";
 
 function App() {
-
-  
-  
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <BrowserRouter>
-      <Layout/>
+        <Layout />
       </BrowserRouter>
     </>
-  )}
-  function Layout(){
-    const [user, setUser] = React.useState();
-    const location = useLocation();
+  );
+}
+
+function Layout() {
+  const [user, setUser] = React.useState();
+  const location = useLocation();
   return (
     <>
       {location.pathname !== "/login" && (
@@ -31,12 +32,14 @@ function App() {
       )}
       <Routes>
         <Route path="/login" element={<Login setUser={setUser} />} />
-
+        {/* Navigation Bar Routes */}
         <Route path="/live" element={<Login setUser={setUser} />} />
         <Route path="/" element={<ProfileDashboard user={user} />} />
-        <Route path="/company" element={<Company setUser={setUser} />} />
-        <Route path="/account" element={<Account setUser={setUser} />} />
-        <Route path="/bulkupload" element={<BulkUpload setUser={setUser} />} />
+        <Route path="/company" element={<Company user={user} />} />
+        <Route path="/account" element={<Account user={user} />} />
+        <Route path="/bulkupload" element={<BulkUpload user={user} />} />
+        {/* Candidate Routes */}
+        <Route path="/addcandidate" element={<AddCandidate user={user}/>} />
       </Routes>
     </>
   );

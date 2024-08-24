@@ -1,12 +1,15 @@
 import * as React from "react";
-import "../../App.css";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileDashboard() {
+
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className="bg" style={{ paddingBottom: "30px" }}>
-        <Grid container spacing={2} sx={{ padding: "1%", paddingTop: "15%" }}>
+      <div className="bg">
+        <Grid container spacing={2} sx={{ padding: "1%", paddingTop: "9.5vh" }}>
           <Grid item xs={6} md={3}>
             <div
               style={{
@@ -14,14 +17,13 @@ export default function ProfileDashboard() {
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
-                borderLeftWidth: "2vh",
                 textAlign: "center",
-                textTransform: "uppercase",
-                paddingTop: ".8%"
+                paddingTop: ".8%",                
               }}
+              onClick={() => navigate("AddCandidate")}
             >
-              <Typography variant="h6" mt="3%" color="white">
-                Button UI
+              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+                ADD CANDIDATE
               </Typography>
             </div>
           </Grid>
@@ -32,14 +34,12 @@ export default function ProfileDashboard() {
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
-                borderLeftWidth: "2vh",
                 textAlign: "center",
-                textTransform: "uppercase",                
-                paddingTop: ".8%"
+                paddingTop: ".8%", 
               }}
             >
-              <Typography variant="h6" mt="3%" color="white">
-                Button UI
+              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+                ASSIGN PROFILE
               </Typography>
             </div>
           </Grid>
@@ -50,16 +50,12 @@ export default function ProfileDashboard() {
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
-                borderStyle: "solid",
-                borderColor: "#FF5C00",
-                borderWidth: "0.3vh",
-                borderLeftWidth: "2vh",
                 textAlign: "center",
-                textTransform: "uppercase",
+                paddingTop: ".8%", 
               }}
             >
-              <Typography variant="h6" mt="3%" color="white">
-                Button UI
+              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+                POTENTIAL LEADS
               </Typography>
             </div>
           </Grid>
@@ -70,16 +66,12 @@ export default function ProfileDashboard() {
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
-                borderStyle: "solid",
-                borderColor: "#FF5C00",
-                borderWidth: "0.3vh",
-                borderLeftWidth: "2vh",
                 textAlign: "center",
-                textTransform: "uppercase",
+                paddingTop: ".8%", 
               }}
             >
-              <Typography variant="h6" mt="3%" color="white">
-                Button UI
+              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+                SEARCH PROFILE
               </Typography>
             </div>
           </Grid>
@@ -104,15 +96,15 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
-                    8
+                  <Typography component="div" variant="h5">
+                    83
                   </Typography>
                 </CardContent>
               </Box>
@@ -132,14 +124,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     888888
                   </Typography>
                 </CardContent>
@@ -160,14 +152,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8888884
                   </Typography>
                 </CardContent>
@@ -188,14 +180,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     9,88,88,887
                   </Typography>
                 </CardContent>
@@ -216,14 +208,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     88888844
                   </Typography>
                 </CardContent>
@@ -244,14 +236,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8
                   </Typography>
                 </CardContent>
@@ -272,14 +264,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     888888
                   </Typography>
                 </CardContent>
@@ -300,14 +292,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8888884
                   </Typography>
                 </CardContent>
@@ -328,14 +320,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     9,88,88,887
                   </Typography>
                 </CardContent>
@@ -356,14 +348,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     88888844
                   </Typography>
                 </CardContent>
@@ -384,14 +376,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8
                   </Typography>
                 </CardContent>
@@ -412,14 +404,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     888888
                   </Typography>
                 </CardContent>
@@ -440,14 +432,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8888884
                   </Typography>
                 </CardContent>
@@ -468,14 +460,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     9,88,88,887
                   </Typography>
                 </CardContent>
@@ -496,14 +488,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     88888844
                   </Typography>
                 </CardContent>
@@ -524,14 +516,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8
                   </Typography>
                 </CardContent>
@@ -552,14 +544,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     888888
                   </Typography>
                 </CardContent>
@@ -580,14 +572,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8888884
                   </Typography>
                 </CardContent>
@@ -608,14 +600,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     9,88,88,887
                   </Typography>
                 </CardContent>
@@ -636,14 +628,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     88888844
                   </Typography>
                 </CardContent>
@@ -664,14 +656,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8
                   </Typography>
                 </CardContent>
@@ -692,14 +684,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     888888
                   </Typography>
                 </CardContent>
@@ -720,14 +712,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h7" fontWeight="bold">
                     Live From Space
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h5">
                     8888884
                   </Typography>
                 </CardContent>

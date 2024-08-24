@@ -54,9 +54,9 @@ export default function Login({ setUser }) {
         <div style={{ paddingTop: "12%" }}>
           <Card
             sx={{
-              maxWidth: "30%",
-              marginLeft: "35%",
-              backgroundColor: alpha("#FFFFFF", 0.85),
+              width: "40%",
+              marginLeft: "30%",
+              backgroundColor: alpha("#FFFFFF", 0.8),
             }}
           >
             <CardMedia
