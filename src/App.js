@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,useLocation } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavBar from "./Components/Main/NavBar";
@@ -9,29 +9,35 @@ import ProfileDashboard from "./Components/Profile/ProfileDashboard";
 
 function App() {
 
-  const [user, setUser] = React.useState();
-
+  
+  
   return (
     <>
-      <ToastContainer/>
+    <ToastContainer />
       <BrowserRouter>
-        <Routes>          
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route
-            element={
-              <ProtectedRoute user={user} setUser={setUser}>
-                <NavBar user={user} setUser={setUser} />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/live" element={<Login setUser={setUser}/>} />
-            <Route path="/" element={<ProfileDashboard user={user}/>} />
-            <Route path="/company" element={<Company setUser={setUser}/>} />
-            <Route path="/account" element={<Account setUser={setUser}/>} />
-            <Route path="/bulkupload" element={<BulkUpload setUser={setUser}/>} />
-          </Route>
-        </Routes>
+      <Layout/>
       </BrowserRouter>
+    </>
+  )}
+  function Layout(){
+    const [user, setUser] = React.useState();
+    const location = useLocation();
+  return (
+    <>
+      {location.pathname !== "/login" && (
+        <ProtectedRoute user={user} setUser={setUser}>
+          <NavBar user={user} setUser={setUser} />
+        </ProtectedRoute>
+      )}
+      <Routes>
+        <Route path="/login" element={<Login setUser={setUser} />} />
+
+        <Route path="/live" element={<Login setUser={setUser} />} />
+        <Route path="/" element={<ProfileDashboard user={user} />} />
+        <Route path="/company" element={<Company setUser={setUser} />} />
+        <Route path="/account" element={<Account setUser={setUser} />} />
+        <Route path="/bulkupload" element={<BulkUpload setUser={setUser} />} />
+      </Routes>
     </>
   );
 }

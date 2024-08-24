@@ -6,31 +6,30 @@ const ProtectedRoute = ({ children, user, setUser }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("user"))?.token;
-    if(!token)
-      navigate('/login')
-    const fetchData = async ()=> {
+    if (!token) navigate("/login");
+    const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/v1/status", {
           headers: {
             authorization: token,
           },
-        })
-        
-        setUser({userMail:res.data.userMail, employeeType:res.data.employeeType, userid:res.data.userid, username:res.data.username})
+        });
+
+        setUser({
+          userMail: res.data.userMail,
+          employeeType: res.data.employeeType,
+          userid: res.data.userid,
+          username: res.data.username,
+        });
         setCheck(true);
-        
       } catch (error) {
-        navigate("/login")
+        navigate("/login");
       }
-    }
-    fetchData()
-  },[navigate,setUser])
-  if (check||user) {
-    console.log(children);    
+    };
+    fetchData();
+  }, [navigate, setUser]);
+  if (check) {
     return children;
-  }
-  else{
-  navigate("/login");
   }
 };
 

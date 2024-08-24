@@ -24,6 +24,7 @@ const navItems = ["LIVE", "PROFILE", "COMPANY", "ACCOUNT", "BULK UPLOAD"];
 
 export default function NavBar(props) {
   const { window } = props;
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
