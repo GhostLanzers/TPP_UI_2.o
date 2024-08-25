@@ -6,7 +6,6 @@ import {
   Divider,
   Drawer,
   IconButton,
-  styled,
   Toolbar,
   Typography,
   Button,
@@ -16,31 +15,26 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Menu,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
 
 const drawerWidth = 240;
-const navItems = ["LIVE", "PROFILE", "COMPANY", "ACCOUNT", "BULK UPLOAD"];
 
 export default function NavBar(props) {
   // Navigating and Access Control
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const {employeeType,username,userMail,userid} = useSelector((state)=>state.user)
-  
-  const access = !["Recruiter", "Teamlead", "Intern"].includes(
-    employeeType
-  );
+  const dispatch = useDispatch();
+  const { employeeType, username } = useSelector((state) => state.user);
+  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
 
-  // Dropdown JSX
+  // Dropdown logout JSX
   const [anchorEl, setAnchorEl] = React.useState(false);
   const [openpop, setOpenPop] = React.useState(false);
   const [openpopDrawer, setOpenPopDrawer] = React.useState(false);
@@ -53,9 +47,6 @@ export default function NavBar(props) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClicker = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -66,22 +57,13 @@ export default function NavBar(props) {
     setOpenPopDrawer(false);
   };
   const handleLogout = () => {
-    dispatch(setUser({employeeType:'', username:'', userMail:'', userid:''}))
+    dispatch(
+      setUser({ employeeType: "", username: "", userMail: "", userid: "" })
+    );
     localStorage.setItem("user", JSON.stringify({ token: "" }));
     navigate("/login");
   };
   const open = Boolean(anchorEl);
-  const openDeleteDrawer = Boolean(anchorEl);
-
-  // Logout JSX
-  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-    "& .MuiDialogContent-root": {
-      padding: theme.spacing(2),
-    },
-    "& .MuiDialogActions-root": {
-      padding: theme.spacing(1),
-    },
-  }));
 
   // Nav Bar MUI JSX
   const { window } = props;
@@ -120,25 +102,6 @@ export default function NavBar(props) {
           <Button color="inherit" onClick={handleClickOpenDrawer}>
             {username}
           </Button>
-          <Dialog
-            open={openpopDrawer}
-            onClose={handleClosePopDrawer}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{"Logout"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Do You Want to Logout?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleLogout}>Yes</Button>
-              <Button onClick={handleClosePopDrawer} autoFocus>
-                No
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Stack>
       </Box>
     </Box>
@@ -175,10 +138,19 @@ export default function NavBar(props) {
               THE PLACEMENT PARK
             </Typography>
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Stack direction="row" spacing={0}>
+              <Stack direction="row" spacing={1}>
                 <Button
                   color="inherit"
                   size="small"
+                  sx={{ fontWeight: "bold" }}
+                  onClick={() => navigate("/live")}
+                >
+                  Live
+                </Button>
+                <Button
+                  color="inherit"
+                  size="small"
+                  sx={{ fontWeight: "bold" }}
                   onClick={() => navigate("/")}
                 >
                   Profile
@@ -186,7 +158,8 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  onClick={() => navigate("CompanyDashBoard")}
+                  sx={{ fontWeight: "bold" }}
+                  onClick={() => navigate("Company")}
                 >
                   Company
                 </Button>
@@ -194,6 +167,7 @@ export default function NavBar(props) {
                   <Button
                     color="inherit"
                     size="small"
+                    sx={{ fontWeight: "bold" }}
                     onClick={() => navigate("AccountDashBoard")}
                   >
                     Account
@@ -206,23 +180,30 @@ export default function NavBar(props) {
                       variant="middle"
                       color="white"
                       flexItem
-                      sx={{ ml: "8px", mr: "8px" }}
                     />
                     <Button
                       color="inherit"
                       size="small"
+                      sx={{ fontWeight: "bold" }}
                       onClick={() => navigate("/bulkupload")}
                     >
                       Bulk Upload
                     </Button>
                   </>
                 )}
+                <Divider
+                  orientation="vertical"
+                  variant="middle"
+                  color="white"
+                  flexItem
+                />
                 <Button
                   color="inherit"
                   onClick={handleClick}
                   aria-controls={open ? "AddOns-Menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
+                  sx={{ fontWeight: "bold" }}
                   endIcon={<KeyboardDoubleArrowDown />}
                 >
                   {username}
@@ -244,25 +225,6 @@ export default function NavBar(props) {
                     </MenuItem>
                   )}
                 </Menu>
-                <Dialog
-                  open={openpop}
-                  onClose={handleClosePop}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">{"Logout"}</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Do You Want to Logout?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleLogout}>Yes</Button>
-                    <Button onClick={handleClosePop} autoFocus>
-                      No
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </Stack>
             </Box>
           </Toolbar>
@@ -290,6 +252,142 @@ export default function NavBar(props) {
           </Drawer>
         </nav>
       </Box>
+      <Dialog
+        open={openpop}
+        onClose={handleClosePop}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          backgroundColor: "transparent",
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            boxShadow: "none",
+            color: "white",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            p: 2,
+            textTransform: "uppercase",
+            letterSpacing: 6,
+          }}
+          id="customized-dialog-title"
+        >
+          Logout
+        </DialogTitle>
+        <DialogContent
+          dividers
+          sx={{
+            "&.MuiDialogContent-dividers": {
+              borderTop: "1px solid white",
+              borderBottom: "1px solid white",
+            },
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleClosePop}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography
+            gutterBottom
+            sx={{
+              wordBreak: "break-word",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+            }}
+          >
+            Hey {username}, confirm your Logout!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={handleLogout}>
+            Logout
+          </Button>
+          <Button variant="contained" onClick={handleClosePop}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openpopDrawer}
+        onClose={handleClosePopDrawer}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          backgroundColor: "transparent",
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            boxShadow: "none",
+            color: "white",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
+          id="customized-dialog-title"
+        >
+          Logout
+        </DialogTitle>
+        <DialogContent
+          dividers
+          sx={{
+            "&.MuiDialogContent-dividers": {
+              borderTop: "1px solid white",
+              borderBottom: "1px solid white",
+            },
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleClosePopDrawer}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography
+            gutterBottom
+            sx={{
+              wordBreak: "break-word",
+            }}
+          >
+            For {employeeType === "Admin" && "Add Extras and"} Password Change
+            use Tab/Laptop.
+          </Typography>
+          <Typography
+            gutterBottom
+            sx={{
+              wordBreak: "break-word",
+              fontWeight: "bold",
+            }}
+          >
+            Hey {username}, confirm your Logout!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={handleLogout}>
+            Logout
+          </Button>
+          <Button variant="contained" onClick={handleClosePopDrawer}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

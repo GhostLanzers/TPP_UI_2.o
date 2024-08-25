@@ -8,21 +8,24 @@ export default function ProfileDashboard() {
 
   return (
     <>
-      <div className="bg">
+      <div>
         <Grid container spacing={2} sx={{ padding: "1%", paddingTop: "9.5vh" }}>
           <Grid item xs={6} md={3}>
             <div
               style={{
-                height: "8vh",
+                height: "7vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%",                
+                paddingTop: ".8%",
+                borderBlockStyle: "solid",
+                borderColor:"white",
+                borderBlockWidth:"0.1vh",              
               }}
               onClick={() => navigate("AddCandidate")}
             >
-              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+              <Typography variant="h6" mt="1.5%" color="white" fontWeight= "bold">
                 ADD CANDIDATE
               </Typography>
             </div>
@@ -30,15 +33,18 @@ export default function ProfileDashboard() {
           <Grid item xs={6} md={3}>
             <div
               style={{
-                height: "8vh",
+                height: "7vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%", 
+                paddingTop: ".8%",
+                borderBlockStyle: "solid",
+                borderColor:"white",
+                borderBlockWidth:"0.1vh",
               }}
             >
-              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+              <Typography variant="h6" mt="1.5%" color="white" fontWeight= "bold">
                 ASSIGN PROFILE
               </Typography>
             </div>
@@ -46,15 +52,18 @@ export default function ProfileDashboard() {
           <Grid item xs={6} md={3}>
             <div
               style={{
-                height: "8vh",
+                height: "7vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%", 
+                paddingTop: ".8%",
+                borderBlockStyle: "solid",
+                borderColor:"white",
+                borderBlockWidth:"0.1vh",
               }}
             >
-              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+              <Typography variant="h6" mt="1.5%" color="white" fontWeight= "bold">
                 POTENTIAL LEADS
               </Typography>
             </div>
@@ -62,15 +71,18 @@ export default function ProfileDashboard() {
           <Grid item xs={6} md={3}>
             <div
               style={{
-                height: "8vh",
+                height: "7vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%", 
+                paddingTop: ".8%",
+                borderBlockStyle: "solid",
+                borderColor:"white",
+                borderBlockWidth:"0.1vh",
               }}
             >
-              <Typography variant="h5" mt="3%" color="white" fontWeight= "bold">
+              <Typography variant="h6" mt="1.5%" color="white" fontWeight= "bold">
                 SEARCH PROFILE
               </Typography>
             </div>
@@ -90,7 +102,7 @@ export default function ProfileDashboard() {
                 color: "white",
                 borderRadius: "20px",
                 borderLeftStyle: "solid",
-                borderLeftColor: "#FFFF00",
+                borderLeftColor: "#FF5C00",
                 borderLeftWidth: "0.5vh",
               }}
             >
@@ -230,7 +242,7 @@ export default function ProfileDashboard() {
                 color: "white",
                 borderRadius: "20px",
                 borderLeftStyle: "solid",
-                borderLeftColor: "#FFFF00",
+                borderLeftColor: "#FF5C00",
                 borderLeftWidth: "0.5vh",
               }}
             >
@@ -370,7 +382,7 @@ export default function ProfileDashboard() {
                 color: "white",
                 borderRadius: "20px",
                 borderLeftStyle: "solid",
-                borderLeftColor: "#FFFF00",
+                borderLeftColor: "#FF5C00",
                 borderLeftWidth: "0.5vh",
               }}
             >
@@ -510,7 +522,7 @@ export default function ProfileDashboard() {
                 color: "white",
                 borderRadius: "20px",
                 borderLeftStyle: "solid",
-                borderLeftColor: "#FFFF00",
+                borderLeftColor: "#FF5C00",
                 borderLeftWidth: "0.5vh",
               }}
             >
@@ -650,7 +662,7 @@ export default function ProfileDashboard() {
                 color: "white",
                 borderRadius: "20px",
                 borderLeftStyle: "solid",
-                borderLeftColor: "#FFFF00",
+                borderLeftColor: "#FF5C00",
                 borderLeftWidth: "0.5vh",
               }}
             >

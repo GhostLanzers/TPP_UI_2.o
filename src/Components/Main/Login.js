@@ -61,18 +61,19 @@ export default function Login() {
 
   return (
     <>
-      <div className="bg">
-        <div style={{ paddingTop: "12%" }}>
+      <div>
+        <div style={{ paddingTop: "20vh" }}>
           <Card
             sx={{
               width: "40%",
               marginLeft: "30%",
-              backgroundColor: alpha("#FFFFFF", 0.8),
+              backgroundColor: "transparent",
+              backgroundColor: alpha("#FFFFFF", 0.5),
             }}
           >
             <CardMedia
               component={"img"}
-              sx={{ height: "140px", width: "100%" }}
+              sx={{ height: "20vh", width: "100%" }}
               image={image}
               alt="Park logo"
             />
@@ -131,6 +132,7 @@ export default function Login() {
                     variant="contained"
                     size="large"
                     color="primary"
+                    sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
                     onClick={()=>{setUsername('');setPassword('')}}
                   >
                     Clear
@@ -142,6 +144,7 @@ export default function Login() {
                     variant="contained"
                     size="large"
                     color="success"
+                    sx={{ backgroundColor: alpha("#008000", 0.7) }}
                     onClick={handleLogin}
                   >
                     Login

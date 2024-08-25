@@ -8,6 +8,7 @@ import Login from "./Components/Main/Login";
 import ProtectedRoute from "./Components/Main/ProtectedRoute";
 import ProfileDashboard from "./Components/Profile/ProfileDashboard";
 import AddCandidate from "./Components/Profile/AddCandidate";
+import CandidateGrid from "./Components/Profile/CandidateGrid";
 
 function App() {
   return (
@@ -33,20 +34,21 @@ function Layout() {
       <Routes>
         <Route path="/login" element={<Login/>} />
         {/* Navigation Bar Routes */}
-        <Route path="/live" element={<Login/>} />
+        <Route path="/live" element={<CandidateGrid/>} />
         <Route path="/" element={<ProfileDashboard  />} />
         <Route path="/company" element={<Company />} />
         <Route path="/account" element={<Account />} />
         <Route path="/bulkupload" element={<BulkUpload />} />
         {/* Candidate Routes */}
         <Route path="/addcandidate" element={<AddCandidate/>} />
+        <Route path="/candidategrid" element={<CandidateGrid />} />
       </Routes>
     </>
   );
 }
 
 function Company() {
-  return <h1>Company Page</h1>;
+  return <div><h1>Company Page</h1>;</div>
 }
 
 function Account() {

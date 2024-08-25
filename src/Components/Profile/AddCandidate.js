@@ -27,12 +27,13 @@ import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function AddCandidate(props) {
   const navigate = useNavigate();
-  const access = !["Recruiter", "Teamlead", "Intern"].includes(
-    props.user.employeeType
-  );
+  const dispatch = useDispatch();
+  const { employeeType, username } = useSelector((state) => state.user);
+  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -70,9 +71,6 @@ export default function AddCandidate(props) {
     fetchData();
   }, []);
 
-  const [nameError, setNameError] = React.useState(false);
-  const [numberError, setNumberError] = React.useState(false);
-
   const [companiesList, setCompaniesList] = React.useState([]);
   const [rolesList, setRolesList] = React.useState([]);
   const [skillsList, setSkillsList] = React.useState([]);
@@ -84,7 +82,6 @@ export default function AddCandidate(props) {
   const [assessment, setAssessment] = React.useState([]);
   const [interviewStatus, setInterviewStatus] = React.useState([]);
   const [select, setSelect] = React.useState([]);
-
   const [candidate, setCandidate] = React.useState({
     fullName: "",
     mobile: [""],
@@ -144,11 +141,11 @@ export default function AddCandidate(props) {
         const ind = candidate.mobile.indexOf("");
         toast.error(
           "Missing " +
-            (ind == 0
+            (ind === 0
               ? "1st"
-              : ind == 1
+              : ind === 1
               ? "2nd"
-              : ind == 2
+              : ind === 2
               ? "3rd"
               : ind + 1 + "th") +
             " Mobile Number"
@@ -220,7 +217,7 @@ export default function AddCandidate(props) {
 
   return (
     <>
-      <div className="bg">
+      <div>
         <Container sx={{ paddingTop: "9.5vh", width: "96%" }}>
           <Card
             sx={{
@@ -229,14 +226,14 @@ export default function AddCandidate(props) {
             }}
           >
             <CardHeader
-              style={{
-                backgroundColor: alpha("#0B0B0B", 0.1),
+              sx={{
+                backgroundColor: alpha("#0B0B0B", 0.5),
                 backdropFilter: "blur(60px)",
                 color: "white",
               }}
               title="ADD PERSONAL INFORMATION"
             />
-            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.8) }}>
+            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.6) }}>
               <Grid container rowSpacing={2} columnSpacing={1}>
                 <Grid item xs={12}>
                   <TextField
@@ -262,7 +259,7 @@ export default function AddCandidate(props) {
 
                 {candidate.mobile.map((x, i) => (
                   <>
-                    <Grid item xs={9}>
+                    <Grid item xs={7.5} md={9}>
                       <TextField
                         id="outlined-basic"
                         label="Mobile Number"
@@ -290,13 +287,12 @@ export default function AddCandidate(props) {
                       />
                     </Grid>
                     {i === 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={4.5} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           size="large"
-                          style={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
                           endIcon={<ControlPointIcon />}
                           onClick={() =>
                             setCandidate({
@@ -310,15 +306,14 @@ export default function AddCandidate(props) {
                       </Grid>
                     )}
                     {i !== 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={4.5} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -336,7 +331,7 @@ export default function AddCandidate(props) {
                 ))}
                 {candidate.email.map((x, i) => (
                   <>
-                    <Grid item xs={9}>
+                    <Grid item xs={7.5} md={9}>
                       <TextField
                         id="outlined-basic"
                         label="Email ID"
@@ -364,13 +359,12 @@ export default function AddCandidate(props) {
                       />
                     </Grid>
                     {i === 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={4.5} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           size="large"
-                          style={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
                           endIcon={<ControlPointIcon />}
                           onClick={() =>
                             setCandidate({
@@ -384,15 +378,14 @@ export default function AddCandidate(props) {
                       </Grid>
                     )}
                     {i !== 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={4.5} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -408,7 +401,7 @@ export default function AddCandidate(props) {
                     )}
                   </>
                 ))}
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     id="candidateHomeTown"
                     options={locationList.map((location) => location)}
@@ -425,7 +418,7 @@ export default function AddCandidate(props) {
                     )}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     id="candidateCurrentCity"
                     options={locationList.map((location) => location)}
@@ -444,7 +437,7 @@ export default function AddCandidate(props) {
                 </Grid>
                 {candidate.languages.map((x, i) => (
                   <>
-                    <Grid item xs={3}>
+                    <Grid item xs={6} md={3}>
                       <Autocomplete
                         className="candidateLanguage"
                         options={languageList}
@@ -462,7 +455,7 @@ export default function AddCandidate(props) {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6} md={3}>
                       <TextField
                         className="candidatelevel"
                         select
@@ -484,7 +477,7 @@ export default function AddCandidate(props) {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6} md={3}>
                       <TextField
                         id="candidateLanguageRemarks"
                         label="Remarks"
@@ -501,13 +494,12 @@ export default function AddCandidate(props) {
                       />
                     </Grid>
                     {i === 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           size="large"
-                          style={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
                           endIcon={<ControlPointIcon />}
                           onClick={() => {
                             setCandidate({
@@ -524,15 +516,14 @@ export default function AddCandidate(props) {
                       </Grid>
                     )}
                     {i !== 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -549,23 +540,22 @@ export default function AddCandidate(props) {
                   </>
                 ))}
               </Grid>
-              <Divider style={{ marginTop: "4%" }} />
+              <Divider sx={{ marginTop: "4%" }} />
               <Divider>
                 <Chip
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(14,0,255,1) 0%, rgba(4,4,123,1) 65%, rgba(0,137,164,1) 100%)",
+                  sx={{
+                    backgroundColor: alpha("#0B0B0B", 0.5),
                     color: "white",
                   }}
                   label="EDUCATION INFORMATION"
                   size="large"
                 />
               </Divider>
-              <Divider style={{ marginBottom: "2%" }} />
+              <Divider sx={{ marginBottom: "2%" }} />
               <Grid container rowSpacing={2} columnSpacing={1}>
                 {candidate.qualifications.map((x, i) => (
                   <>
-                    <Grid item xs={7}>
+                    <Grid item xs={12} md={7}>
                       <TextField
                         className="canidateQualification"
                         select
@@ -588,7 +578,7 @@ export default function AddCandidate(props) {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={6} md={2}>
                       <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         fullWidth
@@ -596,7 +586,7 @@ export default function AddCandidate(props) {
                         <DatePicker
                           label="Year of Passing"
                           views={["year"]}
-                          style={{ width: "100%" }}
+                          sx={{ width: "100%" }}
                           fullWidth
                           onChange={(e) => {
                             candidate.qualifications[i].YOP = e;
@@ -610,13 +600,12 @@ export default function AddCandidate(props) {
                       </LocalizationProvider>
                     </Grid>
                     {i === 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           size="large"
-                          style={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
                           endIcon={<ControlPointIcon />}
                           onClick={() => {
                             setCandidate({
@@ -633,15 +622,14 @@ export default function AddCandidate(props) {
                       </Grid>
                     )}
                     {i !== 0 && (
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Button
                           fullWidth
-                          margin="normal"
-                          variant="outlined"
+                          variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%" }}
+                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -689,12 +677,11 @@ export default function AddCandidate(props) {
                   />
                 </Grid>
               </Grid>
-              <Divider style={{ marginTop: "4%" }} />
+              <Divider sx={{ marginTop: "4%" }} />
               <Divider>
                 <Chip
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(14,0,255,1) 0%, rgba(4,4,123,1) 65%, rgba(0,137,164,1) 100%)",
+                  sx={{
+                    backgroundColor: alpha("#0B0B0B", 0.5),
                     color: "white",
                   }}
                   label="EXPERIENCE INFORMATION"
@@ -702,8 +689,8 @@ export default function AddCandidate(props) {
                   size="large"
                 />
               </Divider>
-              <Divider style={{ marginBottom: "2%" }} />
-              <Grid container style={{ margin: "2%" }}>
+              <Divider sx={{ marginBottom: "2%" }} />
+              <Grid container sx={{ margin: "2%" }}>
                 <Grid item xs={12}>
                   <RadioGroup
                     row
@@ -735,7 +722,7 @@ export default function AddCandidate(props) {
                         <>
                           <Grid item xs={12} />
                           <Grid container rowSpacing={2} columnSpacing={1}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                               <TextField
                                 className="candidateCompanyName"
                                 label="Comapany Name"
@@ -752,7 +739,7 @@ export default function AddCandidate(props) {
                                 fullWidth
                               />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                               <TextField
                                 className="candidateCompanyRole"
                                 label="Role"
@@ -768,7 +755,7 @@ export default function AddCandidate(props) {
                                 }}
                               />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={6} md={3}>
                               <LocalizationProvider
                                 dateAdapter={AdapterDayjs}
                                 fullWidth
@@ -776,7 +763,7 @@ export default function AddCandidate(props) {
                                 <DatePicker
                                   label="Start Year"
                                   className="candidateCompanyStartDate"
-                                  style={{ width: "100%" }}
+                                  sx={{ width: "100%" }}
                                   fullWidth
                                   value={x.startDate}
                                   onChange={(e) => {
@@ -789,7 +776,7 @@ export default function AddCandidate(props) {
                                 />
                               </LocalizationProvider>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={6} md={3}>
                               <LocalizationProvider
                                 dateAdapter={AdapterDayjs}
                                 fullWidth
@@ -797,7 +784,7 @@ export default function AddCandidate(props) {
                                 <DatePicker
                                   label="End Year"
                                   className="candidateCompanyEndDate"
-                                  style={{ width: "100%" }}
+                                  sx={{ width: "100%" }}
                                   fullWidth
                                   value={x.endDate}
                                   onChange={(e) => {
@@ -810,7 +797,7 @@ export default function AddCandidate(props) {
                                 />
                               </LocalizationProvider>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} ma={6}>
                               <TextField
                                 label="Salary"
                                 variant="outlined"
@@ -829,16 +816,15 @@ export default function AddCandidate(props) {
                             </Grid>
                           </Grid>
                           <Divider
-                            style={{ marginTop: "2%", marginBottom: "2%" }}
+                            sx={{ marginTop: "2%", marginBottom: "2%" }}
                           />
                           {i === 0 && (
                             <>
-                              <Grid item xs={9} />
-                              <Grid item xs={3}>
+                              <Grid item xs={7.5} md={9}/>
+                              <Grid item xs={4.5} md={3}>
                                 <Button
                                   fullWidth
-                                  margin="normal"
-                                  variant="outlined"
+                                  variant="contained"
                                   size="large"
                                   onClick={() => {
                                     setCandidate({
@@ -856,22 +842,21 @@ export default function AddCandidate(props) {
                                       ],
                                     });
                                   }}
-                                  style={{ height: "100%" }}
+                                  sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
                                   endIcon={<ControlPointIcon />}
                                 >
-                                  Add More
+                                  Add
                                 </Button>
                               </Grid>
                             </>
                           )}
                           {i !== 0 && (
                             <>
-                              <Grid item xs={9} />
-                              <Grid item xs={3}>
+                              <Grid item xs={7.5} md={9}/>
+                              <Grid item xs={4.5} md={3}>
                                 <Button
                                   fullWidth
-                                  margin="normal"
-                                  variant="outlined"
+                                  variant="contained"
                                   size="large"
                                   color="error"
                                   onClick={() => {
@@ -884,7 +869,7 @@ export default function AddCandidate(props) {
                                       ),
                                     });
                                   }}
-                                  style={{ height: "100%" }}
+                                  sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                                   endIcon={<RemoveCircleOutlineIcon />}
                                 >
                                   Remove
@@ -896,15 +881,14 @@ export default function AddCandidate(props) {
                       );
                     })}
                   </Grid>
-                  <Divider style={{ marginTop: "2%", marginBottom: "2%" }} />
+                  <Divider sx={{ marginTop: "2%", marginBottom: "2%" }} />
                 </CardContent>
               </Collapse>
-              <Divider style={{ marginTop: "4%" }} />
+              <Divider sx={{ marginTop: "4%" }} />
               <Divider>
                 <Chip
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(14,0,255,1) 0%, rgba(4,4,123,1) 65%, rgba(0,137,164,1) 100%)",
+                  sx={{
+                    backgroundColor: alpha("#0B0B0B", 0.5),
                     color: "white",
                   }}
                   label="ASSESSMENT INFORMATION"
@@ -912,9 +896,9 @@ export default function AddCandidate(props) {
                   size="large"
                 />
               </Divider>
-              <Divider style={{ marginBottom: "2%" }} />
+              <Divider sx={{ marginBottom: "2%" }} />
               <Grid container rowSpacing={2} columnSpacing={1}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <TextField
                     id="candidateL1Assessment"
                     select
@@ -936,7 +920,7 @@ export default function AddCandidate(props) {
                   </TextField>
                 </Grid>
                 {access && (
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <TextField
                       id="candidateL2Assessment"
                       select
@@ -1177,11 +1161,13 @@ export default function AddCandidate(props) {
                       </Grid>
                     </>
                   )}
-                <Grid item xs={9} />
-                <Grid item xs={3}>
+                <Grid item xs={7.5} md={9}/>
+                <Grid item xs={4.5} md={3}>
                   <Button
                     fullWidth
-                    variant="outlined"
+                    size="large"
+                    variant="contained"
+                    sx={{ backgroundColor: alpha("#0000FF", 0.5)}}
                     onClick={handleAddCandidate}
                   >
                     SUBMIT
@@ -1191,7 +1177,7 @@ export default function AddCandidate(props) {
             </CardContent>
             <BottomNavigation
               sx={{
-                backgroundColor: alpha("#0B0B0B", 0.1),
+                backgroundColor: alpha("#FFFFFF", 0.15),
                 backdropFilter: "blur(60px)",
                 paddingBottom: "1vh",
                 marginBottom: "1vh",
