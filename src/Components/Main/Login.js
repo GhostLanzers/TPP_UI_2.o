@@ -66,8 +66,7 @@ export default function Login() {
           <Card
             sx={{
               width: "40%",
-              marginLeft: "30%",
-              
+              marginLeft: "30%",              
               backgroundColor: alpha("#FFFFFF", 0.5),
             }}
           >

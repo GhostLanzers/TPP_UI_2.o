@@ -1,5 +1,5 @@
 .bg {
-  background-image: url('./Assets/BG2.jpeg');
+  background-image: url('./Assets/BG3.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -7,6 +7,33 @@
   min-width: 97vw;
   min-height: 100vh;
 }
+
+/* CSS for Dividers to turn white in dark */
+.dw.MuiDialogContent-dividers {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+/* CSS for MUI TextFields to turn white in dark */
+.tw .MuiOutlinedInput-root {
+  color: white; /* Text color */
+}
+.tw .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: white; /* Unfocused border color */
+}
+.tw .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(0, 204, 255); /* Hover border color */
+}
+.tw .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(0, 204, 255); /* Focused border color */
+}
+.tw .MuiInputLabel-root {
+  color: white; /* Label color */
+}
+.tw .MuiInputLabel-root.Mui-focused {
+  color: rgb(0, 204, 255); /* Focused label color */
+}
+
 
 .App-logo {
   height: 20vmin;

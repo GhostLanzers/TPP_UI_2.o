@@ -26,18 +26,29 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useSelector} from "react-redux";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function AddCandidate(props) {
+export default function EditCandidate() {
   const navigate = useNavigate();
-  
+
   const { employeeType } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
+
+  const [expandedCompany, setExpandedCompany] = React.useState(false);
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const editable = searchParams.get("edit") === "true";
+  const url = "http://localhost:5000/api/v1/candidate/" + id;
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
+        const canres = await axios.get(url, {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        });
         const res = await axios.get(
           "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
           {
@@ -55,7 +66,9 @@ export default function AddCandidate(props) {
           }
         );
 
+        setCandidate(canres.data);
         setCompaniesList(res.data);
+        setExpandedCompany(canres.data.experience.length !== 0);
         extraRes.data.forEach(({ _id, data }) => {
           if (_id === "Skills") setSkillsList(data);
           else if (_id === "Locations") setLocationList(data);
@@ -76,8 +89,7 @@ export default function AddCandidate(props) {
   const [skillsList, setSkillsList] = React.useState([]);
   const [locationList, setLocationList] = React.useState([]);
   const [qualificationList, setQualificationList] = React.useState([]);
-  const [languageList, setLanguageList] = React.useState([]);
-  const [expandedCompany, setExpandedCompany] = React.useState(false);
+  const [languageList, setLanguageList] = React.useState([{ language: " " }]);
   const [languageLevelList, setlanguageLevelList] = React.useState([]);
   const [assessment, setAssessment] = React.useState([]);
   const [interviewStatus, setInterviewStatus] = React.useState([]);
@@ -116,75 +128,97 @@ export default function AddCandidate(props) {
     roleId: null,
     interviewDate: dayjs(new Date()),
     remarks: "",
-    rate: 0,
     interviewStatus: null,
     select: null,
     EMP_ID: "",
+    rate: 0,
     onboardingDate: dayjs(new Date()),
     nextTrackingDate: dayjs(new Date()),
     l1Assessment: "",
-    l2Assessment: null,
+    l2Assessment: "",
   });
 
   const handleExpandCompany = () => {
     setExpandedCompany(!expandedCompany);
   };
 
-  const handleAddCandidate = async () => {
-    try {
-      var flag = 0;
-      if (!candidate.fullName) {
-        toast.error("Full Name is Required");
-        flag = 1;
-      }
-      if (candidate.mobile.includes("")) {
-        const ind = candidate.mobile.indexOf("");
-        toast.error(
-          "Missing " +
-            (ind === 0
-              ? "1st"
-              : ind === 1
-              ? "2nd"
-              : ind === 2
-              ? "3rd"
-              : ind + 1 + "th") +
-            " Mobile Number"
-        );
-        flag = 1;
-      }
+  const handleEditCandidate = async () => {
+    var flag = 0;
+    if (!candidate.fullName) {
+      toast.error("Full Name is Required");
+      flag = 1;
+    }
+    if (candidate.mobile.includes("")) {
+      const ind = candidate.mobile.indexOf("");
+      toast.error(
+        "Missing " +
+          (ind === 0
+            ? "1st"
+            : ind === 1
+            ? "2nd"
+            : ind === 2
+            ? "3rd"
+            : ind + 1 + "th") +
+          " Mobile Number"
+      );
+      flag = 1;
+    }
 
-      if (!access) {
-        if (
-          ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
-          !candidate.interviewStatus
-        ) {
-          toast.error("Missing Interview Status");
-          flag = 1;
-        }
-        if (
-          ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
-          candidate.interviewStatus === "Select" &&
-          !candidate.select
-        ) {
-          toast.error("Missing Select Status");
-          flag = 1;
-        }
-      }
-      if (flag) return;
-      await axios.post(
-        "http://localhost:5000/api/v1/candidate",
-        {
-          ...candidate,
-          assignedEmployee: props.user.userid,
-          createdByEmployee: props.user.userid,
-        },
+    if (
+      ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
+      !candidate.interviewStatus
+    ) {
+      toast.error("Missing Interview Status");
+      flag = 1;
+    }
+    if (
+      ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
+      candidate.interviewStatus === "Select" &&
+      !candidate.select
+    ) {
+      toast.error("Missing Select Status");
+      flag = 1;
+    }
+
+    if (flag) return;
+    if (!["WD", "TAC", "GOOD"].includes(candidate.l1Assessment)) {
+      setCandidate({
+        ...candidate,
+        l2Assessment: null,
+        companyId: null,
+        roleId: null,
+        rate: 0,
+        interviewDate: dayjs(new Date()),
+        interviewStatus: null,
+        select: null,
+        EMP_ID: "",
+        onboardingDate: dayjs(new Date()),
+        nextTrackingDate: dayjs(new Date()),
+      });
+    }
+    if (!["TAC", "GOOD"].includes(candidate.l2Assessment)) {
+      setCandidate({
+        ...candidate,
+        interviewStatus: null,
+        select: null,
+        rate: 0,
+        EMP_ID: "",
+        onboardingDate: dayjs(new Date()),
+        nextTrackingDate: dayjs(new Date()),
+      });
+    }
+
+    try {
+      const newCandidate = await axios.patch(
+        "http://localhost:5000/api/v1/candidate/" + id,
+        { ...candidate },
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,
           },
         }
       );
-      await axios.patch(
+      const skilldata = await axios.patch(
         "http://localhost:5000/api/v1/extra/skills",
         { data: [...new Set([...candidate.skills, ...skillsList])] },
         {
@@ -193,13 +227,10 @@ export default function AddCandidate(props) {
           },
         }
       );
-      toast.success("Candidate Added Successfully");
+      toast.success("Candidate Edited Successfully");
       navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
-  
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
@@ -218,7 +249,9 @@ export default function AddCandidate(props) {
   return (
     <>
       <div>
-        <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
+        <Container
+          sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}
+        >
           <Card
             sx={{
               borderRadius: "20px",
@@ -231,9 +264,9 @@ export default function AddCandidate(props) {
                 backdropFilter: "blur(60px)",
                 color: "white",
               }}
-              title="ADD PERSONAL INFORMATION"
+              title={editable ? "EDIT CANDIDATE" : "VIEW CANDIDATE"}
             />
-            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.6) }}>
+            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.75) }}>
               <Grid container rowSpacing={2} columnSpacing={1}>
                 <Grid item xs={12}>
                   <TextField
@@ -241,11 +274,7 @@ export default function AddCandidate(props) {
                     label="Full Name"
                     variant="outlined"
                     fullWidth
-                    required
                     value={candidate.fullName}
-                    inputProps={{
-                      pattern: "[A-Za-z ]+",
-                    }}
                     onChange={(e) => {
                       setCandidate({ ...candidate, fullName: e.target.value });
                       if (!e.target.validity.valid) {
@@ -254,18 +283,21 @@ export default function AddCandidate(props) {
                         );
                       }
                     }}
+                    InputProps={{
+                      readOnly: !editable,
+                      pattern: "[A-Za-z ]+",
+                    }}
                   />
                 </Grid>
 
                 {candidate.mobile.map((x, i) => (
                   <>
-                    <Grid item xs={7.5} md={9}>
+                    <Grid item xs={editable ? 9 : 6}>
                       <TextField
                         id="outlined-basic"
                         label="Mobile Number"
                         variant="outlined"
                         value={x}
-                        required
                         onChange={(e) => {
                           if (!/^\d*$/.test(e.target.value))
                             toast.warning("Only Number allowed in Mobile");
@@ -275,7 +307,12 @@ export default function AddCandidate(props) {
                             mobile: candidate.mobile,
                           });
                         }}
+                        fullWidth
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                         onBlur={(e) => {
+                          if (!editable) return;
                           if (!/^\d{10}$/.test(e.target.value)) {
                             if (e.target.value.length === 0) return;
                             toast.warning("Mobile number should be 10 digits");
@@ -283,16 +320,18 @@ export default function AddCandidate(props) {
                           }
                           checkNumber(e.target.value);
                         }}
-                        fullWidth
                       />
                     </Grid>
-                    {i === 0 && (
-                      <Grid item xs={4.5} md={3}>
+                    {editable && i === 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
                           variant="contained"
                           size="large"
-                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
+                          sx={{
+                            backgroundColor: alpha("#0000FF", 0.5),
+                            height: "100%",
+                          }}
                           endIcon={<ControlPointIcon />}
                           onClick={() =>
                             setCandidate({
@@ -305,15 +344,19 @@ export default function AddCandidate(props) {
                         </Button>
                       </Grid>
                     )}
-                    {i !== 0 && (
-                      <Grid item xs={4.5} md={3}>
+                    {editable && i !== 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
+                          margin="normal"
                           variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
+                          sx={{
+                            height: "100%",
+                            backgroundColor: alpha("#FF0000", 0.6),
+                          }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -331,10 +374,10 @@ export default function AddCandidate(props) {
                 ))}
                 {candidate.email.map((x, i) => (
                   <>
-                    <Grid item xs={7.5} md={9}>
+                    <Grid item xs={editable ? 9 : 6}>
                       <TextField
                         id="outlined-basic"
-                        label="Email ID"
+                        label="HR Email ID"
                         variant="outlined"
                         value={x}
                         onChange={(e) => {
@@ -344,7 +387,12 @@ export default function AddCandidate(props) {
                             email: candidate.email,
                           });
                         }}
+                        fullWidth
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                         onBlur={(e) => {
+                          if (!editable) return;
                           if (
                             !/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(
                               e.target.value
@@ -355,16 +403,18 @@ export default function AddCandidate(props) {
                             return;
                           }
                         }}
-                        fullWidth
                       />
                     </Grid>
-                    {i === 0 && (
-                      <Grid item xs={4.5} md={3}>
+                    {editable && i === 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
                           variant="contained"
                           size="large"
-                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
+                          sx={{
+                            backgroundColor: alpha("#0000FF", 0.5),
+                            height: "100%",
+                          }}
                           endIcon={<ControlPointIcon />}
                           onClick={() =>
                             setCandidate({
@@ -377,15 +427,19 @@ export default function AddCandidate(props) {
                         </Button>
                       </Grid>
                     )}
-                    {i !== 0 && (
-                      <Grid item xs={4.5} md={3}>
+                    {editable && i !== 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
+                          margin="normal"
                           variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
+                          sx={{
+                            height: "100%",
+                            backgroundColor: alpha("#FF0000", 0.6),
+                          }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -401,7 +455,7 @@ export default function AddCandidate(props) {
                     )}
                   </>
                 ))}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={6}>
                   <Autocomplete
                     id="candidateHomeTown"
                     options={locationList.map((location) => location)}
@@ -416,9 +470,10 @@ export default function AddCandidate(props) {
                     renderInput={(params) => (
                       <TextField {...params} label="Candidate Home Town" />
                     )}
+                    readOnly={!editable}
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={6}>
                   <Autocomplete
                     id="candidateCurrentCity"
                     options={locationList.map((location) => location)}
@@ -433,11 +488,12 @@ export default function AddCandidate(props) {
                     renderInput={(params) => (
                       <TextField {...params} label="Candidate Current City" />
                     )}
+                    readOnly={!editable}
                   />
                 </Grid>
                 {candidate.languages.map((x, i) => (
                   <>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={editable ? 3 : 4}>
                       <Autocomplete
                         className="candidateLanguage"
                         options={languageList}
@@ -453,9 +509,10 @@ export default function AddCandidate(props) {
                         renderInput={(params) => (
                           <TextField {...params} label="Language" />
                         )}
+                        readOnly={!editable}
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={editable ? 3 : 4}>
                       <TextField
                         className="candidatelevel"
                         select
@@ -469,6 +526,9 @@ export default function AddCandidate(props) {
                           });
                         }}
                         fullWidth
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                       >
                         {languageLevelList.map((option) => (
                           <MenuItem key={option} value={option}>
@@ -477,9 +537,9 @@ export default function AddCandidate(props) {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={editable ? 9 : 12} md={editable ? 3 : 4}>
                       <TextField
-                        id="candidateLanguageRemarks"
+                        id="candidateLanguageRemark"
                         label="Remarks"
                         variant="outlined"
                         value={x.remarks}
@@ -491,15 +551,21 @@ export default function AddCandidate(props) {
                           });
                         }}
                         fullWidth
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                       />
                     </Grid>
-                    {i === 0 && (
-                      <Grid item xs={6} md={3}>
+                    {editable && i === 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
                           variant="contained"
                           size="large"
-                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
+                          sx={{
+                            backgroundColor: alpha("#0000FF", 0.5),
+                            height: "100%",
+                          }}
                           endIcon={<ControlPointIcon />}
                           onClick={() => {
                             setCandidate({
@@ -515,15 +581,19 @@ export default function AddCandidate(props) {
                         </Button>
                       </Grid>
                     )}
-                    {i !== 0 && (
-                      <Grid item xs={6} md={3}>
+                    {editable && i !== 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
+                          margin="normal"
                           variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
+                          sx={{
+                            height: "100%",
+                            backgroundColor: alpha("#FF0000", 0.6),
+                          }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -540,7 +610,7 @@ export default function AddCandidate(props) {
                   </>
                 ))}
               </Grid>
-              <Divider sx={{ marginTop: "4%" }} />
+              <Divider style={{ marginTop: "4%" }} />
               <Divider>
                 <Chip
                   sx={{
@@ -551,11 +621,11 @@ export default function AddCandidate(props) {
                   size="large"
                 />
               </Divider>
-              <Divider sx={{ marginBottom: "2%" }} />
+              <Divider style={{ marginBottom: "2%" }} />
               <Grid container rowSpacing={2} columnSpacing={1}>
                 {candidate.qualifications.map((x, i) => (
                   <>
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={6}>
                       <TextField
                         className="canidateQualification"
                         select
@@ -569,6 +639,9 @@ export default function AddCandidate(props) {
                             qualifications: candidate.qualifications,
                           });
                         }}
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                         fullWidth
                       >
                         {qualificationList.map((option) => (
@@ -578,7 +651,7 @@ export default function AddCandidate(props) {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={6} md={2}>
+                    <Grid item xs={editable? 3 : 6}>
                       <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         fullWidth
@@ -595,17 +668,21 @@ export default function AddCandidate(props) {
                               qualifications: candidate.qualifications,
                             });
                           }}
-                          value={x.YOP}
+                          readOnly={!editable}
+                          value={dayjs(x.YOP)}
                         />
                       </LocalizationProvider>
                     </Grid>
-                    {i === 0 && (
-                      <Grid item xs={6} md={3}>
+                    {editable && i === 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
                           variant="contained"
                           size="large"
-                          sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
+                          sx={{
+                            backgroundColor: alpha("#0000FF", 0.5),
+                            height: "100%",
+                          }}
                           endIcon={<ControlPointIcon />}
                           onClick={() => {
                             setCandidate({
@@ -621,15 +698,19 @@ export default function AddCandidate(props) {
                         </Button>
                       </Grid>
                     )}
-                    {i !== 0 && (
-                      <Grid item xs={6} md={3}>
+                    {editable && i !== 0 && (
+                      <Grid item xs={3}>
                         <Button
                           fullWidth
+                          margin="normal"
                           variant="contained"
                           color="error"
                           size="large"
                           endIcon={<RemoveCircleOutlineIcon />}
-                          sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
+                          sx={{
+                            height: "100%",
+                            backgroundColor: alpha("#FF0000", 0.6),
+                          }}
                           onClick={() => {
                             setCandidate({
                               ...candidate,
@@ -647,10 +728,14 @@ export default function AddCandidate(props) {
                     )}
                   </>
                 ))}
-                <Grid item xs={12}>
+                <Grid
+                  item
+                  xs={12}
+                >
                   <Autocomplete
                     multiple
                     freeSolo
+                    readOnly={!editable}
                     id="candidateSkills"
                     options={skillsList.map((skill) => skill)}
                     filterSelectedOptions
@@ -677,7 +762,7 @@ export default function AddCandidate(props) {
                   />
                 </Grid>
               </Grid>
-              <Divider sx={{ marginTop: "4%" }} />
+              <Divider style={{ marginTop: "4%" }} />
               <Divider>
                 <Chip
                   sx={{
@@ -685,29 +770,30 @@ export default function AddCandidate(props) {
                     color: "white",
                   }}
                   label="EXPERIENCE INFORMATION"
-                  light
                   size="large"
                 />
               </Divider>
-              <Divider sx={{ marginBottom: "2%" }} />
-              <Grid container sx={{ margin: "2%" }}>
+              <Divider style={{ marginBottom: "2%" }} />
+              <Grid container style={{ margin: "2%" }}>
                 <Grid item xs={12}>
                   <RadioGroup
                     row
+                    readOnly={!editable}
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     defaultValue="FRESHER"
                     name="row-radio-buttons-group"
                     onChange={handleExpandCompany}
+                    value={expandedCompany ? "EXPERIENCE" : "FRESHER"}
                   >
                     <FormControlLabel
                       value="EXPERIENCE"
-                      control={<Radio />}
+                      control={<Radio disabled={!editable} />}
                       label="EXPERIENCE"
                       aria-label="show more"
                     />
                     <FormControlLabel
                       value="FRESHER"
-                      control={<Radio />}
+                      control={<Radio disabled={!editable} />}
                       label="FRESHER"
                       timeout="auto"
                     />
@@ -736,6 +822,9 @@ export default function AddCandidate(props) {
                                     experience: candidate.experience,
                                   });
                                 }}
+                                InputProps={{
+                                  readOnly: !editable,
+                                }}
                                 fullWidth
                               />
                             </Grid>
@@ -744,8 +833,8 @@ export default function AddCandidate(props) {
                                 className="candidateCompanyRole"
                                 label="Role"
                                 variant="outlined"
-                                value={x.role}
                                 fullWidth
+                                value={x.role}
                                 onChange={(e) => {
                                   candidate.experience[i].role = e.target.value;
                                   setCandidate({
@@ -753,9 +842,12 @@ export default function AddCandidate(props) {
                                     experience: candidate.experience,
                                   });
                                 }}
+                                InputProps={{
+                                  readOnly: !editable,
+                                }}
                               />
                             </Grid>
-                            <Grid item xs={6} md={3}>
+                            <Grid item xs={6}>
                               <LocalizationProvider
                                 dateAdapter={AdapterDayjs}
                                 fullWidth
@@ -765,7 +857,7 @@ export default function AddCandidate(props) {
                                   className="candidateCompanyStartDate"
                                   sx={{ width: "100%" }}
                                   fullWidth
-                                  value={x.startDate}
+                                  value={dayjs(x.startDate)}
                                   onChange={(e) => {
                                     candidate.experience[i].startDate = e;
                                     setCandidate({
@@ -773,10 +865,11 @@ export default function AddCandidate(props) {
                                       experience: candidate.experience,
                                     });
                                   }}
+                                  readOnly={!editable}
                                 />
                               </LocalizationProvider>
                             </Grid>
-                            <Grid item xs={6} md={3}>
+                            <Grid item xs={6}>
                               <LocalizationProvider
                                 dateAdapter={AdapterDayjs}
                                 fullWidth
@@ -786,7 +879,7 @@ export default function AddCandidate(props) {
                                   className="candidateCompanyEndDate"
                                   sx={{ width: "100%" }}
                                   fullWidth
-                                  value={x.endDate}
+                                  value={dayjs(x.endDate)}
                                   onChange={(e) => {
                                     candidate.experience[i].endDate = e;
                                     setCandidate({
@@ -794,10 +887,11 @@ export default function AddCandidate(props) {
                                       experience: candidate.experience,
                                     });
                                   }}
+                                  readOnly={editable}
                                 />
                               </LocalizationProvider>
                             </Grid>
-                            <Grid item xs={12} ma={6}>
+                            <Grid item xs={editable? 9 : 12}>
                               <TextField
                                 label="Salary"
                                 variant="outlined"
@@ -812,16 +906,14 @@ export default function AddCandidate(props) {
                                   });
                                 }}
                                 value={x.salary}
+                                InputProps={{
+                                  readOnly: !editable,
+                                }}
                               />
                             </Grid>
-                          </Grid>
-                          <Divider
-                            sx={{ marginTop: "2%", marginBottom: "2%" }}
-                          />
-                          {i === 0 && (
+                          {editable && i === 0 && (
                             <>
-                              <Grid item xs={7.5} md={9}/>
-                              <Grid item xs={4.5} md={3}>
+                              <Grid item xs={3}>
                                 <Button
                                   fullWidth
                                   variant="contained"
@@ -842,7 +934,10 @@ export default function AddCandidate(props) {
                                       ],
                                     });
                                   }}
-                                  sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.5) }}
+                                  sx={{
+                                    backgroundColor: alpha("#0000FF", 0.5),
+                                    height: "100%",
+                                  }}
                                   endIcon={<ControlPointIcon />}
                                 >
                                   Add
@@ -850,10 +945,11 @@ export default function AddCandidate(props) {
                               </Grid>
                             </>
                           )}
-                          {i !== 0 && (
+                          </Grid>
+                          {editable && i !== 0 && (
                             <>
-                              <Grid item xs={7.5} md={9}/>
-                              <Grid item xs={4.5} md={3}>
+                              <Grid item xs={9} />
+                              <Grid item xs={3}>
                                 <Button
                                   fullWidth
                                   variant="contained"
@@ -869,7 +965,10 @@ export default function AddCandidate(props) {
                                       ),
                                     });
                                   }}
-                                  sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
+                                  sx={{
+                                    height: "100%",
+                                    backgroundColor: alpha("#FF0000", 0.6),
+                                  }}
                                   endIcon={<RemoveCircleOutlineIcon />}
                                 >
                                   Remove
@@ -881,10 +980,9 @@ export default function AddCandidate(props) {
                       );
                     })}
                   </Grid>
-                  <Divider sx={{ marginTop: "2%", marginBottom: "2%" }} />
                 </CardContent>
               </Collapse>
-              <Divider sx={{ marginTop: "4%" }} />
+              <Divider style={{ marginTop: "2%" }} />
               <Divider>
                 <Chip
                   sx={{
@@ -892,13 +990,12 @@ export default function AddCandidate(props) {
                     color: "white",
                   }}
                   label="ASSESSMENT INFORMATION"
-                  light
                   size="large"
                 />
               </Divider>
-              <Divider sx={{ marginBottom: "2%" }} />
+              <Divider style={{ marginBottom: "2%" }} />
               <Grid container rowSpacing={2} columnSpacing={1}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={6}>
                   <TextField
                     id="candidateL1Assessment"
                     select
@@ -911,6 +1008,9 @@ export default function AddCandidate(props) {
                       })
                     }
                     fullWidth
+                    InputProps={{
+                      readOnly: !editable,
+                    }}
                   >
                     {assessment.map((option) => (
                       <MenuItem key={option} value={option}>
@@ -919,28 +1019,37 @@ export default function AddCandidate(props) {
                     ))}
                   </TextField>
                 </Grid>
-                {access && (
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      id="candidateL2Assessment"
-                      select
-                      label="L2 Assessment"
-                      fullWidth
-                      value={candidate.l2Assessment}
-                      onChange={(e) =>
-                        setCandidate({
-                          ...candidate,
-                          l2Assessment: e.target.value,
-                        })
-                      }
-                    >
-                      {assessment.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid>
+                {(candidate.l2Assessment === "" ||
+                candidate.l2Assessment === null ||
+                candidate.l2Assessment === undefined
+                  ? access
+                  : true) && (
+                  <>
+                    <Grid item xs={6}>
+                      <TextField
+                        id="candidateL2Assessment"
+                        select
+                        label="L2 Assessment"
+                        fullWidth
+                        value={candidate.l2Assessment}
+                        onChange={(e) =>
+                          setCandidate({
+                            ...candidate,
+                            l2Assessment: e.target.value,
+                          })
+                        }
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
+                      >
+                        {assessment.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                  </>
                 )}
 
                 <Grid item xs={12}>
@@ -954,15 +1063,22 @@ export default function AddCandidate(props) {
                       setCandidate({ ...candidate, remarks: e.target.value })
                     }
                     multiline
+                    InputProps={{
+                      readOnly: !editable,
+                    }}
                   />
                 </Grid>
                 {["WD", "TAC", "GOOD"].includes(candidate.l1Assessment) && (
                   <>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <Autocomplete
                         id="Companies"
                         disableClearable
                         options={companiesList}
+                        value={candidate.companyId}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id
+                        }
                         getOptionLabel={(option) => option.companyName}
                         onChange={(e, newValue) => {
                           setCandidate({
@@ -981,13 +1097,18 @@ export default function AddCandidate(props) {
                             }}
                           />
                         )}
+                        readOnly={!editable}
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <Autocomplete
                         id="Roles"
                         disableClearable
                         options={rolesList}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id
+                        }
+                        value={candidate.roleId}
                         getOptionLabel={(option) => option.designation}
                         onChange={(e, newValue) => {
                           setCandidate({ ...candidate, roleId: newValue._id });
@@ -1002,9 +1123,10 @@ export default function AddCandidate(props) {
                             }}
                           />
                         )}
+                        readOnly={!editable}
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         fullWidth
@@ -1014,13 +1136,14 @@ export default function AddCandidate(props) {
                           className="candidateCompanyEndDate"
                           sx={{ width: "100%" }}
                           fullWidth
-                          value={candidate.interviewDate}
                           onChange={(e) => {
                             setCandidate({
                               ...candidate,
                               interviewDate: e,
                             });
                           }}
+                          value={dayjs(candidate.interviewDate)}
+                          readOnly={!editable}
                         />
                       </LocalizationProvider>
                     </Grid>
@@ -1029,7 +1152,7 @@ export default function AddCandidate(props) {
 
                 {["TAC", "GOOD"].includes(candidate.l2Assessment) && (
                   <>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <TextField
                         id="candidateInterviewStatus"
                         select
@@ -1042,6 +1165,9 @@ export default function AddCandidate(props) {
                           })
                         }
                         fullWidth
+                        InputProps={{
+                          readOnly: !editable,
+                        }}
                       >
                         {interviewStatus.map((option) => (
                           <MenuItem key={option} value={option}>
@@ -1074,7 +1200,7 @@ export default function AddCandidate(props) {
                         <TextField
                           id="candidateSelect"
                           select
-                          label="Tenure Status"
+                          label="Select"
                           value={candidate.select}
                           onChange={(e) =>
                             setCandidate({
@@ -1083,6 +1209,9 @@ export default function AddCandidate(props) {
                             })
                           }
                           fullWidth
+                          InputProps={{
+                            readOnly: !editable,
+                          }}
                         >
                           {select.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -1110,6 +1239,9 @@ export default function AddCandidate(props) {
                               EMP_ID: e.target.value,
                             })
                           }
+                          InputProps={{
+                            readOnly: !editable,
+                          }}
                         />
                       </Grid>
                       <Grid item xs={4}>
@@ -1122,26 +1254,17 @@ export default function AddCandidate(props) {
                             className="candidateonboardingDate"
                             sx={{ width: "100%" }}
                             fullWidth
-                            onChange={(e) => {
-                              setCandidate({
-                                ...candidate,
-                                onboardingDate: e.target.value,
-                              });
-                            }}
-                            value={candidate.onboardingDate}
+                            value={dayjs(candidate.onboardingDate)}
+                            onChange={(e) =>
+                              setCandidate({ ...candidate, onboardingDate: e })
+                            }
+                            readOnly={!editable}
                           />
                         </LocalizationProvider>
                       </Grid>
                       <Grid item xs={4}>
                         <LocalizationProvider
                           dateAdapter={AdapterDayjs}
-                          onChange={(e) => {
-                            setCandidate({
-                              ...candidate,
-                              nextTrackingDate: e,
-                            });
-                          }}
-                          value={candidate.nextTrackingDate}
                           fullWidth
                         >
                           <DatePicker
@@ -1149,26 +1272,28 @@ export default function AddCandidate(props) {
                             className="candidateNXD"
                             sx={{ width: "100%" }}
                             fullWidth
+                            value={dayjs(candidate.nextTrackingDate)}
                             onChange={(e) => {
                               setCandidate({
                                 ...candidate,
-                                nextTrackingDate: e.target.value,
+                                nextTrackingDate: e,
                               });
                             }}
-                            value={candidate.nextTrackingDate}
+                            readOnly={!editable}
                           />
                         </LocalizationProvider>
                       </Grid>
                     </>
                   )}
-                <Grid item xs={7.5} md={9}/>
-                <Grid item xs={4.5} md={3}>
+                <Grid item xs={9} />
+                <Grid item xs={3}>
                   <Button
                     fullWidth
-                    size="large"
                     variant="contained"
-                    sx={{ backgroundColor: alpha("#0000FF", 0.5)}}
-                    onClick={handleAddCandidate}
+                    size="large"
+                    onClick={handleEditCandidate}
+                    disabled={!editable}
+                    sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
                   >
                     SUBMIT
                   </Button>

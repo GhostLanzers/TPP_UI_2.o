@@ -143,7 +143,7 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{ fontWeight: "bold" }}
+                  sx={{ fontWeight: "bold", color: "rgb(0, 204, 255)", fontSize: "1.2rem", letterSpacing: "10px"}}
                   onClick={() => navigate("/live")}
                 >
                   Live
@@ -153,8 +153,7 @@ export default function NavBar(props) {
                   size="small"
                   sx={{
                     fontWeight: "bold",
-                    textDecoration:
-                      location.pathname === "/" ? "underline" : "none",
+                    textDecoration: location.pathname === "/" ? "underline" : "none",
                     fontSize: location.pathname === "/" ? "1rem" : "0.8125rem",
                   }}
                   onClick={() => navigate("/")}
@@ -166,10 +165,8 @@ export default function NavBar(props) {
                   size="small"
                   sx={{
                     fontWeight: "bold",
-                    textDecoration:
-                      location.pathname === "/Company" ? "underline" : "none",
-                    fontSize:
-                      location.pathname === "/Company" ? "1rem" : "0.8125rem",
+                    textDecoration: location.pathname === "/Company" ? "underline" : "none",
+                    fontSize: location.pathname === "/Company" ? "1rem" : "0.8125rem",
                   }}
                   onClick={() => navigate("Company")}
                 >
@@ -182,15 +179,15 @@ export default function NavBar(props) {
                     sx={{
                       fontWeight: "bold",
                       textDecoration:
-                        location.pathname === "/AccountDashBoard"
+                        location.pathname === "/Account"
                           ? "underline"
                           : "none",
                       fontSize:
-                        location.pathname === "/AccountDashBoard"
+                        location.pathname === "/Account"
                           ? "1rem"
                           : "0.8125rem",
                     }}
-                    onClick={() => navigate("AccountDashBoard")}
+                    onClick={() => navigate("Account")}
                   >
                     Account
                   </Button>
@@ -311,12 +308,7 @@ export default function NavBar(props) {
         </DialogTitle>
         <DialogContent
           dividers
-          sx={{
-            "&.MuiDialogContent-dividers": {
-              borderTop: "1px solid white",
-              borderBottom: "1px solid white",
-            },
-          }}
+          className="dw"
         >
           <IconButton
             aria-label="close"
@@ -373,12 +365,7 @@ export default function NavBar(props) {
         </DialogTitle>
         <DialogContent
           dividers
-          sx={{
-            "&.MuiDialogContent-dividers": {
-              borderTop: "1px solid white",
-              borderBottom: "1px solid white",
-            },
-          }}
+          className="dw"
         >
           <IconButton
             aria-label="close"

@@ -9,6 +9,8 @@ import ProtectedRoute from "./Components/Main/ProtectedRoute";
 import ProfileDashboard from "./Components/Profile/ProfileDashboard";
 import AddCandidate from "./Components/Profile/AddCandidate";
 import CandidateGrid from "./Components/Profile/CandidateGrid";
+import EditCandidate from "./Components/Profile/EditCandidate";
+import SearchProfile from "./Components/Profile/SearchProfile";
 
 function App() {
   return (
@@ -34,7 +36,7 @@ function Layout() {
       <Routes>
         <Route path="/login" element={<Login/>} />
         {/* Navigation Bar Routes */}
-        <Route path="/live" element={<CandidateGrid/>} />
+        <Route path="/live" element={<SearchProfile/>} />
         <Route path="/" element={<ProfileDashboard  />} />
         <Route path="/company" element={<Company />} />
         <Route path="/account" element={<Account />} />
@@ -42,6 +44,8 @@ function Layout() {
         {/* Candidate Routes */}
         <Route path="/addcandidate" element={<AddCandidate/>} />
         <Route path="/candidategrid" element={<CandidateGrid />} />
+        <Route path="/editcandidate/:id" element={<EditCandidate />} />
+        <Route path="/searchprofile" element={<SearchProfile />} />
       </Routes>
     </>
   );

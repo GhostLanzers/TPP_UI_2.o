@@ -13,7 +13,7 @@ import {
   styled,
   IconButton,
   TextField,
-  alpha
+  alpha,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -29,14 +29,6 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 
 export default function CandidateGrid(props) {
-  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-    "& .MuiDialogContent-root": {
-      padding: theme.spacing(2),
-    },
-    "& .MuiDialogActions-root": {
-      padding: theme.spacing(1),
-    },
-  }));
 
   const [open, setOpen] = React.useState(false);
 
@@ -47,7 +39,7 @@ export default function CandidateGrid(props) {
     setOpen(false);
   };
   const [deleteData, setDeleteData] = useState({});
-  
+
   const { employeeType, userid } = useSelector((state) => state.user);
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
@@ -94,7 +86,7 @@ export default function CandidateGrid(props) {
       } catch (error) {}
     };
     fetchData();
-  }, [url,setTableData]);
+  }, [url, setTableData]);
 
   const column = [
     {
@@ -237,25 +229,27 @@ export default function CandidateGrid(props) {
   };
   const handleDelete = async (id) => {
     try {
-      axios.delete(
-        "http://localhost:5000/api/v1/candidate/" + id,
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
+      axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
+        headers: {
+          authorization: JSON.parse(localStorage.getItem("user")).token,
+        },
+      });
       setTableData(tableData.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}
   };
   return (
     <>
-      <div style={{height:"100vh", width:"100vw"}}>
+      <div style={{ height: "100vh", width: "100vw" }}>
         <Grid
           container
           spacing={2}
-          sx={{ paddingTop: "10vh", height:"15vh", marginLeft: "0.5%", width: "98%" }}
+          sx={{
+            paddingTop: "10vh",
+            height: "15vh",
+            marginLeft: "0.5%",
+            width: "98%",
+          }}
         >
           <Grid item xs={2} md={1}>
             <TextField
@@ -264,23 +258,7 @@ export default function CandidateGrid(props) {
               type="number"
               label="No.of Rows"
               value={count}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  color: 'white', // Text color
-                  '& fieldset': {
-                    borderColor: 'white', // Unfocused border color
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'yellow', // Hover border color
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'yellow', // Focused border color (can be changed as needed)
-                  },
-                },
-                '& .MuiInputLabel-root': {
-                  color: 'white', // Label color
-                },
-              }}
+              className="tw"
               onChange={(e) => setCount(e.target.value)}
             ></TextField>
           </Grid>
@@ -310,23 +288,7 @@ export default function CandidateGrid(props) {
               label="File Name"
               value={fileName}
               fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  color: 'white', // Text color
-                  '& fieldset': {
-                    borderColor: 'white', // Unfocused border color
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'yellow', // Hover border color
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'yellow', // Focused border color (can be changed as needed)
-                  },
-                },
-                '& .MuiInputLabel-root': {
-                  color: 'white', // Label color
-                },
-              }}
+              className="tw"
               onChange={(e) => setFileName(e.target.value)}
             />
           </Grid>
@@ -338,9 +300,9 @@ export default function CandidateGrid(props) {
           className="ag-theme-quartz-dark"
           style={{
             marginTop: "4.5vh",
-            marginLeft: "0.5%",
-            height: "70vh",
-            width: "99%",
+            marginLeft: "1vh",
+            height: "80vh",
+            width: "98vw",
             position: "absolute",
           }}
         >
@@ -355,11 +317,21 @@ export default function CandidateGrid(props) {
             rowSelection={"multiple"}
           />
         </div>
-        <BootstrapDialog
-          onClose={handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={open}
-        >
+        <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          backgroundColor: "transparent",
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            boxShadow: "none",
+            color: "white",
+          },
+        }}
+      >
           <DialogTitle
             sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
             id="customized-dialog-title"
@@ -378,7 +350,10 @@ export default function CandidateGrid(props) {
           >
             <CloseIcon />
           </IconButton>
-          <DialogContent dividers>
+          <DialogContent
+            dividers
+            className="dw"
+          >
             <Typography
               gutterBottom
               sx={{
@@ -404,11 +379,10 @@ export default function CandidateGrid(props) {
           </DialogContent>
           <DialogActions>
             <Button
-              autoFocus
-              margin="normal"
-              variant="outlined"
-              size="medium"
+              variant="contained"
+              size="large"
               color="error"
+              sx={{ backgroundColor: alpha("#FF0000", 0.4) }}
               onClick={() => {
                 handleDelete(deleteData._id);
               }}
@@ -416,16 +390,15 @@ export default function CandidateGrid(props) {
               Delete
             </Button>
             <Button
-              autoFocus
-              margin="normal"
-              variant="outlined"
-              size="medium"
+              variant="contained"
+              size="large"
+              sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
               onClick={handleClose}
             >
               Cancel
             </Button>
           </DialogActions>
-        </BootstrapDialog>
+        </Dialog>
       </div>
     </>
   );
