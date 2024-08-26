@@ -67,7 +67,7 @@ export default function Login() {
             sx={{
               width: "40%",
               marginLeft: "30%",
-              backgroundColor: "transparent",
+              
               backgroundColor: alpha("#FFFFFF", 0.5),
             }}
           >

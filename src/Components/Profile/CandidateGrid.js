@@ -23,9 +23,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import ExcelExport from "../../Components/Main/ExcelExport";
-import { flatten } from "flat";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 
@@ -48,8 +47,8 @@ export default function CandidateGrid(props) {
     setOpen(false);
   };
   const [deleteData, setDeleteData] = useState({});
-  const dispatch = useDispatch();
-  const { employeeType, username, userid } = useSelector((state) => state.user);
+  
+  const { employeeType, userid } = useSelector((state) => state.user);
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
   const isTeamlead = employeeType === "Teamlead";
@@ -95,7 +94,7 @@ export default function CandidateGrid(props) {
       } catch (error) {}
     };
     fetchData();
-  }, [setTableData]);
+  }, [url,setTableData]);
 
   const column = [
     {
@@ -238,7 +237,7 @@ export default function CandidateGrid(props) {
   };
   const handleDelete = async (id) => {
     try {
-      const company = axios.delete(
+      axios.delete(
         "http://localhost:5000/api/v1/candidate/" + id,
         {
           headers: {

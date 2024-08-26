@@ -27,12 +27,12 @@ import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 
 export default function AddCandidate(props) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { employeeType, username } = useSelector((state) => state.user);
+  
+  const { employeeType } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
 
   React.useEffect(() => {
@@ -171,7 +171,7 @@ export default function AddCandidate(props) {
         }
       }
       if (flag) return;
-      const newCandidate = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/v1/candidate",
         {
           ...candidate,
@@ -184,7 +184,7 @@ export default function AddCandidate(props) {
           },
         }
       );
-      const skilldata = await axios.patch(
+      await axios.patch(
         "http://localhost:5000/api/v1/extra/skills",
         { data: [...new Set([...candidate.skills, ...skillsList])] },
         {
@@ -199,7 +199,7 @@ export default function AddCandidate(props) {
       console.log(error);
     }
   };
-  const [warning, setWarning] = React.useState("");
+  
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
@@ -277,7 +277,7 @@ export default function AddCandidate(props) {
                         }}
                         onBlur={(e) => {
                           if (!/^\d{10}$/.test(e.target.value)) {
-                            if (e.target.value.length == 0) return;
+                            if (e.target.value.length === 0) return;
                             toast.warning("Mobile number should be 10 digits");
                             return;
                           }
@@ -350,7 +350,7 @@ export default function AddCandidate(props) {
                               e.target.value
                             )
                           ) {
-                            if (e.target.value.length == 0) return;
+                            if (e.target.value.length === 0) return;
                             toast.warning("Not a valid Email");
                             return;
                           }

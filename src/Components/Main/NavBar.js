@@ -19,7 +19,7 @@ import {
   Menu,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,6 +31,7 @@ export default function NavBar(props) {
   // Navigating and Access Control
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { employeeType, username } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
 
@@ -150,7 +151,12 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{ fontWeight: "bold" }}
+                  sx={{
+                    fontWeight: "bold",
+                    textDecoration:
+                      location.pathname === "/" ? "underline" : "none",
+                    fontSize: location.pathname === "/" ? "1rem" : "0.8125rem",
+                  }}
                   onClick={() => navigate("/")}
                 >
                   Profile
@@ -158,7 +164,13 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{ fontWeight: "bold" }}
+                  sx={{
+                    fontWeight: "bold",
+                    textDecoration:
+                      location.pathname === "/Company" ? "underline" : "none",
+                    fontSize:
+                      location.pathname === "/Company" ? "1rem" : "0.8125rem",
+                  }}
                   onClick={() => navigate("Company")}
                 >
                   Company
@@ -167,7 +179,17 @@ export default function NavBar(props) {
                   <Button
                     color="inherit"
                     size="small"
-                    sx={{ fontWeight: "bold" }}
+                    sx={{
+                      fontWeight: "bold",
+                      textDecoration:
+                        location.pathname === "/AccountDashBoard"
+                          ? "underline"
+                          : "none",
+                      fontSize:
+                        location.pathname === "/AccountDashBoard"
+                          ? "1rem"
+                          : "0.8125rem",
+                    }}
                     onClick={() => navigate("AccountDashBoard")}
                   >
                     Account
@@ -184,7 +206,17 @@ export default function NavBar(props) {
                     <Button
                       color="inherit"
                       size="small"
-                      sx={{ fontWeight: "bold" }}
+                      sx={{
+                        fontWeight: "bold",
+                        textDecoration:
+                          location.pathname === "/bulkupload"
+                            ? "underline"
+                            : "none",
+                        fontSize:
+                          location.pathname === "/bulkupload"
+                            ? "1rem"
+                            : "0.8125rem",
+                      }}
                       onClick={() => navigate("/bulkupload")}
                     >
                       Bulk Upload
