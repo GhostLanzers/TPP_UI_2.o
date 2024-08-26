@@ -40,19 +40,17 @@ export default function ProfileDashboard() {
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%",
                 borderBlockStyle: "solid",
                 borderColor: "white",
                 borderBlockWidth: "0.1vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              onClick={() => navigate("AddCandidate")}SearchProfile
+              onClick={() => navigate("AddCandidate")}
+              SearchProfile
             >
-              <Typography
-                variant="h6"
-                mt="1.5%"
-                color="white"
-                fontWeight="bold"
-              >
+              <Typography variant="h6" color="white" fontWeight="bold">
                 ADD CANDIDATE
               </Typography>
             </div>
@@ -65,18 +63,15 @@ export default function ProfileDashboard() {
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%",
                 borderBlockStyle: "solid",
                 borderColor: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 borderBlockWidth: "0.1vh",
               }}
             >
-              <Typography
-                variant="h6"
-                mt="1.5%"
-                color="white"
-                fontWeight="bold"
-              >
+              <Typography variant="h6" color="white" fontWeight="bold">
                 ASSIGN PROFILE
               </Typography>
             </div>
@@ -89,18 +84,15 @@ export default function ProfileDashboard() {
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 borderBlockStyle: "solid",
                 borderColor: "white",
                 borderBlockWidth: "0.1vh",
               }}
             >
-              <Typography
-                variant="h6"
-                mt="1.5%"
-                color="white"
-                fontWeight="bold"
-              >
+              <Typography variant="h6" color="white" fontWeight="bold">
                 POTENTIAL LEADS
               </Typography>
             </div>
@@ -113,19 +105,16 @@ export default function ProfileDashboard() {
                 backdropFilter: "blur(70px)",
                 borderRadius: "20px",
                 textAlign: "center",
-                paddingTop: ".8%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 borderBlockStyle: "solid",
                 borderColor: "white",
                 borderBlockWidth: "0.1vh",
               }}
               onClick={() => navigate("searchprofile")}
             >
-              <Typography
-                variant="h6"
-                mt="1.5%"
-                color="white"
-                fontWeight="bold"
-              >
+              <Typography variant="h6" color="white" fontWeight="bold">
                 SEARCH PROFILE
               </Typography>
             </div>

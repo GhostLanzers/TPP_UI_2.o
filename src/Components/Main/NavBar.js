@@ -110,7 +110,15 @@ export default function NavBar(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
-
+  const liveLink = {
+    fontWeight: "bold",
+    color: "rgb(0, 204, 255)",
+    fontSize: "1.2rem",
+    letterSpacing: "5px",
+  };
+  const normalLink = {
+    fontWeight: "bold",
+  };
   return (
     <>
       <CssBaseline />
@@ -143,7 +151,7 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{ fontWeight: "bold", color: "rgb(0, 204, 255)", fontSize: "1.2rem", letterSpacing: "10px"}}
+                  sx={location.pathname === "/live" ? liveLink : normalLink}
                   onClick={() => navigate("/live")}
                 >
                   Live
@@ -151,11 +159,7 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{
-                    fontWeight: "bold",
-                    textDecoration: location.pathname === "/" ? "underline" : "none",
-                    fontSize: location.pathname === "/" ? "1rem" : "0.8125rem",
-                  }}
+                  sx={location.pathname === "/" ? liveLink : normalLink}
                   onClick={() => navigate("/")}
                 >
                   Profile
@@ -163,12 +167,8 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={{
-                    fontWeight: "bold",
-                    textDecoration: location.pathname === "/Company" ? "underline" : "none",
-                    fontSize: location.pathname === "/Company" ? "1rem" : "0.8125rem",
-                  }}
-                  onClick={() => navigate("Company")}
+                  sx={location.pathname === "/Company" ? liveLink : normalLink}
+                  onClick={() => navigate("/Company")}
                 >
                   Company
                 </Button>
@@ -176,18 +176,10 @@ export default function NavBar(props) {
                   <Button
                     color="inherit"
                     size="small"
-                    sx={{
-                      fontWeight: "bold",
-                      textDecoration:
-                        location.pathname === "/Account"
-                          ? "underline"
-                          : "none",
-                      fontSize:
-                        location.pathname === "/Account"
-                          ? "1rem"
-                          : "0.8125rem",
-                    }}
-                    onClick={() => navigate("Account")}
+                    sx={
+                      location.pathname === "/Account" ? liveLink : normalLink
+                    }
+                    onClick={() => navigate("/Account")}
                   >
                     Account
                   </Button>
@@ -203,17 +195,11 @@ export default function NavBar(props) {
                     <Button
                       color="inherit"
                       size="small"
-                      sx={{
-                        fontWeight: "bold",
-                        textDecoration:
-                          location.pathname === "/bulkupload"
-                            ? "underline"
-                            : "none",
-                        fontSize:
-                          location.pathname === "/bulkupload"
-                            ? "1rem"
-                            : "0.8125rem",
-                      }}
+                      sx={
+                        location.pathname === "/bulkupload"
+                          ? liveLink
+                          : normalLink
+                      }
                       onClick={() => navigate("/bulkupload")}
                     >
                       Bulk Upload
@@ -306,10 +292,7 @@ export default function NavBar(props) {
         >
           Logout
         </DialogTitle>
-        <DialogContent
-          dividers
-          className="dw"
-        >
+        <DialogContent dividers className="dw">
           <IconButton
             aria-label="close"
             onClick={handleClosePop}
@@ -363,10 +346,7 @@ export default function NavBar(props) {
         >
           Logout
         </DialogTitle>
-        <DialogContent
-          dividers
-          className="dw"
-        >
+        <DialogContent dividers className="dw">
           <IconButton
             aria-label="close"
             onClick={handleClosePopDrawer}
