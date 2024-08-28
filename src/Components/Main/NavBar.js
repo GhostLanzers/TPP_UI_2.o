@@ -17,13 +17,19 @@ import {
   DialogContent,
   DialogActions,
   Menu,
+  Tooltip,
+  Avatar,
+  ListItemIcon,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation, useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
+import Settings from '@mui/icons-material/Settings';
+import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
+import Logout from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
+import img from "../../Assets/Park_Logo.png";
 
 const drawerWidth = 240;
 
@@ -110,38 +116,45 @@ export default function NavBar(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  // Nav Bar Working Page Header Name Styling
   const liveLink = {
     fontWeight: "bold",
     color: "rgb(0, 204, 255)",
-    fontSize: "1.2rem",
-    letterSpacing: "5px",
+    fontSize: "1.2vw",
+    letterSpacing: "6px",
   };
   const normalLink = {
     fontWeight: "bold",
+    fontSize: "0.8vw",
   };
   return (
     <>
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
-        <AppBar sx={{ backgroundColor: alpha("#0B0B0B", 0.7), height: "8vh" }}>
+        <AppBar
+          sx={{
+            backgroundColor: alpha("#0B0B0B", 0.7),
+            height: "7vh",
+            justifyContent: "center",
+          }}
+        >
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Tooltip title="Open settings">
+              <IconButton sx={{ p: 0 }} onClick={handleDrawerToggle}>
+                <Avatar alt="Remy Sharp" src={img} sx={{width:"max-content"}} />
+              </IconButton>
+            </Tooltip>
             <Typography
               variant="h6"
               component="div"
               letterSpacing="5px"
               sx={{
                 flexGrow: 1,
+                marginLeft: "0.5vw",
                 display: { xs: "none", sm: "block" },
                 fontWeight: "bold",
+                fontSize: "1.2vw"
               }}
             >
               THE PLACEMENT PARK
@@ -218,7 +231,7 @@ export default function NavBar(props) {
                   aria-controls={open ? "AddOns-Menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
-                  sx={{ fontWeight: "bold" }}
+                  sx={{ fontWeight: "bold", fontSize: "1.8vh" }}
                   endIcon={<KeyboardDoubleArrowDown />}
                 >
                   {username}
@@ -229,13 +242,52 @@ export default function NavBar(props) {
                   open={open}
                   MenuListProps={{ "aria-labelledby": "resources-button" }}
                   onClose={handleClose}
+                  slotProps={{
+                    paper: {
+                      elevation: 0,
+                      sx: {
+                        overflow: "visible",
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        mt: 1.5,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          ml: -0.5,
+                          mr: 1,
+                        },
+                        "&::before": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%) rotate(45deg)",
+                          zIndex: 0,
+                        },
+                      },
+                    },
+                  }}
                 >
-                  <MenuItem onClick={handleClickOpen}>Logout</MenuItem>
+                  <MenuItem onClick={handleClickOpen}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                    </ListItemIcon>
+                    Logout
+                  </MenuItem>
                   <MenuItem onClick={() => navigate("/ChangePassword")}>
+                    <ListItemIcon>
+                      <Settings fontSize="small" />
+                    </ListItemIcon>
                     Change Password
                   </MenuItem>
                   {employeeType === "Admin" && (
                     <MenuItem onClick={() => navigate("/AddExtras")}>
+                      <ListItemIcon>
+                        <GroupAddOutlinedIcon fontSize="small"/>
+                      </ListItemIcon>
                       Add Extras
                     </MenuItem>
                   )}

@@ -233,7 +233,7 @@ export default function AddCandidate(props) {
               }}
               title="ADD PERSONAL INFORMATION"
             />
-            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.6) }}>
+            <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
               <Grid container rowSpacing={2} columnSpacing={1}>
                 <Grid item xs={12}>
                   <TextField

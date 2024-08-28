@@ -2,6 +2,7 @@ import * as React from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Margin } from "@mui/icons-material";
 
 export default function ProfileDashboard() {
   const navigate = useNavigate();
@@ -28,93 +29,44 @@ export default function ProfileDashboard() {
     fetchData();
   }, []);
 
+  const cardsStyle = {
+    height:"14.5vh",
+    backgroundColor: "transparent",
+    backdropFilter: "blur(70px)",
+    color: "white",
+    borderRadius: "20px",
+    borderLeftStyle: "solid",
+    borderLeftWidth: "0.5vh",
+  };
+
   return (
     <>
-      <div>
-        <Grid container spacing={2} sx={{ padding: "1%", paddingTop: "9.5vh" }}>
+      <div style={{ paddingLeft: "1vw", paddingRight: "1vw" }}>
+        <Grid container spacing={2} sx={{ paddingTop: "9vh" }}>
           <Grid item xs={6} md={3}>
-            <div
-              style={{
-                height: "7vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                borderRadius: "20px",
-                textAlign: "center",
-                borderBlockStyle: "solid",
-                borderColor: "white",
-                borderBlockWidth: "0.1vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onClick={() => navigate("AddCandidate")}
-              SearchProfile
-            >
-              <Typography variant="h6" color="white" fontWeight="bold">
+            <div className="dbButton" onClick={() => navigate("AddCandidate")}>
+              <Typography variant="h7" color="white" fontWeight="bold">
                 ADD CANDIDATE
               </Typography>
             </div>
           </Grid>
           <Grid item xs={6} md={3}>
-            <div
-              style={{
-                height: "7vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                borderRadius: "20px",
-                textAlign: "center",
-                borderBlockStyle: "solid",
-                borderColor: "white",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderBlockWidth: "0.1vh",
-              }}
-            >
-              <Typography variant="h6" color="white" fontWeight="bold">
+            <div className="dbButton">
+              <Typography variant="h7" color="white" fontWeight="bold">
                 ASSIGN PROFILE
               </Typography>
             </div>
           </Grid>
           <Grid item xs={6} md={3}>
-            <div
-              style={{
-                height: "7vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                borderRadius: "20px",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderBlockStyle: "solid",
-                borderColor: "white",
-                borderBlockWidth: "0.1vh",
-              }}
-            >
-              <Typography variant="h6" color="white" fontWeight="bold">
+            <div className="dbButton">
+              <Typography variant="h7" color="white" fontWeight="bold">
                 POTENTIAL LEADS
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={6} md={3}>
-            <div
-              style={{
-                height: "7vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                borderRadius: "20px",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderBlockStyle: "solid",
-                borderColor: "white",
-                borderBlockWidth: "0.1vh",
-              }}
-              onClick={() => navigate("searchprofile")}
-            >
-              <Typography variant="h6" color="white" fontWeight="bold">
+          <Grid item xs={6} md={3} onClick={() => navigate("SearchProfile")}>
+            <div className="dbButton">
+              <Typography variant="h7" color="white" fontWeight="bold">
                 SEARCH PROFILE
               </Typography>
             </div>
@@ -123,32 +75,24 @@ export default function ProfileDashboard() {
         {/* Lower Grid Data Cards */}
         <Grid
           container
-          columnSpacing={2.5}
+          columnSpacing={2}
           rowSpacing={1}
-          sx={{ padding: "1%", paddingTop: "0%" }}
+          sx={{ paddingTop: "2vh", paddingBottom: "2vh" }}
         >
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF5C00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=all")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
+                <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography component="div" variant="h7" fontWeight="bold">
                     All Candidates
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
+                <CardContent>
                   <Typography component="div" variant="h5">
                     {counts && counts["all"] ? counts["all"] : 0}
                   </Typography>
@@ -158,15 +102,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF0000",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{...cardsStyle, borderLeftColor: "#FF0000",}}
               onClick={() => navigate("/CandidateGrid?type=newCandidates")}
             >
               <Box>
@@ -189,15 +125,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FF00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{...cardsStyle, borderLeftColor: "#00FF00"}}
               onClick={() => navigate("/CandidateGrid?type=L1L2WrongNumbers")}
             >
               <Box>
@@ -220,15 +148,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FFFF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{...cardsStyle, borderLeftColor: "#00FFFF",}}
               onClick={() => navigate("/CandidateGrid?type=L1L2Blacklist")}
             >
               <Box>
@@ -251,15 +171,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF00FF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{...cardsStyle, borderLeftColor: "#FF00FF",}}
               onClick={() => navigate("/CandidateGrid?type=NonLeads")}
             >
               <Box>
@@ -280,15 +192,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF5C00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{...cardsStyle, borderLeftColor: "#FF5C00",}}
               onClick={() => navigate("/CandidateGrid?type=L1WD")}
             >
               <Box>
@@ -310,6 +214,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -339,6 +244,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -368,6 +274,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -397,6 +304,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -426,6 +334,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -455,6 +364,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -486,6 +396,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -517,6 +428,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -546,6 +458,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -575,6 +488,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -606,6 +520,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -635,6 +550,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -666,6 +582,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -695,6 +612,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -724,6 +642,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -753,6 +672,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
@@ -784,6 +704,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{
+                height: "14.5vh",
                 backgroundColor: "transparent",
                 backdropFilter: "blur(70px)",
                 color: "white",
