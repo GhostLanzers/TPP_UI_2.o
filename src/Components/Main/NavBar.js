@@ -121,12 +121,12 @@ export default function NavBar(props) {
   const liveLink = {
     fontWeight: "bold",
     color: "rgb(0, 204, 255)",
-    fontSize: "1.2vw",
+    fontSize: "2.6vh",
     letterSpacing: "6px",
   };
   const normalLink = {
     fontWeight: "bold",
-    fontSize: "0.8vw",
+    fontSize: "1.7vh",
   };
   return (
     <>
@@ -154,7 +154,7 @@ export default function NavBar(props) {
                 marginLeft: "0.5vw",
                 display: { xs: "none", sm: "block" },
                 fontWeight: "bold",
-                fontSize: "1.2vw"
+                fontSize: "3vh"
               }}
             >
               THE PLACEMENT PARK

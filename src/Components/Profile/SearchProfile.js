@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function SearchProfile(props) {
-
   const { employeeType, userid } = useSelector((state) => state.user);
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
@@ -33,9 +32,13 @@ export default function SearchProfile(props) {
   });
   const [tableData, setTableData] = React.useState([]);
   const handleSearch = async () => {
-    if (searchParams.name==="" && searchParams.mobile==="" && searchParams.email==="") {
-        toast.warning("Fuckup")
-        return
+    if (
+      searchParams.name === "" &&
+      searchParams.mobile === "" &&
+      searchParams.email === ""
+    ) {
+      toast.warning("Fuckup");
+      return;
     }
     try {
       const res = await axios.post(
@@ -136,24 +139,35 @@ export default function SearchProfile(props) {
   };
   return (
     <>
-      <Container disableGutters maxWidth={false} sx={{ paddingTop: "9.5vh", width: "96%" }}>
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{ paddingTop: "9vh", width: "96%" }}
+      >
         <Card
           sx={{
             borderRadius: "20px",
-              backgroundColor: "transparent",
+            backgroundColor: "transparent",
           }}
         >
           <CardHeader
             sx={{
-                backgroundColor: alpha("#0B0B0B", 0.5),
-                backdropFilter: "blur(60px)",
-                color: "white",
-              }}
+              backgroundColor: alpha("#0B0B0B", 0.5),
+              backdropFilter: "blur(5px)",
+              height: "7.5vh",
+              color: "white",
+            }}
             title="SEARCH PROFILE"
+            titleTypographyProps={{
+              sx: {
+                fontSize: "2.8vh",
+                letterSpacing: "5px",
+              },
+            }}
           />
-          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.6) }}>
+          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
             <Grid container rowSpacing={2} columnSpacing={1}>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   id="outlined-basic"
                   label="Name"
@@ -165,7 +179,7 @@ export default function SearchProfile(props) {
                   }
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   id="outlined-basic"
                   type="number"
@@ -178,7 +192,7 @@ export default function SearchProfile(props) {
                   }
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   id="outlined-basic"
                   label="Email ID"
@@ -190,8 +204,8 @@ export default function SearchProfile(props) {
                   }
                 />
               </Grid>
-              <Grid item xs={9} />
-              <Grid item xs={3}>
+              <Grid item xs={8} md={9} />
+              <Grid item xs={4} md={3}>
                 <Button
                   fullWidth
                   size="large"
@@ -206,14 +220,18 @@ export default function SearchProfile(props) {
           </CardContent>
           <BottomNavigation
             sx={{
-                backgroundColor: alpha("#0B0B0B", 0.5),
-                backdropFilter: "blur(60px)",
+              backgroundColor: alpha("#0B0B0B", 0.5),
+              backdropFilter: "blur(5px)",
+              height: "7vh",
             }}
-            elevation={3}
           />
         </Card>
       </Container>
-      <Container disableGutters maxWidth={false} sx={{ paddingTop: "2vh", width: "96%", paddingBottom: "1.5vh" }}>
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{ paddingTop: "2vh", width: "96%", paddingBottom: "2vh" }}
+      >
         <Card
           sx={{
             borderRadius: "20px",
@@ -222,20 +240,26 @@ export default function SearchProfile(props) {
         >
           <CardHeader
             sx={{
-                backgroundColor: alpha("#0B0B0B", 0.5),
-                backdropFilter: "blur(60px)",
-                color: "white",
-              }}
+              backgroundColor: alpha("#0B0B0B", 0.5),
+              backdropFilter: "blur(5px)",
+              height: "7.5vh",
+              color: "white",
+            }}
             title="SEARCH RESULTS"
+            titleTypographyProps={{
+              sx: {
+                fontSize: "2.8vh",
+                letterSpacing: "5px",
+              },
+            }}
           />
-          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.3) }}>
+          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.2) }}>
             <Grid container xs={12}>
               <div
                 className="ag-theme-quartz-dark"
                 style={{
                   height: "100%",
-                  width: "99%",
-                  marginLeft: "0.5%",
+                  width: "100%",
                 }}
               >
                 <AgGridReact
@@ -252,9 +276,10 @@ export default function SearchProfile(props) {
           </CardContent>
           <BottomNavigation
             sx={{
-                backgroundColor: alpha("#FFFFFF", 0.15),
-                backdropFilter: "blur(60px)"
-              }}
+              backgroundColor: alpha("#0B0B0B", 0.5),
+              backdropFilter: "blur(5px)",
+              height: "7vh",
+            }}
           />
         </Card>
       </Container>

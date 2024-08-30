@@ -261,10 +261,17 @@ export default function EditCandidate() {
             <CardHeader
               sx={{
                 backgroundColor: alpha("#0B0B0B", 0.5),
-                backdropFilter: "blur(60px)",
+                backdropFilter: "blur(5px)",
+                height: "7.5vh",
                 color: "white",
               }}
               title={editable ? "EDIT CANDIDATE" : "VIEW CANDIDATE"}
+              titleTypographyProps={{
+                sx: {
+                  fontSize: "2.8vh",
+                  letterSpacing: "5px",
+                },
+              }}
             />
             <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.75) }}>
               <Grid container rowSpacing={2} columnSpacing={1}>
@@ -1302,8 +1309,9 @@ export default function EditCandidate() {
             </CardContent>
             <BottomNavigation
               sx={{
-                backgroundColor: alpha("#FFFFFF", 0.15),
-                backdropFilter: "blur(60px)",
+                backgroundColor: alpha("#0B0B0B", 0.5),
+                backdropFilter: "blur(5px)",
+                height: "7vh",
               }}
             />
           </Card>

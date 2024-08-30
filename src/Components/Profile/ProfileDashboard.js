@@ -30,7 +30,7 @@ export default function ProfileDashboard() {
   }, []);
 
   const cardsStyle = {
-    height:"14.5vh",
+    height: "14.5vh",
     backgroundColor: "transparent",
     backdropFilter: "blur(70px)",
     color: "white",
@@ -86,14 +86,14 @@ export default function ProfileDashboard() {
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                  <Typography variant="h7" fontWeight="bold">
                     All Candidates
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
-                  <Typography component="div" variant="h5">
+                  <Typography variant="h5">
                     {counts && counts["all"] ? counts["all"] : 0}
                   </Typography>
                 </CardContent>
@@ -102,19 +102,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{...cardsStyle, borderLeftColor: "#FF0000",}}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=newCandidates")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     New Candidate
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["newCandidates"]
                       ? counts["newCandidates"]
                       : 0}
@@ -125,19 +125,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{...cardsStyle, borderLeftColor: "#00FF00"}}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
               onClick={() => navigate("/CandidateGrid?type=L1L2WrongNumbers")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L1 & L2 Wrong Numbers
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["L1L2WrongNumbers"]
                       ? counts["L1L2WrongNumbers"]
                       : 0}
@@ -148,19 +148,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{...cardsStyle, borderLeftColor: "#00FFFF",}}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=L1L2Blacklist")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L1 & L2 Blacklist
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["L1L2Blacklist"]
                       ? counts["L1L2Blacklist"]
                       : 0}
@@ -171,19 +171,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{...cardsStyle, borderLeftColor: "#FF00FF",}}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
               onClick={() => navigate("/CandidateGrid?type=NonLeads")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Non Leads
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["NonLeads"] ? counts["NonLeads"] : 0}
                   </Typography>
                 </CardContent>
@@ -192,19 +192,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{...cardsStyle, borderLeftColor: "#FF5C00",}}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=L1WD")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L1 WD
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["L1WD"] ? counts["L1WD"] : 0}
                   </Typography>
                 </CardContent>
@@ -213,28 +213,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF0000",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=L2WD")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L2 WD
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["L2WD"] ? counts["L2WD"] : 0}
                   </Typography>
                 </CardContent>
@@ -243,28 +234,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FF00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
               onClick={() => navigate("/CandidateGrid?type=NSWI")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     No Show Walk-In
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["NSWI"] ? counts["NSWI"] : 0}
                   </Typography>
                 </CardContent>
@@ -273,28 +255,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FFFF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=NSIC")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     No Show IC
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["NSIC"] ? counts["NSIC"] : 0}
                   </Typography>
                 </CardContent>
@@ -303,28 +276,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF00FF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
               onClick={() => navigate("/CandidateGrid?type=Awaiting")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L2 Awaiting
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["Awaiting"] ? counts["Awaiting"] : 0}
                   </Typography>
                 </CardContent>
@@ -333,28 +297,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF5C00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=L2DND")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     L2 DND
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["L2DND"] ? counts["L2DND"] : 0}
                   </Typography>
                 </CardContent>
@@ -363,28 +318,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF0000",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=InterviewScheduled")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Interview Scheduled
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["InterviewScheduled"]
                       ? counts["InterviewScheduled"]
                       : 0}
@@ -395,28 +341,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FF00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
               onClick={() => navigate("/CandidateGrid?type=VirtualInterview")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Virtual Interview
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["VirtualInterview"]
                       ? counts["VirtualInterview"]
                       : 0}
@@ -427,28 +364,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FFFF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=Rejects")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Rejects
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["Rejects"] ? counts["Rejects"] : 0}
                   </Typography>
                 </CardContent>
@@ -457,28 +385,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF00FF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
               onClick={() => navigate("/CandidateGrid?type=OfferDrop")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Offer Drop
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["OfferDrop"] ? counts["OfferDrop"] : 0}
                   </Typography>
                 </CardContent>
@@ -487,28 +406,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF5C00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=AwaitingJoining")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Awaiting Joining
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["AwaitingJoining"]
                       ? counts["AwaitingJoining"]
                       : 0}
@@ -519,28 +429,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF0000",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=Hold")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Hold
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["Hold"] ? counts["Hold"] : 0}
                   </Typography>
                 </CardContent>
@@ -549,28 +450,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FF00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
               onClick={() => navigate("/CandidateGrid?type=TrackingTenure")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Tracking Tenure
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["TrackingTenure"]
                       ? counts["TrackingTenure"]
                       : 0}
@@ -581,28 +473,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FFFF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=Billed")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Billed
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["Billed"] ? counts["Billed"] : 0}
                   </Typography>
                 </CardContent>
@@ -611,28 +494,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF00FF",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
               onClick={() => navigate("/CandidateGrid?type=N2B")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     N2B
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["N2B"] ? counts["N2B"] : 0}
                   </Typography>
                 </CardContent>
@@ -641,28 +515,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF5C00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=NonTenure")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Non Tenure
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["NonTenure"] ? counts["NonTenure"] : 0}
                   </Typography>
                 </CardContent>
@@ -671,28 +536,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#FF0000",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=ProcessRampdown")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Process Rampdown
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["ProcessRampdown"]
                       ? counts["ProcessRampdown"]
                       : 0}
@@ -703,28 +559,19 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{
-                height: "14.5vh",
-                backgroundColor: "transparent",
-                backdropFilter: "blur(70px)",
-                color: "white",
-                borderRadius: "20px",
-                borderLeftStyle: "solid",
-                borderLeftColor: "#00FF00",
-                borderLeftWidth: "0.5vh",
-              }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
               onClick={() => navigate("/CandidateGrid?type=ClientRampdown")}
             >
               <Box>
-                <CardContent sx={{ flex: "1 0 auto", maxHeight: "5vh" }}>
-                  <Typography component="div" variant="h7" fontWeight="bold">
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
                     Client Rampdown
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                <CardContent>
+                  <Typography variant="h5">
                     {counts && counts["ClientRampdown"]
                       ? counts["ClientRampdown"]
                       : 0}

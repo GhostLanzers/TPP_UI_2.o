@@ -36,7 +36,7 @@ function Layout() {
       <Routes>
         <Route path="/login" element={<Login/>} />
         {/* Navigation Bar Routes */}
-        <Route path="/live" element={<SearchProfile/>} />
+        <Route path="/live" element={<Login/>} />
         <Route path="/" element={<ProfileDashboard  />} />
         <Route path="/company" element={<Company />} />
         <Route path="/account" element={<Account />} />

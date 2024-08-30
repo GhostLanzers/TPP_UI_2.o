@@ -247,8 +247,8 @@ export default function CandidateGrid(props) {
           sx={{
             paddingTop: "10vh",
             height: "15vh",
-            marginLeft: "0.5%",
-            width: "98%",
+            marginLeft: "1vw",
+            width: "98vw",
           }}
         >
           <Grid item xs={2} md={1}>
@@ -300,10 +300,9 @@ export default function CandidateGrid(props) {
           className="ag-theme-quartz-dark"
           style={{
             marginTop: "4.5vh",
-            marginLeft: "1vh",
+            marginLeft: "1vw",
             height: "80vh",
             width: "98vw",
-            position: "absolute",
           }}
         >
           <AgGridReact

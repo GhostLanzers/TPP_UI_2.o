@@ -67,20 +67,19 @@ export default function Login() {
             sx={{
               width: "40%",
               marginLeft: "30%",              
-              backgroundColor: alpha("#FFFFFF", 0.5),
+              backgroundColor: alpha("#FFFFFF", 0.4),
             }}
           >
             <CardMedia
               component={"img"}
               sx={{ height: "20vh", width: "100%" }}
               image={image}
-              alt="Park logo"
+              alt="The Placement Park logo"
             />
             <CardContent>
               <Typography
                 gutterBottom
                 variant="h5"
-                component="div"
                 textAlign="center"
                 fontWeight="bold"
                 letterSpacing="10px"
