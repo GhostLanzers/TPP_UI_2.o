@@ -13,6 +13,7 @@ import EditCandidate from "./Components/Profile/EditCandidate";
 import SearchProfile from "./Components/Profile/SearchProfile";
 import AssignCandidate from "./Components/Profile/AssignCandidate";
 import AssignCandidateGrid from "./Components/Profile/AssignCandidateGrid";
+import PotentialLeads from "./Components/Profile/PotentailLeads";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function Layout() {
         <Route path="/searchprofile" element={<SearchProfile />} />
         <Route path="/assigncandidate" element={<AssignCandidate />}/>
         <Route path="/assigncandidategrid" element={<AssignCandidateGrid/>}/>
+        <Route path="/potentialleads" element={<PotentialLeads />}/>
       </Routes>
     </>
   );

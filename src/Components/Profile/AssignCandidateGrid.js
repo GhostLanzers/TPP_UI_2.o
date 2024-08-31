@@ -11,7 +11,6 @@ import {
   Dialog,
   styled,
   DialogContent,
-  Alert,
   BottomNavigation,
   Container,
   TextField,
@@ -290,7 +289,7 @@ export default function AssignCandidateGrid(props) {
   };
   return (
     <>
-      <Container sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}>
+      <Container sx={{ paddingTop: "9vh", width: "100%", paddingBottom: "2vh" }}>
         <Card
           sx={{
             borderRadius: "20px",
@@ -312,9 +311,9 @@ export default function AssignCandidateGrid(props) {
               },
             }}
           />
-          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.3) }}>
-            <Grid container columnSpacing={1} rowSpacing={1}>
-              <Grid item xs={9}>
+          <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
+            <Grid container columnSpacing={1} rowSpacing={1} sx={{paddingBottom: "2vh"}}>
+              <Grid item xs={8}>
                 <Autocomplete
                   multiple
                   id="Employees"
@@ -347,7 +346,7 @@ export default function AssignCandidateGrid(props) {
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <Button
                   fullWidth
                   size="large"
@@ -361,7 +360,7 @@ export default function AssignCandidateGrid(props) {
                   ASSIGN
                 </Button>
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item xs={8} sm={2} md={1.5}>
                 <TextField
                   fullWidth
                   type="number"
@@ -370,7 +369,7 @@ export default function AssignCandidateGrid(props) {
                   onChange={(e) => setCount(e.target.value)}
                 ></TextField>
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item xs={4} sm={3} md={2}>
                 <Button
                   fullWidth
                   size="large"
@@ -393,7 +392,8 @@ export default function AssignCandidateGrid(props) {
                   Select
                 </Button>
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item md={2} display={{xs:"none", md:"block"}}/>
+              <Grid item xs={7.5} sm={4.5}>
                 <TextField
                   fullWidth
                   label="File Name"
@@ -401,22 +401,14 @@ export default function AssignCandidateGrid(props) {
                   onChange={(e) => setFileName(e.target.value)}
                 ></TextField>
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item xs={4.5} sm={2.5} md={2}>
                 <ExcelExport
                   excelData={potentialLeadList.map((l) => flatten(l))}
                   fileName={fileName}
                 ></ExcelExport>
               </Grid>
             </Grid>
-            <div
-              className="ag-theme-quartz-dark"
-              sx={{
-                height: "100%",
-                width: "100%",
-                position: "inherit",
-                marginTop: "2vh",
-              }}
-            >
+            <div className="ag-theme-quartz-dark" >
               <AgGridReact
                 ref={gridapi}
                 domLayout="autoHeight"

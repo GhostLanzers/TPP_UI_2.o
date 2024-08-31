@@ -56,7 +56,7 @@ export default function ProfileDashboard() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={6} md={3}>
+          <Grid item xs={6} md={3} onClick={()=> navigate("PotentialLeads")}>
             <div className="dbButton">
               <Typography variant="h7" color="white" fontWeight="bold">
                 POTENTIAL LEADS

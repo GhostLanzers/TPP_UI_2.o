@@ -29,7 +29,7 @@ import Logout from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
-import img from "../../Assets/Park_Logo.png";
+import img from "../../Assets/./Park_Logo.png";
 
 const drawerWidth = 240;
 
@@ -142,7 +142,7 @@ export default function NavBar(props) {
           <Toolbar>
             <Tooltip title="Open settings">
               <IconButton sx={{ p: 0 }} onClick={handleDrawerToggle}>
-                <Avatar alt="Remy Sharp" src={img} sx={{width:"max-content"}} />
+                <Avatar alt="THE PLACEMENT PARK LOGO PNG" src={img} sx={{width:"max-content"}} />
               </IconButton>
             </Tooltip>
             <Typography

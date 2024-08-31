@@ -209,7 +209,7 @@ export default function SearchProfile(props) {
                 <Button
                   fullWidth
                   size="large"
-                  sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
+                  sx={{ backgroundColor: alpha("#0000FF", 0.5), height: "100%" }}
                   variant="contained"
                   onClick={handleSearch}
                 >
