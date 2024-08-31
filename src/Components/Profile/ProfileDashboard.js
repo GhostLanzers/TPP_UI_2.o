@@ -2,7 +2,6 @@ import * as React from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Margin } from "@mui/icons-material";
 
 export default function ProfileDashboard() {
   const navigate = useNavigate();
@@ -50,7 +49,7 @@ export default function ProfileDashboard() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={6} md={3}>
+          <Grid item xs={6} md={3} onClick={() => navigate("AssignCandidate")}>
             <div className="dbButton">
               <Typography variant="h7" color="white" fontWeight="bold">
                 ASSIGN PROFILE

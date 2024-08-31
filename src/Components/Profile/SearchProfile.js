@@ -37,7 +37,7 @@ export default function SearchProfile(props) {
       searchParams.mobile === "" &&
       searchParams.email === ""
     ) {
-      toast.warning("Fuckup");
+      toast.warning("Handle");
       return;
     }
     try {

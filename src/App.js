@@ -11,6 +11,8 @@ import AddCandidate from "./Components/Profile/AddCandidate";
 import CandidateGrid from "./Components/Profile/CandidateGrid";
 import EditCandidate from "./Components/Profile/EditCandidate";
 import SearchProfile from "./Components/Profile/SearchProfile";
+import AssignCandidate from "./Components/Profile/AssignCandidate";
+import AssignCandidateGrid from "./Components/Profile/AssignCandidateGrid";
 
 function App() {
   return (
@@ -34,18 +36,20 @@ function Layout() {
         </ProtectedRoute>
       )}
       <Routes>
-        <Route path="/login" element={<Login/>} />
+        <Route path="/login" element={<Login/>}/>
         {/* Navigation Bar Routes */}
-        <Route path="/live" element={<Login/>} />
-        <Route path="/" element={<ProfileDashboard  />} />
-        <Route path="/company" element={<Company />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/bulkupload" element={<BulkUpload />} />
+        <Route path="/live" element={<Login/>}/>
+        <Route path="/" element={<ProfileDashboard/>}/>
+        <Route path="/company" element={<Company />}/>
+        <Route path="/account" element={<Account />}/>
+        <Route path="/bulkupload" element={<BulkUpload />}/>
         {/* Candidate Routes */}
-        <Route path="/addcandidate" element={<AddCandidate/>} />
-        <Route path="/candidategrid" element={<CandidateGrid />} />
-        <Route path="/editcandidate/:id" element={<EditCandidate />} />
+        <Route path="/addcandidate" element={<AddCandidate/>}/>
+        <Route path="/candidategrid" element={<CandidateGrid />}/>
+        <Route path="/editcandidate/:id" element={<EditCandidate />}/>
         <Route path="/searchprofile" element={<SearchProfile />} />
+        <Route path="/assigncandidate" element={<AssignCandidate />}/>
+        <Route path="/assigncandidategrid" element={<AssignCandidateGrid/>}/>
       </Routes>
     </>
   );
