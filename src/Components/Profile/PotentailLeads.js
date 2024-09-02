@@ -19,6 +19,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
 import ExcelExport from "../Main/ExcelExport";
 import { flatten } from "flat";
+import { toast } from "react-toastify";
 
 export default function PotentialLeads() {
   const [companiesList, setCompaniesList] = useState([]);
@@ -108,6 +109,14 @@ export default function PotentialLeads() {
   }, []);
 
   const handleGetLeads = async () => {
+    if(searchParams.company=== ""){
+      toast.error("Please Select Company")
+      return
+    }
+    if(searchParams.role===""){
+      toast.error("Please Select Role")
+      return
+    }
     var query = [];
     searchParams.query.forEach(({ label, value }) => {
       switch (value) {

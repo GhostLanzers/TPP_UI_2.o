@@ -7,7 +7,9 @@
   min-width: 97vw;
   min-height: 100vh;
 }
-
+::-webkit-scrollbar {
+  display: none;
+}
 .dbButton{
   height: 7vh;
   background-color: transparent;

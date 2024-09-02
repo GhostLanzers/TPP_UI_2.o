@@ -128,6 +128,14 @@ export default function NavBar(props) {
     fontWeight: "bold",
     fontSize: "1.7vh",
   };
+  console.log(
+    location.pathname.toLowerCase().search("candidate"),
+    location.pathname.toLowerCase().search("leads"),
+    location.pathname === "/",
+    location.pathname.toLowerCase().search("company"),
+    location.pathname.toLowerCase().search("account")
+  );
+  
   return (
     <>
       <CssBaseline />
@@ -142,7 +150,11 @@ export default function NavBar(props) {
           <Toolbar>
             <Tooltip title="Open settings">
               <IconButton sx={{ p: 0 }} onClick={handleDrawerToggle}>
-                <Avatar alt="THE PLACEMENT PARK LOGO PNG" src={img} sx={{width:"max-content"}} />
+                <Avatar
+                  alt="THE PLACEMENT PARK LOGO PNG"
+                  src={img}
+                  sx={{ width: "max-content" }}
+                />
               </IconButton>
             </Tooltip>
             <Typography
@@ -154,7 +166,7 @@ export default function NavBar(props) {
                 marginLeft: "0.5vw",
                 display: { xs: "none", sm: "block" },
                 fontWeight: "bold",
-                fontSize: "3vh"
+                fontSize: { xs: "none", sm: "2vh", md: "3vh" },
               }}
             >
               THE PLACEMENT PARK
@@ -172,7 +184,13 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={location.pathname === "/" ? liveLink : normalLink}
+                  sx={
+                    location.pathname.toLowerCase().search("candidate")!==-1 ||
+                    location.pathname.toLowerCase().search("leads")!==-1 ||
+                    location.pathname === "/"
+                      ? liveLink
+                      : normalLink
+                  }
                   onClick={() => navigate("/")}
                 >
                   Profile
@@ -180,7 +198,11 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={location.pathname === "/Company" ? liveLink : normalLink}
+                  sx={
+                    location.pathname.toLowerCase().search("company")!==-1
+                      ? liveLink
+                      : normalLink
+                  }
                   onClick={() => navigate("/Company")}
                 >
                   Company
@@ -190,7 +212,9 @@ export default function NavBar(props) {
                     color="inherit"
                     size="small"
                     sx={
-                      location.pathname === "/Account" ? liveLink : normalLink
+                      location.pathname.toLowerCase().search("account") !== -1
+                        ? liveLink
+                        : normalLink
                     }
                     onClick={() => navigate("/Account")}
                   >
@@ -286,7 +310,7 @@ export default function NavBar(props) {
                   {employeeType === "Admin" && (
                     <MenuItem onClick={() => navigate("/AddExtras")}>
                       <ListItemIcon>
-                        <GroupAddOutlinedIcon fontSize="small"/>
+                        <GroupAddOutlinedIcon fontSize="small" />
                       </ListItemIcon>
                       Add Extras
                     </MenuItem>
