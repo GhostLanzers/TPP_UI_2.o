@@ -23,8 +23,8 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
-import Settings from '@mui/icons-material/Settings';
-import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
+import Settings from "@mui/icons-material/Settings";
+import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Logout from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
@@ -93,7 +93,7 @@ export default function NavBar(props) {
           <Button
             color="inherit"
             size="large"
-            onClick={() => navigate("CompanyDashBoard")}
+            onClick={() => navigate("companydashboard")}
           >
             Company
           </Button>
@@ -101,11 +101,18 @@ export default function NavBar(props) {
             <Button
               color="inherit"
               size="large"
-              onClick={() => navigate("AccountDashBoard")}
+              onClick={() => navigate("accountdashboard")}
             >
               Account
             </Button>
           )}
+          <Button
+            color="inherit"
+            size="large"
+            onClick={() => navigate("/ChangePassword")}
+          >
+            Change Password
+          </Button>
           <Button color="inherit" onClick={handleClickOpenDrawer}>
             {username}
           </Button>
@@ -128,14 +135,7 @@ export default function NavBar(props) {
     fontWeight: "bold",
     fontSize: "1.7vh",
   };
-  console.log(
-    location.pathname.toLowerCase().search("candidate"),
-    location.pathname.toLowerCase().search("leads"),
-    location.pathname === "/",
-    location.pathname.toLowerCase().search("company"),
-    location.pathname.toLowerCase().search("account")
-  );
-  
+
   return (
     <>
       <CssBaseline />
@@ -176,17 +176,11 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={location.pathname === "/live" ? liveLink : normalLink}
-                  onClick={() => navigate("/live")}
-                >
-                  Live
-                </Button>
-                <Button
-                  color="inherit"
-                  size="small"
                   sx={
-                    location.pathname.toLowerCase().search("candidate")!==-1 ||
-                    location.pathname.toLowerCase().search("leads")!==-1 ||
+                    location.pathname.toLowerCase().search("candidate") !==
+                      -1 ||
+                    location.pathname.toLowerCase().search("profile") !== -1 ||
+                    location.pathname.toLowerCase().search("leads") !== -1 ||
                     location.pathname === "/"
                       ? liveLink
                       : normalLink
@@ -199,11 +193,12 @@ export default function NavBar(props) {
                   color="inherit"
                   size="small"
                   sx={
-                    location.pathname.toLowerCase().search("company")!==-1
+                    location.pathname.toLowerCase().search("company") !== -1 ||
+                    location.pathname.toLowerCase().search("role") !== -1
                       ? liveLink
                       : normalLink
                   }
-                  onClick={() => navigate("/Company")}
+                  onClick={() => navigate("/companydashboard")}
                 >
                   Company
                 </Button>
@@ -212,11 +207,13 @@ export default function NavBar(props) {
                     color="inherit"
                     size="small"
                     sx={
-                      location.pathname.toLowerCase().search("account") !== -1
+                      location.pathname.toLowerCase().search("account") !==
+                        -1 ||
+                      location.pathname.toLowerCase().search("employee") !== -1
                         ? liveLink
                         : normalLink
                     }
-                    onClick={() => navigate("/Account")}
+                    onClick={() => navigate("/accountdashboard")}
                   >
                     Account
                   </Button>
@@ -255,7 +252,14 @@ export default function NavBar(props) {
                   aria-controls={open ? "AddOns-Menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
-                  sx={{ fontWeight: "bold", fontSize: "1.8vh" }}
+                  sx={
+                    location.pathname.toLowerCase().search("addextras") !==
+                      -1 ||
+                    location.pathname.toLowerCase().search("changepassword") !==
+                      -1
+                      ? liveLink
+                      : normalLink
+                  }
                   endIcon={<KeyboardDoubleArrowDown />}
                 >
                   {username}
@@ -435,15 +439,16 @@ export default function NavBar(props) {
           >
             <CloseIcon />
           </IconButton>
-          <Typography
-            gutterBottom
-            sx={{
-              wordBreak: "break-word",
-            }}
-          >
-            For {employeeType === "Admin" && "Add Extras and"} Password Change
-            use Tab/Laptop.
-          </Typography>
+          {employeeType === "Admin" && (
+            <Typography
+              gutterBottom
+              sx={{
+                wordBreak: "break-word",
+              }}
+            >
+              For Bulk-Upload & Add-Extras use Tab / Laptop.
+            </Typography>
+          )}
           <Typography
             gutterBottom
             sx={{

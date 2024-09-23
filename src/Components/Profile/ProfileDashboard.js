@@ -28,6 +28,7 @@ export default function ProfileDashboard() {
     fetchData();
   }, []);
 
+  //CARDS INLINE CSS
   const cardsStyle = {
     height: "14.5vh",
     backgroundColor: "transparent",
@@ -56,7 +57,7 @@ export default function ProfileDashboard() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={6} md={3} onClick={()=> navigate("PotentialLeads")}>
+          <Grid item xs={6} md={3} onClick={() => navigate("PotentialLeads")}>
             <div className="dbButton">
               <Typography variant="h7" color="white" fontWeight="bold">
                 POTENTIAL LEADS
@@ -574,6 +575,48 @@ export default function ProfileDashboard() {
                     {counts && counts["ClientRampdown"]
                       ? counts["ClientRampdown"]
                       : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
+              onClick={() => navigate("/")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    Invoice Processed
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["Billed"] ? counts["Billed"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
+              onClick={() => navigate("/")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    BUSINESS TRACKING
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["N2B"] ? counts["N2B"] : 0}
                   </Typography>
                 </CardContent>
               </Box>

@@ -59,14 +59,21 @@ export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  //CSS HANDLING FOR CARDS/BUTTON/PAGE ON XS AND SM
+  const screenWidth = window.innerWidth;
+  const inlineStyles = {
+    paddingBottom: '2vh',
+    ...(screenWidth <= 576 && { marginLeft: '5%', width: '90%' }), // xs screens
+    ...(screenWidth > 576 && { marginLeft: '32.5%', width: '35%' }),  // xs+ screens
+  };
+
   return (
     <>
       <div>
         <div style={{ paddingTop: "20vh" }}>
           <Card
             sx={{
-              width: "40%",
-              marginLeft: "30%",              
+              ...inlineStyles,             
               backgroundColor: alpha("#FFFFFF", 0.4),
             }}
           >

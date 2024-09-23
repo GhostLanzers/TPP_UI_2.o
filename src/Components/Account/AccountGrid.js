@@ -2,213 +2,150 @@ import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import { toast } from "react-toastify";
 import {
   Button,
   Grid,
-  Dialog,
-  DialogContent,
-  DialogActions,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
   DialogTitle,
   IconButton,
   TextField,
   alpha,
 } from "@mui/material";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import CallIcon from "@mui/icons-material/Call";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
-import { useSelector } from "react-redux";
-import ExcelExport from "../../Components/Main/ExcelExport";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
+import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
+import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
+import ExcelExport from "../Main/ExcelExport";
 
-export default function CandidateGrid(props) {
+export default function AccountGrid() {
 
   const [open, setOpen] = React.useState(false);
-
+  const [deleteData, setDeleteData] = React.useState({});
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const [deleteData, setDeleteData] = useState({});
 
-  const { employeeType, userid } = useSelector((state) => state.user);
-  const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
-  const empId = userid;
-  const isTeamlead = employeeType === "Teamlead";
-  const isAdmin = employeeType === "Admin";
-  const [tableData, setTableData] = useState([]);
+  const [employeeList, setEmployeeList] = useState([]);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
   const gridapi = React.useRef();
   const [fileName, setFileName] = useState(String(new Date()));
   const [warning, setWarning] = useState("");
   const [count, setCount] = useState(0);
-
-  const [searchParams] = useSearchParams();
-  var url =
-    "http://localhost:5000/api/v1/candidate/data/" +
-    searchParams.get("type") +
-    "?";
-
-  var flag = 0;
-
-  if (searchParams.has("companyId")) {
-    if (flag === 1) url += "&&";
-    flag = 1;
-    url += "companyId=" + searchParams.get("companyId");
-  }
-  if (searchParams.has("roleId")) {
-    if (flag === 1) url += "&&";
-    flag = 1;
-    url += "roleId=" + searchParams.get("roleId");
-  }
-
-  console.log(url);
+  console.log(searchParams.get("employeeType"));
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(url, {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        });
+        const res = await axios.get(
+          "http://localhost:5000/api/v1/employee/employeeType/" +
+            searchParams.get("employeeType"),
+          {
+            headers: {
+              authorization: JSON.parse(localStorage.getItem("user")).token,
+            },
+          }
+        );
 
-        setTableData(res.data);
-      } catch (error) {}
+        setEmployeeList(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
-  }, [url, setTableData]);
-
+  }, [setEmployeeList]);
   const column = [
     {
-      headerName: "Created By",
-      field: "createdByEmployee.name",
+      headerName: "Employee Name",
+      field: "name",
+      width: "280px",
       headerCheckboxSelection: true,
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
     },
-    { headerName: "Assigned to", field: "assignedEmployee.name" },
-    { headerName: "Candidate Name", field: "fullName" },
-    { headerName: "Candidate ID", field: "candidateId" },
-    { headerName: "Candidate Number", field: "mobile", sortable: false },
-    { headerName: "Candidate Email ID", field: "email" },
-    { headerName: "Interview Status", field: "interviewStatus" },
-    { headerName: "L1 Assessment", field: "l1Assessment" },
-    { headerName: "L2 Assessment", field: "l2Assessment" },
-    { headerName: "Company", field: "companyId.companyName" },
-    { headerName: "Role", field: "roleId.role" },
-    { headerName: "Interview Date", field: "interviewDate" },
-    { headerName: "Interview Status", field: "interviewStatus" },
-    { headerName: "Remarks", field: "remarks" },
-    { headerName: "Tenure Status", field: "select" },
+    { headerName: "Employee ID", field: "employeeId", width: "180px" },
     {
-      headerName: "Onboarding Date",
-      field: "onboardingDate",
-      valueFormatter: (p) => dayjs(p.value).format("DD/MM/YYYY"),
+      headerName: "Employee Number",
+      field: "mobile",
+      width: "200px",
+      sortable: false,
     },
     {
-      headerName: "Next Tracking Date",
-      field: "nextTrackingDate",
-      valueFormatter: (p) => dayjs(p.value).format("DD/MM/YYYY"),
-    },
-    { headerName: "Rate", field: "rate", hide: !isAdmin },
-
-    {
-      headerName: "Actions",
-      width: isAdmin ? "180px" : "150px",
-      field: "assignedEmployee",
-
-      comparator: (a, b) => {
-        if (a === empId && b !== empId) return -1;
-        else if (b === empId && a !== empId) return 1;
-        else if (a === undefined || a === null) return 1;
-        else if (b === undefined || b === null) return -1;
-        else return 0;
-      },
+      headerName: "Employee Status",
+      width: "180px",
       cellRenderer: (props) => {
         return (
           <>
-            <Grid container columnSpacing={0}>
-              <Grid item xs={isAdmin ? 4 : 6}>
-                <IconButton
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=false`)
-                  }
-                >
-                  <VisibilityTwoToneIcon />
+            {props.data.status ? (
+              <>
+                <IconButton color="success">
+                  <CheckCircleTwoToneIcon />
                 </IconButton>
-              </Grid>
-              <Grid item xs={isAdmin ? 4 : 6}>
-                <IconButton
-                  size="small"
-                  color="secondary"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=true`)
-                  }
-                  disabled={
-                    !rtAccess
-                      ? false
-                      : props.data.assignedEmployee === empId
-                      ? false
-                      : true
-                  }
-                >
-                  <BorderColorTwoToneIcon />
+              </>
+            ) : (
+              <>
+                <IconButton color="error">
+                  <CancelTwoToneIcon />
                 </IconButton>
-              </Grid>
-              {isAdmin && (
-                <Grid item xs={4}>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => {
-                      setDeleteData({
-                        name: props.data.fullName,
-                        id: props.data.candidateId,
-                        _id: props.data._id,
-                      });
-                      handleClickOpen();
-                    }}
-                  >
-                    <DeleteSweepTwoToneIcon />
-                  </IconButton>
-                </Grid>
-              )}
-            </Grid>
+              </>
+            )}
           </>
         );
       },
     },
     {
-      headerName: "Contact",
-      width: "120px",
+      headerName: "Actions",
+      width: "200px",
       cellRenderer: (props) => {
         return (
           <>
             <Grid container columnSpacing={1}>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <IconButton
-                  aria-label="delete"
-                  color="success"
-                  href={`https://wa.me/${props.data.mobile[0]}`}
-                  target="_blank"
+                  color="primary"
+                  size="small"
+                  onClick={() =>
+                    navigate(`/EditEmployee/${props.data._id}?edit=false`)
+                  }
                 >
-                  <WhatsAppIcon />
+                  <VisibilityTwoToneIcon />
                 </IconButton>
               </Grid>
-              <Grid item xs={6}>
-                <IconButton aria-label="delete" color="warning">
-                  <CallIcon />
+              <Grid item xs={4}>
+                <IconButton
+                  size="small"
+                  color="secondary"
+                  onClick={() =>
+                    navigate(`/EditEmployee/${props.data._id}?edit=true`)
+                  }
+                >
+                  <BorderColorTwoToneIcon />
+                </IconButton>
+              </Grid>
+              <Grid item xs={4}>
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={() => {
+                    setDeleteData({
+                      name: props.data.name,
+                      id: props.data.employeeId,
+                      _id: props.data._id,
+                    });
+                    handleClickOpen();
+                  }}
+                >
+                  <DeleteSweepTwoToneIcon />
                 </IconButton>
               </Grid>
             </Grid>
@@ -227,12 +164,15 @@ export default function CandidateGrid(props) {
   };
   const handleDelete = async (id) => {
     try {
-      axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
-        headers: {
-          authorization: JSON.parse(localStorage.getItem("user")).token,
-        },
-      });
-      setTableData(tableData.filter((d) => d._id !== id));
+      const company = axios.delete(
+        "http://localhost:5000/api/v1/employee/" + id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
+      setEmployeeList(employeeList.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}
   };
@@ -261,11 +201,11 @@ export default function CandidateGrid(props) {
               variant="contained"
               sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.4) }}
               onClick={() => {
-                if (tableData.length === 0) {
+                if (employeeList.length === 0) {
                   toast.error("No Rows to select");
                   return;
                 }
-                for (var i = 0; i < Math.min(count, tableData.length); i++) {
+                for (var i = 0; i < Math.min(count, employeeList.length); i++) {
                   var node = gridapi?.current.api.getRowNode(i);
                   node.setSelected(true);
                 }
@@ -283,7 +223,7 @@ export default function CandidateGrid(props) {
               fullWidth
               className="tw"
               onChange={(e) => setFileName(e.target.value)}
-            />
+            ></TextField>
           </Grid>
           <Grid item xs={3.5} md={2}>
             <ExcelExport height="100%" gridRef={gridapi} fileName={fileName} />
@@ -300,13 +240,15 @@ export default function CandidateGrid(props) {
         >
           <AgGridReact
             ref={gridapi}
-            rowData={tableData}
+            rowData={employeeList}
             columnDefs={column}
             defaultColDef={defaultColDef}
             pagination={true}
             paginationPageSize={10}
-            paginationPageSizeSelector={() => [20, 50, 100, 200, 500]}
             rowSelection={"multiple"}
+            paginationPageSizeSelector={() => [
+              10, 20, 30, 40, 50, 100, 200, 500,
+            ]}
           />
         </div>
         <Dialog

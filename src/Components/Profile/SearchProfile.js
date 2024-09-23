@@ -254,7 +254,7 @@ export default function SearchProfile(props) {
             }}
           />
           <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.2) }}>
-            <Grid container xs={12}>
+            <Grid container>
               <div
                 className="ag-theme-quartz-dark"
                 style={{
