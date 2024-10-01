@@ -15,11 +15,47 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AssignCandidate() {
+  // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
+  const [companiesList, setCompaniesList] = React.useState([]);
+  const [rolesList, setRolesList] = React.useState([]);
+  const [skillsList, setSkillsList] = React.useState([]);
+  const [locationList, setLocationList] = React.useState([]);
+  const [qualificationList, setQualificationList] = React.useState([]);
+  const [employeeList, setEmployeeList] = React.useState([]);
+  const [languageList, setLanguageList] = React.useState([{ language: " " }]);
+  const [candidate, setCandidate] = React.useState({
+    fullName: null,
+    mobile: null,
+    email: null,
+    homeTown: [],
+    currentCity: [],
+    qualification: [],
+    minYOP: null,
+    maxYOP: null,
+    language: [],
+    all: [],
+    any: [],
+    companyName: null,
+    role: null,
+    companyId: null,
+    roleId: null,
+    mininterviewDate: null,
+    maxinterviewDate: null,
+    remarks: null,
+    interviewStatus: [],
+    select: [],
+    l1Assessment: [],
+    l2Assessment: [],
+    assignedEmployee: null,
+    createdByEmployee: null,
+  });
+
+  // API CALLS HANDLING
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,7 +75,15 @@ export default function AssignCandidate() {
             },
           }
         );
-
+        const empres = await axios.get(
+          "http://localhost:5000/api/v1/employee",
+          {
+            headers: {
+              authorization: JSON.parse(localStorage.getItem("user")).token,
+            },
+          }
+        );
+        setEmployeeList(empres.data.employees);
         setCompaniesList(res.data);
         extraRes.data.forEach(({ _id, data }) => {
           if (_id === "Skills") setSkillsList(data);
@@ -51,38 +95,8 @@ export default function AssignCandidate() {
     };
     fetchData();
   }, []);
-  const [companiesList, setCompaniesList] = React.useState([]);
-  const [rolesList, setRolesList] = React.useState([]);
-  const [skillsList, setSkillsList] = React.useState([]);
-  const [locationList, setLocationList] = React.useState([]);
-  const [qualificationList, setQualificationList] = React.useState([]);
-  const [languageList, setLanguageList] = React.useState([{ language: " " }]);
-  const [candidate, setCandidate] = React.useState({
-    fullName: null,
-    mobile: null,
-    email: null,
-    homeTown: [],
-    currentCity: [],
-    qualification: [],
-    minYOP: null,
-    maxYOP: null,
-    language: [],
-    all: [],
-    any: [],
-    companyName: null,
-    role: null,
 
-    companyId: null,
-    roleId: null,
-    mininterviewDate: null,
-    maxinterviewDate: null,
-    remarks: null,
-    interviewStatus: [],
-    select: [],
-    l1Assessment: [],
-    l2Assessment: [],
-  });
-
+  //DROP-DOWN DATA
   const Assessment = [
     "DND",
     "Number Not Reachable",
@@ -138,7 +152,8 @@ export default function AssignCandidate() {
     "Client Rampdown",
   ];
 
-  const handleAddCandidate = async () => {
+  // FUNCTIONS HANDLING
+  const handleAssignCandidate = async () => {
     var query = [];
     if (candidate.fullName)
       query.push({
@@ -216,6 +231,16 @@ export default function AssignCandidate() {
           $in: candidate.any,
         },
       });
+    if (candidate.createdByEmployee) {
+      query.push({
+        createdByEmployee: candidate.createdByEmployee,
+      });
+    }
+    if (candidate.assignedEmployee) {
+      query.push({
+        assignedEmployee: candidate.assignedEmployee,
+      });
+    }
     if (candidate.qualification.length > 0)
       query.push({
         "qualifications.qualification": {
@@ -230,7 +255,6 @@ export default function AssignCandidate() {
       query.push({ interviewDate: { $gt: candidate.mininterviewDate } });
     if (candidate.maxinterviewDate)
       query.push({ interviewDate: { $lt: candidate.maxinterviewDate } });
-
     if (candidate.companyName)
       query.push({
         "experience.companyName": {
@@ -263,6 +287,7 @@ export default function AssignCandidate() {
     });
   };
 
+  // JSX CODE
   return (
     <Container sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}>
       <Card
@@ -300,7 +325,6 @@ export default function AssignCandidate() {
                 }
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
               <TextField
                 id="outlined-basic"
@@ -313,7 +337,6 @@ export default function AssignCandidate() {
                 fullWidth
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
               <TextField
                 id="outlined-basic"
@@ -326,7 +349,6 @@ export default function AssignCandidate() {
                 fullWidth
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
               <Autocomplete
                 multiple
@@ -363,7 +385,6 @@ export default function AssignCandidate() {
                 )}
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
               <Autocomplete
                 className="candidateLanguage"
@@ -403,7 +424,6 @@ export default function AssignCandidate() {
                 )}
               />
             </Grid>
-
             <Grid item xs={6} md={3}>
               <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                 <DatePicker
@@ -438,10 +458,10 @@ export default function AssignCandidate() {
                 />
               </LocalizationProvider>
             </Grid>
-
             <Grid item xs={12}>
               <Autocomplete
                 multiple
+                freeSolo
                 id="candidateSkills"
                 options={skillsList.map((skill) => skill)}
                 filterSelectedOptions
@@ -466,6 +486,7 @@ export default function AssignCandidate() {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
+                freeSolo
                 id="candidateSkills"
                 options={skillsList.map((skill) => skill)}
                 filterSelectedOptions
@@ -517,7 +538,6 @@ export default function AssignCandidate() {
                 }}
               />
             </Grid>
-
             <Grid item xs={6}>
               <Autocomplete
                 multiple
@@ -536,7 +556,6 @@ export default function AssignCandidate() {
                 )}
               />
             </Grid>
-
             <Grid item xs={6}>
               <Autocomplete
                 multiple
@@ -568,7 +587,6 @@ export default function AssignCandidate() {
                 multiline
               />
             </Grid>
-
             <Grid item xs={6}>
               <Autocomplete
                 id="Companies"
@@ -664,7 +682,6 @@ export default function AssignCandidate() {
                 )}
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
               <Autocomplete
                 multiple
@@ -683,6 +700,50 @@ export default function AssignCandidate() {
                 )}
               />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <Autocomplete
+                id="Employees"
+                options={employeeList}
+                filterSelectedOptions
+                getOptionLabel={(option) => option.name}
+                renderOption={(props, item) => (
+                  <li {...props} key={item.key}>
+                    {item.name}
+                  </li>
+                )}
+                onChange={(e, v) =>
+                  setCandidate({
+                    ...candidate,
+                    createdByEmployee: v?._id ? v._id : v,
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Created By" />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Autocomplete
+                id="Employees"
+                options={employeeList}
+                filterSelectedOptions
+                getOptionLabel={(option) => option.name}
+                renderOption={(props, item) => (
+                  <li {...props} key={item.key}>
+                    {item.name}
+                  </li>
+                )}
+                onChange={(e, v) =>
+                  setCandidate({
+                    ...candidate,
+                    assignedEmployee: v?._id ? v._id : v,
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Assigned To" />
+                )}
+              />
+            </Grid>
             <Grid item xs={7} md={9} />
             <Grid item xs={5} md={3}>
               <Button
@@ -690,7 +751,7 @@ export default function AssignCandidate() {
                 size="large"
                 variant="contained"
                 sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
-                onClick={handleAddCandidate}
+                onClick={handleAssignCandidate}
               >
                 SUBMIT
               </Button>

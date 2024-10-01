@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import * as React from "react";
 import {
   Container,
   TextField,
   Card,
   CardHeader,
   CardContent,
-  Alert,
   BottomNavigation,
   Chip,
   Autocomplete,
   Button,
   Grid,
+  Alert,
   alpha,
 } from "@mui/material";
 import { AgGridReact } from "ag-grid-react";
@@ -22,9 +22,16 @@ import { flatten } from "flat";
 import { toast } from "react-toastify";
 
 export default function PotentialLeads() {
-  const [companiesList, setCompaniesList] = useState([]);
-  const [rolesList, setRolesList] = useState([]);
+  // STATES HANDLING AND VARIABLES
+  const [companiesList, setCompaniesList] = React.useState([]);
+  const [rolesList, setRolesList] = React.useState([]);
   const gridapi = React.useRef();
+  const [count, setCount] = React.useState(0);
+  const [fileName, setFileName] = React.useState(String(new Date()));
+  const [potentialLeadList, setPotentialLeadList] = React.useState([]);
+  const [employeeList, setEmployeeList] = React.useState([]);
+  const [assignees, setAssignees] = React.useState([]);
+  const [warning, setWarning] = React.useState("");
   const Empanelled = [
     "Hide All Rejects",
     "Hide Offer Drops",
@@ -37,20 +44,28 @@ export default function PotentialLeads() {
   ].map((x, i) => {
     return { label: x, value: i + 1 };
   });
-  const [potentialLeadList, setPotentialLeadList] = useState([]);
-  const [employeeList, setEmployeeList] = useState([]);
-  const [searchParams, setSearchParams] = useState({
+  const [searchParams, setSearchParams] = React.useState({
     company: "",
     role: "",
     query: [],
   });
-  const [displayParams, setDisplayParams] = useState({
+  const [displayParams, setDisplayParams] = React.useState({
     company: "",
     role: "",
     query: [],
   });
-  const [assignees, setAssignees] = useState([]);
-  const [warning, setWarning] = useState("");
+
+  // GRID HEADER/COLOUMS HANDLING
+  const selection = React.useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = React.useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
   const column = [
     {
       headerName: "Created By",
@@ -60,18 +75,14 @@ export default function PotentialLeads() {
       headerCheckboxSelectionFilteredOnly: true,
     },
     { headerName: "Assigned to", field: "assignedEmployee.name" },
-    {
-      headerName: "Name",
-      field: "fullName",
-    },
+    { headerName: "Name", field: "fullName" },
     { headerName: "ID", field: "candidateId" },
     { headerName: "Skills", field: "skills", sortable: false },
     { headerName: "Current Location", field: "currentCity" },
     { headerName: "Home town", field: "homeTown" },
     { headerName: "_id", field: "_id", hide: true, supressToolPanel: true },
   ];
-  const [count, setCount] = useState(0);
-  const [fileName, setFileName] = useState(String(new Date()));
+
   const defaultColDef = {
     sortable: true,
     editable: false,
@@ -79,6 +90,8 @@ export default function PotentialLeads() {
     filter: true,
     rowSelection: "multiple",
   };
+
+  // API CALLS HANDLING
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -108,14 +121,15 @@ export default function PotentialLeads() {
     fetchData();
   }, []);
 
+  // FUNCTIONS HANDLING, SEARCH AND POST API CALLS
   const handleGetLeads = async () => {
-    if(searchParams.company=== ""){
-      toast.error("Please Select Company")
-      return
+    if (searchParams.company === "") {
+      toast.error("Please Select Company");
+      return;
     }
-    if(searchParams.role===""){
-      toast.error("Please Select Role")
-      return
+    if (searchParams.role === "") {
+      toast.error("Please Select Role");
+      return;
     }
     var query = [];
     searchParams.query.forEach(({ label, value }) => {
@@ -213,7 +227,7 @@ export default function PotentialLeads() {
             },
           });
           break;
-        case 6:
+        case 7:
           query.push({
             $or: [
               {
@@ -229,17 +243,18 @@ export default function PotentialLeads() {
             ],
           });
           break;
-        case 7:
+        case 8:
           query.push({
             select: {
               $in: ["Non Tenure", "Process Rampdown", "Client Rampdown"],
             },
           });
           break;
+        default:
+          break;
       }
     });
 
-    console.log(JSON.stringify({ $nor: query }));
     try {
       const res = await axios.post(
         "http://localhost:5000/api/v1/candidate/candidate/potentialleads",
@@ -255,7 +270,6 @@ export default function PotentialLeads() {
         }
       );
       setTimeout(() => {
-        console.log(res.data);
         setPotentialLeadList(res.data);
       });
     } catch (error) {}
@@ -263,7 +277,6 @@ export default function PotentialLeads() {
   const handleAssign = async () => {
     var selectedRows = gridapi.current.api.getSelectedRows();
     var emp = assignees;
-
     var srCount = selectedRows.length;
     var empCount = assignees.length;
     if (srCount === 0) {
@@ -276,11 +289,9 @@ export default function PotentialLeads() {
     var ind = 0;
     var i = 0;
     var count = parseInt(srCount / empCount);
-    console.log(count);
     var assignedData = [];
     while (srCount / count > 0) {
       const part = selectedRows.slice(ind, count + ind);
-
       if (i === empCount)
         assignedData[i - 1].part = assignedData[i - 1].part.concat(part);
       else assignedData.push({ emp: emp[i], part: part.map((o) => o._id) });
@@ -289,7 +300,7 @@ export default function PotentialLeads() {
       ind += count;
     }
     try {
-      const candres = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/v1/candidate/candidate/assign",
         {
           list: assignedData,
@@ -313,7 +324,8 @@ export default function PotentialLeads() {
       );
     } catch (error) {}
   };
-  const handleTopSelect = async () => {};
+
+  //JSX CODE
   return (
     <>
       <Container
@@ -378,13 +390,13 @@ export default function PotentialLeads() {
                   id="Roles"
                   disableClearable
                   options={rolesList}
-                  getOptionLabel={(option) => option.designation}
+                  getOptionLabel={(option) => option.role}
                   inputValue={displayParams.role}
                   onChange={(e, newValue) => {
                     setSearchParams({ ...searchParams, role: newValue._id });
                     setDisplayParams({
                       ...displayParams,
-                      role: newValue.designation,
+                      role: newValue.role,
                     });
                   }}
                   renderInput={(params) => (
@@ -482,7 +494,12 @@ export default function PotentialLeads() {
             }}
           />
           <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
-            <Grid container columnSpacing={1} rowSpacing={2} sx={{paddingBottom: "2vh"}}>
+            <Grid
+              container
+              columnSpacing={1}
+              rowSpacing={2}
+              sx={{ paddingBottom: "2vh" }}
+            >
               <Grid item xs={8}>
                 <Autocomplete
                   multiple
@@ -562,20 +579,32 @@ export default function PotentialLeads() {
                   Select
                 </Button>
               </Grid>
-              <Grid item md={2} display={{xs:"none", md:"block"}}/>
+              <Grid item md={2} display={{ xs: "none", md: "block" }} />
               <Grid item xs={7.5} sm={4.5}>
                 <TextField
                   label="File Name"
                   value={fileName}
                   fullWidth
                   onChange={(e) => setFileName(e.target.value)}
-                ></TextField>
+                />
               </Grid>
               <Grid item xs={4.5} sm={2.5} md={2}>
                 <ExcelExport
                   excelData={potentialLeadList.map((l) => flatten(l))}
                   fileName={fileName}
-                ></ExcelExport>
+                />
+              </Grid>
+              <Grid item xs={12}>
+                {warning && (
+                  <Alert
+                    severity="error"
+                    onClose={() => {
+                      setWarning("");
+                    }}
+                  >
+                    {warning}
+                  </Alert>
+                )}
               </Grid>
             </Grid>
             <div
@@ -593,8 +622,9 @@ export default function PotentialLeads() {
                 columnDefs={column}
                 defaultColDef={defaultColDef}
                 pagination={true}
-                paginationPageSize={10}
-                paginationPageSizeSelector={() => [10, 20, 50, 100, 200, 500]}
+                paginationPageSize={100}
+                selection={selection}
+                paginationPageSizeSelector={paginationPageSizeSelector}
                 rowSelection={"multiple"}
                 isRowSelectable={() => true}
               />

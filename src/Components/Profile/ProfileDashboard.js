@@ -1,13 +1,20 @@
 import * as React from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function ProfileDashboard() {
-  const navigate = useNavigate();
 
-  // Data for Cards (COUNTS)
+  // STATES HANDLING AND VARIABLES
+  const navigate = useNavigate();
+  const { employeeType } = useSelector((state) => state.user);
+  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
   const [counts, setCounts] = React.useState(null);
+
+
+
+  // API CALLS HANDLING
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,6 +35,8 @@ export default function ProfileDashboard() {
     fetchData();
   }, []);
 
+
+
   //CARDS INLINE CSS
   const cardsStyle = {
     height: "14.5vh",
@@ -39,6 +48,9 @@ export default function ProfileDashboard() {
     borderLeftWidth: "0.5vh",
   };
 
+
+
+  // JSX CODE
   return (
     <>
       <div style={{ paddingLeft: "1vw", paddingRight: "1vw" }}>
@@ -50,20 +62,6 @@ export default function ProfileDashboard() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={6} md={3} onClick={() => navigate("AssignCandidate")}>
-            <div className="dbButton">
-              <Typography variant="h7" color="white" fontWeight="bold">
-                ASSIGN PROFILE
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={6} md={3} onClick={() => navigate("PotentialLeads")}>
-            <div className="dbButton">
-              <Typography variant="h7" color="white" fontWeight="bold">
-                POTENTIAL LEADS
-              </Typography>
-            </div>
-          </Grid>
           <Grid item xs={6} md={3} onClick={() => navigate("SearchProfile")}>
             <div className="dbButton">
               <Typography variant="h7" color="white" fontWeight="bold">
@@ -71,6 +69,34 @@ export default function ProfileDashboard() {
               </Typography>
             </div>
           </Grid>
+          {access && (
+            <>
+              <Grid
+                item
+                xs={6}
+                md={3}
+                onClick={() => navigate("AssignCandidate")}
+              >
+                <div className="dbButton">
+                  <Typography variant="h7" color="white" fontWeight="bold">
+                    ASSIGN PROFILE
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                md={3}
+                onClick={() => navigate("PotentialLeads")}
+              >
+                <div className="dbButton">
+                  <Typography variant="h7" color="white" fontWeight="bold">
+                    POTENTIAL LEADS
+                  </Typography>
+                </div>
+              </Grid>
+            </>
+          )}
         </Grid>
         {/* Lower Grid Data Cards */}
         <Grid
@@ -87,7 +113,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    All Candidates
+                    ALL CANDIDATES
                   </Typography>
                 </CardContent>
               </Box>
@@ -108,7 +134,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    New Candidate
+                    NEW CANDIDATES
                   </Typography>
                 </CardContent>
               </Box>
@@ -131,7 +157,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    L1 & L2 Wrong Numbers
+                    L1 & L2 WRONG NUMBERS
                   </Typography>
                 </CardContent>
               </Box>
@@ -154,7 +180,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    L1 & L2 Blacklist
+                    L1 & L2 BLACKLIST
                   </Typography>
                 </CardContent>
               </Box>
@@ -177,7 +203,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Non Leads
+                    NON LEADS
                   </Typography>
                 </CardContent>
               </Box>
@@ -240,7 +266,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    No Show Walk-In
+                    NO SHOW WALK-IN
                   </Typography>
                 </CardContent>
               </Box>
@@ -261,7 +287,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    No Show IC
+                    NO SHOW IC
                   </Typography>
                 </CardContent>
               </Box>
@@ -282,7 +308,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    L2 Awaiting
+                    L2 AWAITING
                   </Typography>
                 </CardContent>
               </Box>
@@ -324,7 +350,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Interview Scheduled
+                    INTERVIEW SCHEDULED
                   </Typography>
                 </CardContent>
               </Box>
@@ -347,7 +373,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Virtual Interview
+                    VIRTUAL INTERVIEW
                   </Typography>
                 </CardContent>
               </Box>
@@ -370,7 +396,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Rejects
+                    REJECTS
                   </Typography>
                 </CardContent>
               </Box>
@@ -391,7 +417,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Offer Drop
+                    OFFER DROP
                   </Typography>
                 </CardContent>
               </Box>
@@ -412,7 +438,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Awaiting Joining
+                    AWAITING JOINING
                   </Typography>
                 </CardContent>
               </Box>
@@ -435,7 +461,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Hold
+                    HOLD
                   </Typography>
                 </CardContent>
               </Box>
@@ -456,7 +482,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Tracking Tenure
+                    TRACKING TENURE
                   </Typography>
                 </CardContent>
               </Box>
@@ -479,7 +505,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Billed
+                    BILLED
                   </Typography>
                 </CardContent>
               </Box>
@@ -521,7 +547,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Non Tenure
+                    NON TENURE
                   </Typography>
                 </CardContent>
               </Box>
@@ -542,7 +568,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Process Rampdown
+                    PROCESS RAMPDOWN
                   </Typography>
                 </CardContent>
               </Box>
@@ -565,7 +591,7 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Client Rampdown
+                    CLIENT RAMPDOWN
                   </Typography>
                 </CardContent>
               </Box>
@@ -583,19 +609,21 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/CandidateGrid?type=InvoiceProcessed")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    Invoice Processed
+                    INVOICE PROCESSED
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["Billed"] ? counts["Billed"] : 0}
+                    {counts && counts["InvoiceProcessed"]
+                      ? counts["InvoiceProcessed"]
+                      : 0}
                   </Typography>
                 </CardContent>
               </Box>
@@ -604,7 +632,7 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/CandidateGrid?type=BusinessTracking")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
@@ -616,7 +644,9 @@ export default function ProfileDashboard() {
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["N2B"] ? counts["N2B"] : 0}
+                    {counts && counts["BusinessTracking"]
+                      ? counts["BusinessTracking"]
+                      : 0}
                   </Typography>
                 </CardContent>
               </Box>

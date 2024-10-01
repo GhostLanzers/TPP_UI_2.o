@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Button,
   Grid,
@@ -14,45 +11,39 @@ import {
   TextField,
   alpha,
 } from "@mui/material";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import dayjs from "dayjs";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import ExcelExport from "../../Components/Main/ExcelExport";
+import { toast } from "react-toastify";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import CallIcon from "@mui/icons-material/Call";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
-import { useSelector } from "react-redux";
-import ExcelExport from "../../Components/Main/ExcelExport";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
 
-export default function CandidateGrid(props) {
+export default function CandidateGrid() {
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // STATES HANDLING AND VARIABLES
+  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);  
   const [deleteData, setDeleteData] = useState({});
-
   const { employeeType, userid } = useSelector((state) => state.user);
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
-  const isTeamlead = employeeType === "Teamlead";
   const isAdmin = employeeType === "Admin";
   const [tableData, setTableData] = useState([]);
-  const navigate = useNavigate();
-
   const gridapi = React.useRef();
   const [fileName, setFileName] = useState(String(new Date()));
-  const [warning, setWarning] = useState("");
   const [count, setCount] = useState(0);
-
   const [searchParams] = useSearchParams();
+
+  // API CALLS HANDLING
   var url =
     "http://localhost:5000/api/v1/candidate/data/" +
     searchParams.get("type") +
@@ -71,7 +62,6 @@ export default function CandidateGrid(props) {
     url += "roleId=" + searchParams.get("roleId");
   }
 
-  console.log(url);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,6 +77,8 @@ export default function CandidateGrid(props) {
     fetchData();
   }, [url, setTableData]);
 
+
+  // GRID HEADER/COLOUMS HANDLING
   const column = [
     {
       headerName: "Created By",
@@ -100,27 +92,48 @@ export default function CandidateGrid(props) {
     { headerName: "Candidate ID", field: "candidateId" },
     { headerName: "Candidate Number", field: "mobile", sortable: false },
     { headerName: "Candidate Email ID", field: "email" },
-    { headerName: "Interview Status", field: "interviewStatus" },
     { headerName: "L1 Assessment", field: "l1Assessment" },
     { headerName: "L2 Assessment", field: "l2Assessment" },
     { headerName: "Company", field: "companyId.companyName" },
     { headerName: "Role", field: "roleId.role" },
-    { headerName: "Interview Date", field: "interviewDate" },
+    {
+      headerName: "Interview Date",
+      field: "interviewDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
     { headerName: "Interview Status", field: "interviewStatus" },
     { headerName: "Remarks", field: "remarks" },
     { headerName: "Tenure Status", field: "select" },
     {
       headerName: "Onboarding Date",
       field: "onboardingDate",
-      valueFormatter: (p) => dayjs(p.value).format("DD/MM/YYYY"),
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Next Tracking Date",
       field: "nextTrackingDate",
-      valueFormatter: (p) => dayjs(p.value).format("DD/MM/YYYY"),
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
     },
     { headerName: "Rate", field: "rate", hide: !isAdmin },
-
+    {
+      headerName: "Billing Date",
+      field: "billingDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    {
+      headerName: "Invoice Date",
+      field: "invoiceDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    {
+      headerName: "Invoice Number",
+      field: "invoiceNumber",
+    },
     {
       headerName: "Actions",
       width: isAdmin ? "180px" : "150px",
@@ -152,9 +165,7 @@ export default function CandidateGrid(props) {
                 <IconButton
                   size="small"
                   color="secondary"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=true`)
-                  }
+                  href={`/EditCandidate/${props.data._id}?edit=true`}
                   disabled={
                     !rtAccess
                       ? false
@@ -225,6 +236,26 @@ export default function CandidateGrid(props) {
     filter: true,
     rowSelection: "multiple",
   };
+
+  const selection = useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
+
+  // FUNCTIONS HANDLING
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleDelete = async (id) => {
     try {
       axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
@@ -236,6 +267,9 @@ export default function CandidateGrid(props) {
       handleClose();
     } catch (error) {}
   };
+
+
+  // JSX CODE
   return (
     <>
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -304,8 +338,9 @@ export default function CandidateGrid(props) {
             columnDefs={column}
             defaultColDef={defaultColDef}
             pagination={true}
-            paginationPageSize={10}
-            paginationPageSizeSelector={() => [20, 50, 100, 200, 500]}
+            paginationPageSize={100}
+            selection={selection}
+            paginationPageSizeSelector={paginationPageSizeSelector}
             rowSelection={"multiple"}
           />
         </div>

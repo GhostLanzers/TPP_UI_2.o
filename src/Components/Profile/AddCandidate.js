@@ -18,23 +18,84 @@ import {
   Collapse,
   alpha,
 } from "@mui/material";
-import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 export default function AddCandidate(props) {
-  const navigate = useNavigate();
 
+  // STATES HANDLING AND VARIABLES
+  const navigate = useNavigate();
   const { employeeType } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
+  const [companiesList, setCompaniesList] = React.useState([]);
+  const [rolesList, setRolesList] = React.useState([]);
+  const [skillsList, setSkillsList] = React.useState([]);
+  const [locationList, setLocationList] = React.useState([]);
+  const [qualificationList, setQualificationList] = React.useState([]);
+  const [languageList, setLanguageList] = React.useState([]);
+  const [expandedCompany, setExpandedCompany] = React.useState(false);
+  const [languageLevelList, setlanguageLevelList] = React.useState([]);
+  const [assessment, setAssessment] = React.useState([]);
+  const [interviewStatus, setInterviewStatus] = React.useState([]);
+  const [select, setSelect] = React.useState([]);
+  const [candidate, setCandidate] = React.useState({
+    fullName: "",
+    mobile: [""],
+    email: [""],
+    homeTown: "",
+    currentCity: "",
+    qualifications: [
+      {
+        qualification: "",
+        YOP: null,
+      },
+    ],
+    languages: [
+      {
+        language: null,
+        level: "",
+        remarks: "",
+      },
+    ],
+    skills: [],
+    experience: [
+      {
+        companyName: "",
+        role: "",
+        salary: 0,
+        startDate: null,
+        endDate: null,
+        experience: 0,
+      },
+    ],
+    companyId: null,
+    roleId: null,
+    interviewDate: null,
+    remarks: "",
+    rate: 0,
+    interviewStatus: null,
+    select: null,
+    EMP_ID: "",
+    onboardingDate: null,
+    nextTrackingDate: null,
+    l1Assessment: "",
+    l2Assessment: null,
+    billingDate: null,
+    invoiceNumber: "",
+    invoiceDate: null,
+  });
 
+
+
+  // API CALLS HANDLING
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -71,61 +132,9 @@ export default function AddCandidate(props) {
     fetchData();
   }, []);
 
-  const [companiesList, setCompaniesList] = React.useState([]);
-  const [rolesList, setRolesList] = React.useState([]);
-  const [skillsList, setSkillsList] = React.useState([]);
-  const [locationList, setLocationList] = React.useState([]);
-  const [qualificationList, setQualificationList] = React.useState([]);
-  const [languageList, setLanguageList] = React.useState([]);
-  const [expandedCompany, setExpandedCompany] = React.useState(false);
-  const [languageLevelList, setlanguageLevelList] = React.useState([]);
-  const [assessment, setAssessment] = React.useState([]);
-  const [interviewStatus, setInterviewStatus] = React.useState([]);
-  const [select, setSelect] = React.useState([]);
-  const [candidate, setCandidate] = React.useState({
-    fullName: "",
-    mobile: [""],
-    email: [""],
-    homeTown: "",
-    currentCity: "",
-    qualifications: [
-      {
-        qualification: "",
-        YOP: dayjs(new Date()),
-      },
-    ],
-    languages: [
-      {
-        language: null,
-        level: "",
-        remarks: "",
-      },
-    ],
-    skills: [],
-    experience: [
-      {
-        companyName: "",
-        role: "",
-        salary: 0,
-        startDate: dayjs(new Date()),
-        endDate: dayjs(new Date()),
-        experience: 0,
-      },
-    ],
-    companyId: null,
-    roleId: null,
-    interviewDate: dayjs(new Date()),
-    remarks: "",
-    rate: 0,
-    interviewStatus: null,
-    select: null,
-    EMP_ID: "",
-    onboardingDate: dayjs(new Date()),
-    nextTrackingDate: dayjs(new Date()),
-    l1Assessment: "",
-    l2Assessment: null,
-  });
+  
 
+  // FUNCTIONS HANDLING AND API POST CALLS
   const handleExpandCompany = () => {
     setExpandedCompany(!expandedCompany);
   };
@@ -153,23 +162,22 @@ export default function AddCandidate(props) {
         flag = 1;
       }
 
-      if (!access) {
-        if (
-          ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
-          !candidate.interviewStatus
-        ) {
-          toast.error("Missing Interview Status");
-          flag = 1;
-        }
-        if (
-          ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
-          candidate.interviewStatus === "Select" &&
-          !candidate.select
-        ) {
-          toast.error("Missing Select Status");
-          flag = 1;
-        }
+      if (
+        ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
+        !candidate.interviewStatus
+      ) {
+        toast.error("Missing Interview Status");
+        flag = 1;
       }
+      if (
+        ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
+        candidate.interviewStatus === "Select" &&
+        !candidate.select
+      ) {
+        toast.error("Missing Select Status");
+        flag = 1;
+      }
+      
       if (flag) return;
       await axios.post(
         "http://localhost:5000/api/v1/candidate",
@@ -215,6 +223,9 @@ export default function AddCandidate(props) {
     } catch (error) {}
   };
 
+
+
+  // JSX CODE
   return (
     <>
       <Container
@@ -322,7 +333,7 @@ export default function AddCandidate(props) {
                         fullWidth
                         variant="contained"
                         color="error"
-                        size="large"                        
+                        size="large"
                         sx={{
                           height: "100%",
                           backgroundColor: alpha("#FF0000", 0.6),

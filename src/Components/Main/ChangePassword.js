@@ -26,7 +26,7 @@ export default function ChangePassword(props) {
   });
   const handlePasswordChange = async () => {
     if (passwords.new !== passwords.confirm) {
-      setWarning("Confirm Password doesnot match. Try Again");
+      setWarning("Confirm Password does not match. Please Check");
       return;
     }
     try {

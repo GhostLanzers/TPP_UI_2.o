@@ -1,7 +1,4 @@
 import * as React from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   Container,
   TextField,
@@ -13,16 +10,19 @@ import {
   BottomNavigation,
   alpha,
 } from "@mui/material";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function SearchProfile(props) {
+export default function SearchProfile() {
+  // STATES HANDLING AND VARIABLES
   const { employeeType, userid } = useSelector((state) => state.user);
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
-  const isTeamlead = employeeType === "Teamlead";
   const isAdmin = employeeType === "Admin";
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = React.useState({
@@ -31,6 +31,8 @@ export default function SearchProfile(props) {
     email: "",
   });
   const [tableData, setTableData] = React.useState([]);
+
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
   const handleSearch = async () => {
     if (
       searchParams.name === "" &&
@@ -53,6 +55,18 @@ export default function SearchProfile(props) {
       setTableData(res.data);
     } catch (error) {}
   };
+
+  // GRID HEADER/COLOUMS HANDLING
+  const selection = React.useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = React.useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
   const column = [
     { headerName: "Candidate Name", field: "fullName" },
     { headerName: "Candidate ID", field: "candidateId" },
@@ -137,6 +151,8 @@ export default function SearchProfile(props) {
     cellEditor: false,
     filter: true,
   };
+
+  //JSX CODE
   return (
     <>
       <Container
@@ -209,7 +225,10 @@ export default function SearchProfile(props) {
                 <Button
                   fullWidth
                   size="large"
-                  sx={{ backgroundColor: alpha("#0000FF", 0.5), height: "100%" }}
+                  sx={{
+                    backgroundColor: alpha("#0000FF", 0.5),
+                    height: "100%",
+                  }}
                   variant="contained"
                   onClick={handleSearch}
                 >
@@ -268,8 +287,9 @@ export default function SearchProfile(props) {
                   columnDefs={column}
                   defaultColDef={defaultColDef}
                   pagination={true}
-                  paginationPageSize={10}
-                  paginationPageSizeSelector={() => [10, 20, 50, 100, 200, 500]}
+                  paginationPageSize={100}
+                  selection={selection}
+                  paginationPageSizeSelector={paginationPageSizeSelector}
                 />
               </div>
             </Grid>
