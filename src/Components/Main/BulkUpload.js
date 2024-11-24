@@ -4,8 +4,6 @@ import {
   Container,
   Grid,
   CardContent,
-  BottomNavigation,
-  CardHeader,
   Button,
   styled,
   alpha,
@@ -31,21 +29,15 @@ export default function Bulkupload(props) {
     whiteSpace: "nowrap",
     width: 1,
   });
-  const [companyFile, setCompanyFile] = React.useState(null);
-  const [employeeFile, setEmployeeFile] = React.useState(null);
-  const [candidateFile, setCandidateFile] = React.useState(null);
 
   const handleCompanyFileUpload = (e) => {
     const file = e.target.files[0];
-
     const reader = new FileReader();
-
     reader.onload = async (event) => {
       const workbook = XLSX.read(event.target.result, { type: "binary" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       var sheetData = XLSX.utils.sheet_to_json(sheet);
-
       const data = sheetData.map((sheet) => {
         var { HRMobile, empanelled, ...rest } = sheet;
         return {
@@ -58,7 +50,7 @@ export default function Bulkupload(props) {
       });
       console.log(data);
       const resp = axios.post(
-        "http://localhost:5000/api/v1/company/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/company/bulkinsert",
         data,
         {
           headers: {
@@ -104,7 +96,7 @@ export default function Bulkupload(props) {
         return { gender, documentation, status, DOJ, DOB, ...rest };
       });
       const resp = axios.post(
-        "http://localhost:5000/api/v1/employee/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/bulkinsert",
         data,
         {
           headers: {
@@ -202,7 +194,7 @@ export default function Bulkupload(props) {
       console.log(data);
 
       const resp = axios.post(
-        "http://localhost:5000/api/v1/candidate/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/bulkinsert",
         data,
         {
           headers: {
@@ -239,6 +231,7 @@ export default function Bulkupload(props) {
     borderLeftWidth: "0.5vh",
   };
 
+  //JSX CODE
   return (
     <>
       {/*NEW CODE FOR BULK UPLOAD*/}

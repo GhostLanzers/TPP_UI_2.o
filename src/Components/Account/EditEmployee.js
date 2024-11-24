@@ -17,17 +17,18 @@ import {
   Grid,
   alpha,
 } from "@mui/material";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
 export default function EditEmployee() {
+  // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -50,6 +51,7 @@ export default function EditEmployee() {
     password: "",
   });
 
+  //DROPDOWN VALUES
   const gender = [
     {
       value: "Female",
@@ -71,6 +73,8 @@ export default function EditEmployee() {
     "Intern",
     "Business Development",
   ];
+
+  // FUNCTIONS HANDLING AND API POST CALLS
   function handleRemoveMobile(index) {
     const newList = [...employee.mobile].filter(
       (_, indexFilter) => !(indexFilter === index)
@@ -95,7 +99,7 @@ export default function EditEmployee() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/employee/" + id,
+          "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
 
           {
             headers: {
@@ -139,13 +143,11 @@ export default function EditEmployee() {
       );
       flag = 1;
     }
-
     if (flag) return;
     if (password) employee.password = "TPP@Pass";
-
     try {
       const res = await axios.patch(
-        "http://localhost:5000/api/v1/employee/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
         { ...employee },
         {
           headers: {
@@ -160,7 +162,7 @@ export default function EditEmployee() {
   const checkId = async (id) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/id/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/id/" + id,
 
         {
           headers: {
@@ -174,7 +176,7 @@ export default function EditEmployee() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mobile/" + num,
 
         {
           headers: {
@@ -188,7 +190,7 @@ export default function EditEmployee() {
   const checkMail = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mail/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mail/" + num,
 
         {
           headers: {
@@ -199,6 +201,8 @@ export default function EditEmployee() {
       if (res.data.status === true) toast.error("Email already exists");
     } catch (error) {}
   };
+
+  //JSX CODE
   return (
     <Container sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}>
       <Card
@@ -238,7 +242,6 @@ export default function EditEmployee() {
                 }
                 onBlur={(e) => {
                   if (e.target.value.length == 0) return;
-
                   checkId(e.target.value);
                 }}
                 InputProps={{
@@ -271,7 +274,6 @@ export default function EditEmployee() {
               >
                 <DatePicker
                   label="Date Of Birth"
-                  style={{ width: "100%" }}
                   fullWidth
                   sx={{ width: "100%" }}
                   value={dayjs(employee.DOB)}
@@ -318,7 +320,6 @@ export default function EditEmployee() {
                         backgroundColor: alpha("#0000FF", 0.5),
                         height: "100%",
                       }}
-                      style={{ height: "100%" }}
                       endIcon={<ControlPointIcon />}
                       onClick={handleAddMobile}
                     >
@@ -335,7 +336,7 @@ export default function EditEmployee() {
                       color="error"
                       size="large"
                       endIcon={<RemoveCircleOutlineOutlinedIcon />}
-                      sx={{ height: "100%" }}
+                      sx={{ height: "100%", backgroundColor: alpha("#FF0000", 0.6) }}
                       onClick={() => {
                         handleRemoveMobile(i);
                       }}

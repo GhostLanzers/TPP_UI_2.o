@@ -22,18 +22,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function AddRole() {
-  const { id } = useParams();
-
-  const [company, setCompany] = React.useState({
-    companyName: "",
-    HRName: "",
-    HRMobile: [""],
-    HREmail: "",
-    about: "",
-    remarks: "",
-    response: "Empanelled",
-    empanelled: true,
-  });
+  //DROP DOWN OPTIONS AND VALUES
   const status = [
     { value: true, label: "Active" },
     { value: false, label: "InActive" },
@@ -48,65 +37,6 @@ export default function AddRole() {
     { value: "Notice Period", label: "Notice Period" },
     { value: "Buyout", label: "Buyout" },
   ];
-  const [skillsList, setSkillsList] = React.useState([]);
-  const [locationList, setLocationList] = React.useState([]);
-  const navigate = useNavigate();
-  const [qualificationList, setQualificationList] = React.useState([]);
-  const [role, setRole] = React.useState({
-    status: true,
-    role: "",
-    designation: "",
-    processType: "Domestic",
-    happens: "",
-    experience: 0,
-    optionalSkills: [],
-    mandatorySkills: [],
-    qualification: [],
-    shift: "",
-    salary: 0,
-    cabFacility: true,
-    location: [],
-    area: "",
-    bond: 0,
-    ageCriteria: "",
-    period: "Permanent",
-    otherDocs: "",
-    originalJD: "",
-    processWorkType: "",
-    faqs: "",
-    rejectionReasons: [],
-  });
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:5000/api/v1/company/company/" + id,
-          {
-            headers: {
-              authorization: JSON.parse(localStorage.getItem("user")).token,
-            },
-          }
-        );
-        const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
-          {
-            headers: {
-              authorization: JSON.parse(localStorage.getItem("user")).token,
-            },
-          }
-        );
-
-        setCompany(res.data);
-        extraRes.data.forEach(({ _id, data }) => {
-          if (_id === "Skills") setSkillsList(data);
-          else if (_id === "Locations") setLocationList(data);
-          else if (_id === "Qualifications") setQualificationList(data);
-        });
-      } catch (error) {}
-    };
-    fetchData();
-  }, []);
-
   const Empanelled = [
     { value: true, label: "Active" },
     { value: false, label: "In-Active" },
@@ -142,29 +72,83 @@ export default function AddRole() {
       label: "No Response",
     },
   ];
+
+  // STATES HANDLING AND VARIABLES
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [company, setCompany] = React.useState({
+    companyName: "",
+    companyType: "",
+    HR: [{ HRName: "", HRMobile: [""], HREmail: "" }],
+    about: "",
+    remarks: "",
+    response: "Empanelled",
+    empanelled: true,
+  });
+  const [skillsList, setSkillsList] = React.useState([]);
+  const [locationList, setLocationList] = React.useState([]);
+  const [qualificationList, setQualificationList] = React.useState([]);
+  const [role, setRole] = React.useState({
+    status: true,
+    role: "",
+    designation: "",
+    processType: "Domestic",
+    happens: "",
+    experience: "",
+    optionalSkills: [],
+    mandatorySkills: [],
+    qualification: [],
+    shift: "",
+    salary: "",
+    cabFacility: true,
+    location: [],
+    area: "",
+    bond: 0,
+    ageCriteria: "",
+    period: "Permanent",
+    otherDocs: "",
+    originalJD: "",
+    processWorkType: "",
+    faqs: "",
+    rejectionReasons: [],
+  });
+
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
+          {
+            headers: {
+              authorization: JSON.parse(localStorage.getItem("user")).token,
+            },
+          }
+        );
+        const extraRes = await axios.get(
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+          {
+            headers: {
+              authorization: JSON.parse(localStorage.getItem("user")).token,
+            },
+          }
+        );
+        setCompany(res.data);
+        extraRes.data.forEach(({ _id, data }) => {
+          if (_id === "Skills") setSkillsList(data);
+          else if (_id === "Locations") setLocationList(data);
+          else if (_id === "Qualifications") setQualificationList(data);
+        });
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
+
   const handleAddRole = async () => {
     try {
       const newRole = await axios.patch(
-        "http://localhost:5000/api/v1/company/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/company/" + id,
         { roles: [role] },
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
-      const skilldata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/skills",
-        {
-          data: [
-            ...new Set([
-              ...role.mandatorySkills,
-              ...role.optionalSkills,
-
-              ...skillsList,
-            ]),
-          ],
-        },
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -179,6 +163,7 @@ export default function AddRole() {
     }
   };
 
+  //JSX
   return (
     <>
       <Container
@@ -217,41 +202,63 @@ export default function AddRole() {
                   disabled
                 />
               </Grid>
-              <Grid item xs={6} md={4}>
+              <Grid item xs={6}>
                 <TextField
-                  id="HRName"
-                  label="HR Name"
-                  variant="outlined"
+                  id="companyType"
+                  select
+                  label="Company Type"
                   fullWidth
-                  value={company.HRName}
+                  value={company.companyType}
                   disabled
-                />
+                >
+                  {["Product", "Service", "Product & Service"].map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
-              {company.HRMobile.map((x, i) => (
-                <>
-                  <Grid item xs={6} md={4}>
-                    <TextField
-                      className="HRMobile"
-                      type="number"
-                      label="HR Mobile Number"
-                      variant="outlined"
-                      value={x}
-                      fullWidth
-                      disabled
-                    />
-                  </Grid>
-                </>
-              ))}
-              <Grid item xs={6} md={4}>
-                <TextField
-                  id="HREmail"
-                  label="HR Email ID"
-                  variant="outlined"
-                  fullWidth
-                  value={company.HREmail}
-                  disabled
-                />
-              </Grid>
+              {company.HR.map((y, j) => {
+                return (
+                  <>
+                    <Grid item xs={6}>
+                      <TextField
+                        id="HRName"
+                        label="HR Name"
+                        variant="outlined"
+                        fullWidth
+                        value={y.HRName}
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField
+                        id="HREmail"
+                        label="HR Email ID"
+                        variant="outlined"
+                        fullWidth
+                        value={y.HREmail}
+                        disabled
+                      />
+                    </Grid>
+                    {y.HRMobile.map((x, i) => (
+                      <>
+                        <Grid item xs={12}>
+                          <TextField
+                            className="HRMobile"
+                            type="number"
+                            label="HR Mobile Number"
+                            variant="outlined"
+                            value={x}
+                            fullWidth
+                            disabled
+                          />
+                        </Grid>
+                      </>
+                    ))}
+                  </>
+                );
+              })}
               <Grid item xs={6} md={4}>
                 <TextField
                   id="empanelled"
@@ -367,6 +374,7 @@ export default function AddRole() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  fullWidth
                   id="roleDesignation"
                   label="Industry/Department-Role/Designation"
                   variant="outlined"
@@ -374,7 +382,6 @@ export default function AddRole() {
                   onChange={(e) =>
                     setRole({ ...role, designation: e.target.value })
                   }
-                  fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -425,6 +432,7 @@ export default function AddRole() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  fullWidth
                   id="roleHappens"
                   label="What Happens in the Role"
                   variant="outlined"
@@ -432,11 +440,11 @@ export default function AddRole() {
                   onChange={(e) =>
                     setRole({ ...role, happens: e.target.value })
                   }
-                  fullWidth
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
+                  fullWidth
                   id="roleExperience"
                   label="Experience / Fresher"
                   variant="outlined"
@@ -444,7 +452,6 @@ export default function AddRole() {
                   onChange={(e) =>
                     setRole({ ...role, experience: e.target.value })
                   }
-                  fullWidth
                 />
               </Grid>
               <Grid item xs={6}>
@@ -683,11 +690,11 @@ export default function AddRole() {
                   label="Original JD"
                   variant="outlined"
                   fullWidth
+                  multiline
                   value={role.originalJD}
                   onChange={(e) =>
                     setRole({ ...role, originalJD: e.target.value })
                   }
-                  multiline
                 />
               </Grid>
               <Grid item xs={12}>
@@ -696,9 +703,9 @@ export default function AddRole() {
                   label="FAQs"
                   variant="outlined"
                   fullWidth
+                  multiline
                   value={role.faqs}
                   onChange={(e) => setRole({ ...role, faqs: e.target.value })}
-                  multiline
                 />
               </Grid>
               <Grid item xs={12}>
@@ -707,11 +714,11 @@ export default function AddRole() {
                   label="Rejection Reasons"
                   variant="outlined"
                   fullWidth
+                  multiline
                   value={role.rejectionReasons}
                   onChange={(e) =>
                     setRole({ ...role, rejectionReasons: e.target.value })
                   }
-                  multiline
                 />
               </Grid>
               <Grid item xs={9} />

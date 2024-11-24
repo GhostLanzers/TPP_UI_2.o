@@ -17,13 +17,17 @@ import {
   RadioGroup,
   alpha,
 } from "@mui/material";
-
-import { toast } from "react-toastify";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 export default function EditRole() {
+  // STATES HANDLING AND VARIABLES
   const { companyId, id } = useParams();
+  const [skillsList, setSkillsList] = React.useState([]);
+  const [locationList, setLocationList] = React.useState([]);
+  const [searchParams] = useSearchParams();
+  const editable = searchParams.get("edit") === "true";
+  const [qualificationList, setQualificationList] = React.useState([]);
   const [company, setCompany] = React.useState({
     companyName: "",
     HRName: "",
@@ -34,6 +38,32 @@ export default function EditRole() {
     response: "Empanelled",
     empanelled: true,
   });
+  const [role, setRole] = React.useState({
+    status: true,
+    role: "",
+    designation: "",
+    processType: "Domestic",
+    happens: "",
+    experience: "",
+    mandatorySkills: [],
+    optionalSkills: [],
+    qualification: [],
+    shift: "",
+    salary: "",
+    cabFacility: true,
+    processWorkType: "",
+    location: [],
+    area: "",
+    bond: 0,
+    ageCriteria: "",
+    period: "Permanent",
+    otherDocs: "",
+    originalJD: "",
+    faqs: "",
+    rejectionReasons: [],
+  });
+
+  //DROP DOWN OPTIONS AND VALUES
   const status = [
     { value: true, label: "Active" },
     { value: false, label: "InActive" },
@@ -48,41 +78,13 @@ export default function EditRole() {
     { value: "Notice Period", label: "Notice Period" },
     { value: "Buyout", label: "Buyout" },
   ];
-  const [skillsList, setSkillsList] = React.useState([]);
-  const [locationList, setLocationList] = React.useState([]);
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const editable = searchParams.get("edit") === "true";
-  const [qualificationList, setQualificationList] = React.useState([]);
-  const [role, setRole] = React.useState({
-    status: true,
-    role: "",
-    designation: "",
-    processType: "Domestic",
-    happens: "",
-    experience: 0,
-    mandatorySkills: [],
-    optionalSkills:[],
-    qualification: [],
-    shift: "",
-    salary: 0,
-    cabFacility: true,
-    processWorkType: "",
-    location: [],
-    area: "",
-    bond: 0,
-    ageCriteria: "",
-    period: "Permanent",
-    otherDocs: "",
-    originalJD: "",
-    faqs: "",
-    rejectionReasons: [],
-  });
+
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/company/company/" + companyId,
+          "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + companyId,
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -90,7 +92,7 @@ export default function EditRole() {
           }
         );
         const roleres = await axios.get(
-          "http://localhost:5000/api/v1/company/" + companyId + "/role/" + id,
+          "https://tpp-backend-eura.onrender.com/api/v1/company/" + companyId + "/role/" + id,
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -98,14 +100,13 @@ export default function EditRole() {
           }
         );
         const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
             },
           }
         );
-
         setCompany(res.data);
         setRole(roleres.data[0]);
         extraRes.data.forEach(({ _id, data }) => {
@@ -122,44 +123,15 @@ export default function EditRole() {
 
   const handleEditRole = async () => {
     try {
-      const newRole = await axios.patch(
-        "http://localhost:5000/api/v1/company/" + companyId + "/role/" + id,
-        { ...role },
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
-      const skilldata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/skills",
-        {
-          data: [
-            ...new Set([
-              ...role.mandatorySkills,
-              ...role.optionalSkills,
-              ...skillsList,
-            ]),
-          ],
-        },
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
-      toast.success("Role Edited Successfully");
-      navigate(`/EditEmpanelled/${companyId}?edit=true`);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //JSX CODE
   return (
     <>
-      <Container
-        sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}
-      >
+      <Container sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}>
         <Card
           sx={{
             borderRadius: "20px",
@@ -214,6 +186,7 @@ export default function EditRole() {
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextField
+                  fullWidth
                   id="roleDesignation"
                   label="Industry/Department-Role/Designation"
                   variant="outlined"
@@ -221,7 +194,6 @@ export default function EditRole() {
                   onChange={(e) =>
                     setRole({ ...role, designation: e.target.value })
                   }
-                  fullWidth
                   InputProps={{
                     readOnly: !editable,
                   }}
@@ -321,7 +293,10 @@ export default function EditRole() {
                     })
                   }
                   renderInput={(params) => (
-                    <TextField {...params} label="Mandatory Skill Requirement" />
+                    <TextField
+                      {...params}
+                      label="Mandatory Skill Requirement"
+                    />
                   )}
                 />
               </Grid>
@@ -385,11 +360,7 @@ export default function EditRole() {
                     })
                   }
                   renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      
-                      label="Qualification Requirement"
-                    />
+                    <TextField {...params} label="Qualification Requirement" />
                   )}
                 />
               </Grid>
@@ -461,11 +432,7 @@ export default function EditRole() {
                     })
                   }
                   renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      
-                      label="Company Location"
-                    />
+                    <TextField {...params} label="Company Location" />
                   )}
                 />
               </Grid>
@@ -528,6 +495,7 @@ export default function EditRole() {
                     control={<Radio />}
                     label="Yes"
                     labelPlacement="start"
+                    fullWidth
                     disabled={!editable}
                   />
                   <FormControlLabel
@@ -535,6 +503,7 @@ export default function EditRole() {
                     control={<Radio />}
                     label="No"
                     labelPlacement="start"
+                    fullWidth
                     disabled={!editable}
                   />
                 </RadioGroup>

@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function AddCompany() {
+  //DROP DOWN OPTIONS AND VALUES
   const Empanelled = [
     { value: true, label: "Active" },
     { value: false, label: "In-Active" },
@@ -53,55 +54,64 @@ export default function AddCompany() {
       label: "No Response",
     },
   ];
+
+  // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const [company, setCompany] = React.useState({
     companyName: "",
     HRName: "",
-    HRMobile: [""],
-    HREmail: "",
+    HR: [{ HRName: "", HRMobile: [""], HREmail: "" }],
     about: "",
     remarks: "",
     response: "Empanelled",
     empanelled: true,
     companyType: "",
   });
-  function handleRemoveMobile(index) {
-    const newHRMobile = [...company.HRMobile].filter(
-      (_, indexFilter) => !(indexFilter === index)
-    );
-    setCompany({ ...company, HRMobile: newHRMobile });
-  }
-  function handleAddMobile() {
-    const newHRMobile = [...company.HRMobile, ""];
-    setCompany({ ...company, HRMobile: newHRMobile });
-  }
-  function handleMobileChange(e, i) {
-    var list = [...company.HRMobile];
-    list[i] = e.target.value;
-    setCompany({ ...company, HRMobile: list });
-  }
 
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
+  function handleRemoveMobile(j, i) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile = [...company.HR[j].HRMobile].filter(
+      (_, indexFilter) => !(indexFilter === i)
+    );
+
+    setCompany({ ...company, HR: HRs });
+  }
+  function handleAddMobile(j) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile = [...company.HR[j].HRMobile, ""];
+    setCompany({ ...company, HR: HRs });
+  }
+  function handleMobileChange(e, j, i) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile[i] = e.target.value;
+    setCompany({ ...company, HR: HRs });
+  }
+  function handleDeleteHR(j) {
+    const newHR = [...company.HR].filter(
+      (_, indexFilter) => !(indexFilter === j)
+    );
+    setCompany({ ...company, HR: newHR });
+  }
   const handleSubmit = async () => {
     try {
       var flag = 0;
-      if (company.HRMobile.includes("")) {
-        const ind = company.HRMobile.indexOf("");
-        toast.error(
-          "Missing " +
-            (ind == 0
-              ? "1st"
-              : ind == 1
-              ? "2nd"
-              : ind == 2
-              ? "3rd"
-              : ind + 1 + "th") +
-            " Mobile Number"
-        );
+      if (company.companyName === "") {
+        toast.error("Enter Company Name");
+        flag = 1;
+      }
+      if (
+        company.HR.map((hr) => hr.HRMobile)
+          .flat(1)
+          .includes("")
+      ) {
+        toast.error("Missing " + " Mobile Number");
         flag = 1;
       }
       if (flag) return;
+
       const res = await axios.post(
-        "http://localhost:5000/api/v1/company",
+        "https://tpp-backend-eura.onrender.com/api/v1/company",
         { ...company },
         {
           headers: {
@@ -116,7 +126,7 @@ export default function AddCompany() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/company/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/company/mobile/" + num,
 
         {
           headers: {
@@ -127,6 +137,8 @@ export default function AddCompany() {
       if (res.data.status === true) toast.error("Number already exists");
     } catch (error) {}
   };
+
+  //JSX CODE
   return (
     <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
       <Card
@@ -152,7 +164,7 @@ export default function AddCompany() {
         />
         <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
           <Grid container rowSpacing={2} columnSpacing={1}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <TextField
                 id="companyName"
                 label="Company Name"
@@ -164,19 +176,7 @@ export default function AddCompany() {
                 }
               />
             </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                id="HRName"
-                label="HR Name"
-                variant="outlined"
-                fullWidth
-                value={company.HRName}
-                onChange={(e) =>
-                  setCompany({ ...company, HRName: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <TextField
                 id="companyType"
                 select
@@ -194,82 +194,141 @@ export default function AddCompany() {
                 ))}
               </TextField>
             </Grid>
-            {company.HRMobile.map((x, i) => (
-              <>
-                <Grid item xs={7.5} md={9}>
-                  <TextField
-                    className="HRMobile"
-                    type="number"
-                    label="HR Mobile Number"
-                    variant="outlined"
-                    value={x}
-                    onChange={(e) => {
-                      if (!/^\d*$/.test(e.target.value))
-                        toast.warning("Only Number allowed in Mobile");
-                      handleMobileChange(e, i);
-                    }}
-                    onBlur={(e) => {
-                      if (!/^\d{10}$/.test(e.target.value)) {
-                        if (e.target.value.length == 0) return;
-                        toast.warning("Mobile number should be 10 digits");
-                        return;
-                      }
-                      checkNumber(e.target.value);
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                {i === 0 && (
-                  <Grid item xs={4.5} md={3}>
-                    <Button
+            {company.HR.map((y, j) => {
+              return (
+                <>
+                  <Grid item xs={6}>
+                    <TextField
+                      id="HRName"
+                      label="HR Name"
+                      variant="outlined"
                       fullWidth
-                      variant="contained"
-                      size="large"
-                      sx={{
-                        height: "100%",
-                        backgroundColor: alpha("#0000FF", 0.5),
+                      value={y.HRName}
+                      onChange={(e) => {
+                        var HRs = [...company.HR];
+                        HRs[j].HRName = e.target.value;
+                        setCompany({ ...company, HR: HRs });
                       }}
-                      endIcon={<ControlPointIcon />}
-                      onClick={handleAddMobile}
-                    >
-                      Add
-                    </Button>
+                    />
                   </Grid>
-                )}
-                {i !== 0 && (
-                  <Grid item xs={4.5} md={3}>
-                    <Button
+                  <Grid item xs={6}>
+                    <TextField
+                      id="HREmail"
+                      label="HR Email ID"
+                      variant="outlined"
                       fullWidth
-                      variant="contained"
-                      color="error"
-                      size="large"
-                      sx={{
-                        height: "100%",
-                        backgroundColor: alpha("#FF0000", 0.6),
+                      value={y.HREmail}
+                      onChange={(e) => {
+                        var HRs = [...company.HR];
+                        HRs[j].HREmail = e.target.value;
+                        setCompany({ ...company, HR: HRs });
                       }}
-                      endIcon={<RemoveCircleOutlineIcon />}
-                      onClick={() => {
-                        handleRemoveMobile(i);
-                      }}
-                    >
-                      Remove
-                    </Button>
+                    />
                   </Grid>
-                )}
-              </>
-            ))}
-            <Grid item xs={12}>
-              <TextField
-                id="HREmail"
-                label="HR Email ID"
-                variant="outlined"
-                fullWidth
-                value={company.HREmail}
-                onChange={(e) =>
-                  setCompany({ ...company, HREmail: e.target.value })
-                }
-              />
-            </Grid>
+                  {y.HRMobile.map((x, i) => (
+                    <>
+                      <Grid item xs={9}>
+                        <TextField
+                          className="HRMobile"
+                          type="number"
+                          label="HR Mobile Number"
+                          variant="outlined"
+                          value={x}
+                          onChange={(e) => {
+                            if (!/^\d*$/.test(e.target.value))
+                              toast.warning("Only Number allowed in Mobile");
+                            handleMobileChange(e, j, i);
+                          }}
+                          onBlur={(e) => {
+                            if (!/^\d{10}$/.test(e.target.value)) {
+                              if (e.target.value.length === 0) return;
+                              toast.warning(
+                                "Mobile number should be 10 digits"
+                              );
+                              return;
+                            }
+                            checkNumber(e.target.value);
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      {i === 0 && (
+                        <Grid item xs={3}>
+                          <Button
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            size="large"
+                            style={{ height: "100%" }}
+                            endIcon={<ControlPointIcon />}
+                            onClick={() => handleAddMobile(j)}
+                          >
+                            Add
+                          </Button>
+                        </Grid>
+                      )}
+                      {i !== 0 && (
+                        <Grid item xs={3}>
+                          <Button
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            color="error"
+                            size="large"
+                            endIcon={<RemoveCircleOutlineIcon />}
+                            sx={{ height: "100%" }}
+                            onClick={() => {
+                              handleRemoveMobile(j, i);
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </Grid>
+                      )}
+                    </>
+                  ))}
+                  {j === 0 && (
+                    <Grid item xs={12}>
+                      <Button
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        size="large"
+                        style={{ height: "100%" }}
+                        endIcon={<ControlPointIcon />}
+                        onClick={() => {
+                          const newHR = [
+                            ...company.HR,
+                            { HRName: "", HRMobile: [""], HREmail: "" },
+                          ];
+                          setCompany({ ...company, HR: newHR });
+                        }}
+                      >
+                        Add HR
+                      </Button>
+                    </Grid>
+                  )}
+                  {j !== 0 && (
+                    <Grid item xs={12}>
+                      <Button
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        color="error"
+                        size="large"
+                        endIcon={<RemoveCircleOutlineIcon />}
+                        sx={{ height: "100%" }}
+                        onClick={() => {
+                          handleDeleteHR(j);
+                        }}
+                      >
+                        Remove HR
+                      </Button>
+                    </Grid>
+                  )}
+                </>
+              );
+            })}
             <Grid item xs={12}>
               <TextField
                 id="about"

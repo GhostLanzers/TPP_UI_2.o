@@ -43,6 +43,10 @@
   border-bottom: 1px solid white;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 /* CSS for MUI TextFields to turn white in dark */
 .tw .MuiOutlinedInput-root {
   color: white; /* Text color */

@@ -6,8 +6,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { flatten } from "flat";
 
 const ExcelExport = ({ excelData=null,gridRef, fileName, buttonName = "Download" }) => {
-  const fileType =
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
   const exportToExcel = async () => {
     let expdata = excelData
@@ -20,6 +19,7 @@ const ExcelExport = ({ excelData=null,gridRef, fileName, buttonName = "Download"
     FileSaver.saveAs(data, fileName + fileExtension);
   };
 
+  //JSX CODE
   return (
     <>
       <Button

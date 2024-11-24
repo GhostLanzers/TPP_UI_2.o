@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import * as React from "react";
 import {
   Button,
   Grid,
@@ -9,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
   Dialog,
-  styled,
   Card,
   CardHeader,
   CardContent,
@@ -21,10 +17,13 @@ import {
   MenuItem,
   alpha,
 } from "@mui/material";
-import { toast } from "react-toastify";
-import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate, useSearchParams, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -35,43 +34,35 @@ import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../../Components/Main/ExcelExport";
 
-export default function EditEmpanelled(props) {
+export default function EditEmpanelled() {
+  // STATES HANDLING AND VARIABLES
   const [open, setOpen] = React.useState(false);
-
   const { employeeType } = useSelector((state) => state.user);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const gridapi = React.useRef();
-  const [fileName, setFileName] = useState(String(new Date()));
-  const [warning, setWarning] = useState("");
-  const [count, setCount] = useState(0);
+  const [fileName, setFileName] = React.useState(String(new Date()));
+  const [count, setCount] = React.useState(0);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
   const editable = searchParams.get("edit") === "true";
-  const [company, setCompany] = useState({
+  const [deleteData, setDeleteData] = React.useState({});
+  const [company, setCompany] = React.useState({
     companyName: "",
-    HRName: "",
     companyType: "",
-    HRMobile: [""],
-    HREmail: "",
+    HR: [{ HRName: "", HRMobile: [""], HREmail: "" }],
     about: "",
     remarks: "",
     response: "Empanelled",
     empanelled: true,
     roles: [],
   });
+
+  // API CALLS HANDLING
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/company/company/" + id,
+          "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -85,11 +76,11 @@ export default function EditEmpanelled(props) {
     fetchData();
   }, []);
 
+  //DROP DOWN OPTIONS AND VALUES
   const Empanelled = [
     { value: true, label: "Active" },
     { value: false, label: "In-Active" },
   ];
-
   const source = [
     {
       value: "Empanelled",
@@ -120,8 +111,8 @@ export default function EditEmpanelled(props) {
       label: "No Response",
     },
   ];
-  const [deleteData, setDeleteData] = useState({});
 
+  // GRID HEADER/COLOUMS HANDLING
   const column = [
     { headerName: "Role", field: "role", width: "150px" },
     { headerName: "Qualifications", field: "qualification", width: "150px" },
@@ -341,50 +332,64 @@ export default function EditEmpanelled(props) {
     cellEditor: false,
     filter: true,
   };
-  function handleRemoveMobile(index) {
-    const newHRMobile = [...company.HRMobile].filter(
-      (_, indexFilter) => !(indexFilter === index)
+  const selection = React.useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = React.useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
+  // FUNCTIONS HANDLING
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  function handleRemoveMobile(j, i) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile = [...company.HR[j].HRMobile].filter(
+      (_, indexFilter) => !(indexFilter === i)
     );
-    setCompany({ ...company, HRMobile: newHRMobile });
+    setCompany({ ...company, HR: HRs });
   }
-  function handleAddMobile() {
-    const newHRMobile = [...company.HRMobile, ""];
-    setCompany({ ...company, HRMobile: newHRMobile });
+  function handleAddMobile(j) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile = [...company.HR[j].HRMobile, ""];
+    setCompany({ ...company, HR: HRs });
   }
-  function handleMobileChange(e, i) {
-    var list = [...company.HRMobile];
-    list[i] = e.target.value;
-    setCompany({ ...company, HRMobile: list });
+  function handleMobileChange(e, j, i) {
+    var HRs = [...company.HR];
+    HRs[j].HRMobile[i] = e.target.value;
+    setCompany({ ...company, HR: HRs });
+  }
+  function handleDeleteHR(j) {
+    const newHR = [...company.HR].filter(
+      (_, indexFilter) => !(indexFilter === j)
+    );
+    setCompany({ ...company, HR: newHR });
   }
   const handleSubmit = async () => {
     try {
       var flag = 0;
-      if (company.HRMobile.includes("")) {
+      if (company.companyName === "") {
+        toast.error("Enter Company Name");
+        flag = 1;
+      }
+      if (
+        company.HR.map((hr) => hr.HRMobile)
+          .flat(1)
+          .includes("")
+      ) {
         const ind = company.HRMobile.indexOf("");
-        toast.error(
-          "Missing " +
-            (ind === 0
-              ? "1st"
-              : ind === 1
-              ? "2nd"
-              : ind === 2
-              ? "3rd"
-              : ind + 1 + "th") +
-            " Mobile Number"
-        );
+        toast.error("Missing " + " Mobile Number");
         flag = 1;
       }
       if (flag) return;
       delete company.__v;
-      const newRole = await axios.patch(
-        "http://localhost:5000/api/v1/company/company/" + id,
-        { ...company, roles: company.roles.map((r) => r._id) },
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
       toast.success("Company Edited Successfully");
       navigate(`/CompanyDashBoard`);
     } catch (error) {
@@ -392,17 +397,33 @@ export default function EditEmpanelled(props) {
     }
   };
   const handleRoleDelete = () => {
-    setCompany({
-      ...company,
-      roles: company.roles.filter((r) => r._id !== deleteData._id),
-    });
-    handleClose();
+    try {
+      setCompany({
+        ...company,
+        roles: company.roles.filter((r) => r._id !== deleteData._id),
+      });
+      handleClose();
+    } catch (error) {}
   };
+  const checkNumber = async (num) => {
+    try {
+      const res = await axios.get(
+        "https://tpp-backend-eura.onrender.com/api/v1/company/mobile/" + num,
+
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
+      if (res.data.status === true) toast.error("Number already exists");
+    } catch (error) {}
+  };
+
+  //JSX CODE
   return (
     <>
-      <Container
-        sx={{ paddingTop: "9vh", width: "96%" }}
-      >
+      <Container sx={{ paddingTop: "9vh", width: "96%" }}>
         <Card
           sx={{
             borderRadius: "20px",
@@ -426,7 +447,7 @@ export default function EditEmpanelled(props) {
           />
           <CardContent sx={{ backgroundColor: alpha("#FFFFFF", 0.7) }}>
             <Grid container rowSpacing={2} columnSpacing={1}>
-              <Grid item xs={12} md={access ? 4 : 6}>
+              <Grid item xs={12} md={6}>
                 <TextField
                   id="companyName"
                   label="Company Name"
@@ -441,7 +462,7 @@ export default function EditEmpanelled(props) {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={access ? 4 : 6}>
+              <Grid item xs={12} md={6}>
                 <TextField
                   id="companyType"
                   select
@@ -461,94 +482,153 @@ export default function EditEmpanelled(props) {
               </Grid>
               {access && (
                 <>
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      id="HRName"
-                      label="HR Name"
-                      variant="outlined"
-                      fullWidth
-                      value={company.HRName}
-                      onChange={(e) =>
-                        setCompany({ ...company, HRName: e.target.value })
-                      }
-                      InputProps={{
-                        readOnly: !editable,
-                      }}
-                    />
-                  </Grid>
+                  {company.HR.map((y, j) => {
+                    return (
+                      <>
+                        <Grid item xs={6}>
+                          <TextField
+                            id="HRName"
+                            label="HR Name"
+                            variant="outlined"
+                            fullWidth
+                            value={y.HRName}
+                            onChange={(e) => {
+                              var HRs = [...company.HR];
+                              HRs[j].HRName = e.target.value;
+                              setCompany({ ...company, HR: HRs });
+                            }}
+                            InputProps={{
+                              readOnly: !editable,
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            id="HREmail"
+                            label="HR Email ID"
+                            variant="outlined"
+                            fullWidth
+                            value={y.HREmail}
+                            onChange={(e) => {
+                              var HRs = [...company.HR];
+                              HRs[j].HREmail = e.target.value;
+                              setCompany({ ...company, HR: HRs });
+                            }}
+                            InputProps={{
+                              readOnly: !editable,
+                            }}
+                          />
+                        </Grid>
+                        {y.HRMobile.map((x, i) => (
+                          <>
+                            <Grid item xs={editable ? 9 : 12}>
+                              <TextField
+                                className="HRMobile"
+                                type="number"
+                                label="HR Mobile Number"
+                                variant="outlined"
+                                value={x}
+                                onChange={(e) => {
+                                  if (!/^\d*$/.test(e.target.value))
+                                    toast.warning(
+                                      "Only Number allowed in Mobile"
+                                    );
+                                  handleMobileChange(e, j, i);
+                                }}
+                                onBlur={(e) => {
+                                  if (!/^\d{10}$/.test(e.target.value)) {
+                                    if (e.target.value.length == 0) return;
+                                    toast.warning(
+                                      "Mobile number should be 10 digits"
+                                    );
+                                    return;
+                                  }
+                                  checkNumber(e.target.value);
+                                }}
+                                fullWidth
+                                InputProps={{
+                                  readOnly: !editable,
+                                }}
+                              />
+                            </Grid>
+                            {editable && i === 0 && (
+                              <Grid item xs={3}>
+                                <Button
+                                  fullWidth
+                                  margin="normal"
+                                  variant="outlined"
+                                  size="large"
+                                  style={{ height: "100%" }}
+                                  endIcon={<ControlPointIcon />}
+                                  onClick={() => handleAddMobile(j)}
+                                >
+                                  Add
+                                </Button>
+                              </Grid>
+                            )}
+                            {editable && i !== 0 && (
+                              <Grid item xs={3}>
+                                <Button
+                                  fullWidth
+                                  margin="normal"
+                                  variant="outlined"
+                                  color="error"
+                                  size="large"
+                                  endIcon={<RemoveCircleOutlineIcon />}
+                                  sx={{ height: "100%" }}
+                                  onClick={() => {
+                                    handleRemoveMobile(j, i);
+                                  }}
+                                >
+                                  Remove
+                                </Button>
+                              </Grid>
+                            )}
+                          </>
+                        ))}
+                        {editable && j === 0 && (
+                          <Grid item xs={12}>
+                            <Button
+                              fullWidth
+                              margin="normal"
+                              variant="outlined"
+                              size="large"
+                              style={{ height: "100%" }}
+                              endIcon={<ControlPointIcon />}
+                              onClick={() => {
+                                const newHR = [
+                                  ...company.HR,
+                                  { HRName: "", HRMobile: [""], HREmail: "" },
+                                ];
+                                setCompany({ ...company, HR: newHR });
+                              }}
+                            >
+                              Add HR
+                            </Button>
+                          </Grid>
+                        )}
+                        {editable && j !== 0 && (
+                          <Grid item xs={12}>
+                            <Button
+                              fullWidth
+                              margin="normal"
+                              variant="outlined"
+                              color="error"
+                              size="large"
+                              endIcon={<RemoveCircleOutlineIcon />}
+                              sx={{ height: "100%" }}
+                              onClick={() => {
+                                handleDeleteHR(j);
+                              }}
+                            >
+                              Remove HR
+                            </Button>
+                          </Grid>
+                        )}
+                      </>
+                    );
+                  })}
 
-                  {company.HRMobile.map((x, i) => (
-                    <>
-                      <Grid item xs={editable ? 8 : 12} md={editable ? 4 : 6}>
-                        <TextField
-                          className="HRMobile"
-                          type="number"
-                          label="HR Mobile Number"
-                          variant="outlined"
-                          value={x}
-                          onChange={(e) => handleMobileChange(e, i)}
-                          fullWidth
-                          InputProps={{
-                            readOnly: !editable,
-                          }}
-                        />
-                      </Grid>
-                      {editable && i === 0 && (
-                        <Grid item xs={4} md={2}>
-                          <Button
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            sx={{
-                              height: "100%",
-                              backgroundColor: alpha("#0000FF", 0.5),
-                            }}
-                            endIcon={<ControlPointIcon />}
-                            onClick={handleAddMobile}
-                            disabled={!editable}
-                          >
-                            Add
-                          </Button>
-                        </Grid>
-                      )}
-                      {editable && i !== 0 && (
-                        <Grid item xs={4} md={2}>
-                          <Button
-                            fullWidth
-                            variant="contained"
-                            color="error"
-                            size="large"
-                            sx={{
-                              height: "100%",
-                              backgroundColor: alpha("#FF0000", 0.6),
-                            }}
-                            endIcon={<RemoveCircleOutlineIcon />}
-                            onClick={() => {
-                              handleRemoveMobile(i);
-                            }}
-                            disabled={!editable}
-                          >
-                            Remove
-                          </Button>
-                        </Grid>
-                      )}
-                    </>
-                  ))}
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      id="HREmail"
-                      label="HR Email ID"
-                      variant="outlined"
-                      fullWidth
-                      value={company.HREmail}
-                      onChange={(e) =>
-                        setCompany({ ...company, HREmail: e.target.value })
-                      }
-                      InputProps={{
-                        readOnly: !editable,
-                      }}
-                    />
-                  </Grid>
                   <Grid item xs={6}>
                     <TextField
                       id="empanelled"
@@ -645,7 +725,6 @@ export default function EditEmpanelled(props) {
                       SUBMIT
                     </Button>
                   </Grid>
-
                   <Grid item xs={3}>
                     <Button
                       fullWidth
@@ -730,7 +809,7 @@ export default function EditEmpanelled(props) {
                   Select
                 </Button>
               </Grid>
-              <Grid item md={3} display={{xs:"none", md:"block"}} />
+              <Grid item md={3} display={{ xs: "none", md: "block" }} />
               <Grid item xs={4}>
                 <TextField
                   size="small"
@@ -742,11 +821,7 @@ export default function EditEmpanelled(props) {
                 />
               </Grid>
               <Grid item xs={4} md={2}>
-                <ExcelExport
-                  height="100%"
-                  excelData={{}}
-                  fileName={fileName}
-                ></ExcelExport>
+                <ExcelExport height="100%" excelData={{}} fileName={fileName} />
               </Grid>
             </Grid>
             <Grid container xs={12}>
@@ -770,8 +845,9 @@ export default function EditEmpanelled(props) {
                   columnDefs={column}
                   defaultColDef={defaultColDef}
                   pagination={true}
-                  paginationPageSize={10}
-                  paginationPageSizeSelector={() => [10, 20, 50, 100, 200, 500]}
+                  paginationPageSize={100}
+                  selection={selection}
+                  paginationPageSizeSelector={paginationPageSizeSelector}
                 />
               </div>
             </Grid>

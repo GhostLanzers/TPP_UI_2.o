@@ -100,7 +100,7 @@ export default function AddCandidate(props) {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
+          "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -108,7 +108,7 @@ export default function AddCandidate(props) {
           }
         );
         const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -180,7 +180,7 @@ export default function AddCandidate(props) {
       
       if (flag) return;
       await axios.post(
-        "http://localhost:5000/api/v1/candidate",
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate",
         {
           ...candidate,
           assignedEmployee: props.user.userid,
@@ -193,7 +193,7 @@ export default function AddCandidate(props) {
         }
       );
       await axios.patch(
-        "http://localhost:5000/api/v1/extra/skills",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
         { data: [...new Set([...candidate.skills, ...skillsList])] },
         {
           headers: {
@@ -211,7 +211,7 @@ export default function AddCandidate(props) {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/candidate/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/mobile/" + num,
 
         {
           headers: {

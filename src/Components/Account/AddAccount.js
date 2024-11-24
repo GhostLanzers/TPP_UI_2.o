@@ -15,17 +15,19 @@ import {
   Grid,
   alpha,
 } from "@mui/material";
-import axios from "axios";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
 export default function AddAccount() {
+
+  // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const [employee, setEmployee] = React.useState({
     name: "",
@@ -37,13 +39,15 @@ export default function AddAccount() {
     gender: "Male",
     currentAddress: "",
     permanentAddress: "",
-    DOB: dayjs(new Date()),
-    DOJ: dayjs(new Date()),
+    DOB: null,
+    DOJ: null,
     documentation: true,
     status: true,
     password: "TPP@Pass",
   });
 
+
+  //DROPDOWN VALUES
   const gender = [
     {
       value: "Female",
@@ -65,6 +69,8 @@ export default function AddAccount() {
     "Intern",
     "Business Development",
   ];
+
+  // FUNCTIONS HANDLING AND API POST CALLS
   function handleRemoveMobile(index) {
     const newList = [...employee.mobile].filter(
       (_, indexFilter) => !(indexFilter === index)
@@ -74,9 +80,11 @@ export default function AddAccount() {
       mobile: newList,
     });
   }
+
   function handleAddMobile() {
     setEmployee({ ...employee, mobile: [...employee.mobile, ""] });
   }
+
   function handleMobileChange(e, i) {
     var list = [...employee.mobile];
     list[i] = e.target.value;
@@ -85,6 +93,7 @@ export default function AddAccount() {
       mobile: list,
     });
   }
+
   const handleAddEmployee = async () => {
     var flag = 0;
     if (!employee.name) {
@@ -114,11 +123,10 @@ export default function AddAccount() {
       );
       flag = 1;
     }
-
     if (flag) return;
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/employee",
+        "https://tpp-backend-eura.onrender.com/api/v1/employee",
         { ...employee },
         {
           headers: {
@@ -130,10 +138,11 @@ export default function AddAccount() {
       navigate(`/AccountGrid?employeeType=${res.data.employee.employeeType}`);
     } catch (error) {}
   };
+
   const checkId = async (id) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/id/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/id/" + id,
 
         {
           headers: {
@@ -147,7 +156,7 @@ export default function AddAccount() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mobile/" + num,
 
         {
           headers: {
@@ -161,7 +170,7 @@ export default function AddAccount() {
   const checkMail = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mail/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mail/" + num,
 
         {
           headers: {
@@ -172,6 +181,8 @@ export default function AddAccount() {
       if (res.data.status === true) toast.error("Email already exists");
     } catch (error) {}
   };
+
+  //JSX CODE
   return (
     <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
       <Card
@@ -209,7 +220,6 @@ export default function AddAccount() {
                 }
                 onBlur={(e) => {
                   if (e.target.value.length == 0) return;
-
                   checkId(e.target.value);
                 }}
               />

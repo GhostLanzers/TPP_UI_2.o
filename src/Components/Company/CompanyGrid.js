@@ -1,9 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { AgGridReact } from "ag-grid-react";
-import { toast } from "react-toastify";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import * as React from "react";
 import {
   Button,
   Grid,
@@ -18,8 +13,13 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
@@ -27,34 +27,27 @@ import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../../Components/Main/ExcelExport";
-import { flatten } from "flat";
 
-export default function CompanyGrid(props) {
+export default function CompanyGrid() {
+  // STATES HANDLING AND VARIABLES
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const { employeeType } = useSelector((state) => state.user);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = React.useState([]);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
-  const [deleteData, setDeleteData] = useState({});
+  const [deleteData, setDeleteData] = React.useState({});
   const [searchParams] = useSearchParams();
   const gridapi = React.useRef();
-  const [fileName, setFileName] = useState(String(new Date()));
-  const [warning, setWarning] = useState("");
-  const [count, setCount] = useState(0);
+  const [fileName, setFileName] = React.useState(String(new Date()));
+  const [count, setCount] = React.useState(0);
   const navigate = useNavigate();
-  useEffect(() => {
+
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
+  React.useEffect(() => {
     var url =
-      "http://localhost:5000/api/v1/company/companyType/?companyType=" +
+      "https://tpp-backend-eura.onrender.com/api/v1/company/companyType/?companyType=" +
       searchParams.get("companyType");
     if (!searchParams.has("companyType")) {
-      url = "http://localhost:5000/api/v1/company/companyType";
+      url = "https://tpp-backend-eura.onrender.com/api/v1/company/companyType";
     }
     axios
       .get(url, {
@@ -76,13 +69,10 @@ export default function CompanyGrid(props) {
   const theme = createTheme({
     palette: {
       white: createColor("#FFFFF0"),
-      anger: createColor("#F40B27"),
-      apple: createColor("#5DBA40"),
-      steelBlue: createColor("#5C76B7"),
-      violet: createColor("#BC00A3"),
     },
   });
 
+  // GRID HEADER/COLOUMS HANDLING
   const column = [
     {
       headerName: "Company Name",
@@ -91,9 +81,25 @@ export default function CompanyGrid(props) {
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
     },
-    { headerName: "HR Name", field: "HRName", hide: !access },
-    { headerName: "HR Mobile", field: "HRMobile", hide: !access },
-    { headerName: "HR Email", field: "HREmail", hide: !access },
+    {
+      headerName: "HR Name",
+      field: "HR.HRName",
+      hide: !access,
+      valueFormatter: (p) => p.data.HR.map((hr) => hr.HRName),
+    },
+    {
+      headerName: "HR Mobile",
+      field: "HR.HRMobile",
+      hide: !access,
+      valueFormatter: (p) => p.data.HR.map((hr) => hr.HRMobile).flat(1),
+      filter: true,
+    },
+    {
+      headerName: "HR Email",
+      field: "HR.HREmail",
+      hide: !access,
+      valueFormatter: (p) => p.data.HR.map((hr) => hr.HREmail),
+    },
     { headerName: "Remarks", field: "remarks", hide: !access },
 
     {
@@ -119,7 +125,6 @@ export default function CompanyGrid(props) {
         );
       },
     },
-
     {
       headerName: "In Process",
       suppressSizeToFit: true,
@@ -211,8 +216,7 @@ export default function CompanyGrid(props) {
                   size="small"
                   onClick={() =>
                     navigate(
-                      "/CandidateGrid?type=OfferDrop&&companyId=" +
-                        props.data._id
+                      "/CandidateGrid?type=OfferDrop&&companyId=" + props.data._id
                     )
                   }
                 >
@@ -312,23 +316,31 @@ export default function CompanyGrid(props) {
     filter: true,
     rowSelection: "multiple",
   };
-  const getSelectedData = useCallback(() => {
-    return gridapi.current?.api.getSelectedRows().map((l) => flatten(l));
-  });
+  const selection = React.useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = React.useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
+  // FUNCTIONS HANDLING
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleDelete = async (id) => {
     try {
-      const company = axios.delete(
-        "http://localhost:5000/api/v1/company/" + id,
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
       setTableData(tableData.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}
   };
+
+  //JSX CODE
   return (
     <>
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -401,8 +413,9 @@ export default function CompanyGrid(props) {
             columnDefs={column}
             defaultColDef={defaultColDef}
             pagination={true}
-            paginationPageSize={10}
-            paginationPageSizeSelector={() => [10, 20, 50, 100, 200, 500]}
+            paginationPageSize={100}
+            selection={selection}
+            paginationPageSizeSelector={paginationPageSizeSelector}
             rowSelection={"multiple"}
           />
         </div>

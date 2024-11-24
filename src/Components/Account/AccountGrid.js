@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import { toast } from "react-toastify";
 import {
   Button,
   Grid,
@@ -15,7 +11,11 @@ import {
   TextField,
   alpha,
 } from "@mui/material";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
@@ -26,16 +26,9 @@ import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../Main/ExcelExport";
 
 export default function AccountGrid() {
-
+  // STATES HANDLING AND VARIABLES
   const [open, setOpen] = React.useState(false);
   const [deleteData, setDeleteData] = React.useState({});
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const [employeeList, setEmployeeList] = useState([]);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -43,12 +36,13 @@ export default function AccountGrid() {
   const [fileName, setFileName] = useState(String(new Date()));
   const [warning, setWarning] = useState("");
   const [count, setCount] = useState(0);
-  console.log(searchParams.get("employeeType"));
+
+  // FUNCTIONS HANDLING AND SEARCH API CALLS
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/employee/employeeType/" +
+          "https://tpp-backend-eura.onrender.com/api/v1/employee/employeeType/" +
             searchParams.get("employeeType"),
           {
             headers: {
@@ -56,7 +50,6 @@ export default function AccountGrid() {
             },
           }
         );
-
         setEmployeeList(res.data);
       } catch (error) {
         console.log(error);
@@ -64,6 +57,8 @@ export default function AccountGrid() {
     };
     fetchData();
   }, [setEmployeeList]);
+
+  // GRID HEADER/COLOUMS HANDLING
   const column = [
     {
       headerName: "Employee Name",
@@ -162,20 +157,31 @@ export default function AccountGrid() {
     filter: true,
     rowSelection: "multiple",
   };
+
+  const selection = React.useMemo(() => {
+    return {
+      mode: "multiRow",
+      groupSelects: "descendants",
+    };
+  }, []);
+  const paginationPageSizeSelector = React.useMemo(() => {
+    return [200, 500, 1000];
+  }, []);
+
+  // FUNCTIONS HANDLING
   const handleDelete = async (id) => {
     try {
-      const company = axios.delete(
-        "http://localhost:5000/api/v1/employee/" + id,
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("user")).token,
-          },
-        }
-      );
       setEmployeeList(employeeList.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}
   };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -223,7 +229,7 @@ export default function AccountGrid() {
               fullWidth
               className="tw"
               onChange={(e) => setFileName(e.target.value)}
-            ></TextField>
+            />
           </Grid>
           <Grid item xs={3.5} md={2}>
             <ExcelExport height="100%" gridRef={gridapi} fileName={fileName} />
@@ -244,28 +250,27 @@ export default function AccountGrid() {
             columnDefs={column}
             defaultColDef={defaultColDef}
             pagination={true}
-            paginationPageSize={10}
+            paginationPageSize={100}
+            selection={selection}
+            paginationPageSizeSelector={paginationPageSizeSelector}
             rowSelection={"multiple"}
-            paginationPageSizeSelector={() => [
-              10, 20, 30, 40, 50, 100, 200, 500,
-            ]}
           />
         </div>
         <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{
-          backgroundColor: "transparent",
-          "& .MuiDialog-paper": {
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{
             backgroundColor: "transparent",
-            backdropFilter: "blur(100px)",
-            boxShadow: "none",
-            color: "white",
-          },
-        }}
-      >
+            "& .MuiDialog-paper": {
+              backgroundColor: "transparent",
+              backdropFilter: "blur(100px)",
+              boxShadow: "none",
+              color: "white",
+            },
+          }}
+        >
           <DialogTitle
             sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
             id="customized-dialog-title"
@@ -284,10 +289,7 @@ export default function AccountGrid() {
           >
             <CloseIcon />
           </IconButton>
-          <DialogContent
-            dividers
-            className="dw"
-          >
+          <DialogContent dividers className="dw">
             <Typography
               gutterBottom
               sx={{

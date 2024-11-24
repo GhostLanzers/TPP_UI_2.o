@@ -15,22 +15,29 @@ import {
   InputAdornment,
   FormControl,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import image from "../../Assets/Placement.jpeg";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 export default function Login() {
+
+  // STATES HANDLING AND VARIABLES
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  // FUNCTIONS HANDLING AND API POST CALLS
   const handleLogin = () => {
     axios
-      .post("http://localhost:5000/api/v1/auth/login", {
+      .post("https://tpp-backend-eura.onrender.com/api/v1/auth/login", {
         userMail: username,
         password: password,
       })
@@ -56,9 +63,6 @@ export default function Login() {
       });
   };
 
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
   //CSS HANDLING FOR CARDS/BUTTON/PAGE ON XS AND SM
   const screenWidth = window.innerWidth;
   const inlineStyles = {
@@ -67,6 +71,7 @@ export default function Login() {
     ...(screenWidth > 576 && { marginLeft: '32.5%', width: '35%' }),  // xs+ screens
   };
 
+  //JSX CODE
   return (
     <>
       <div>

@@ -9,6 +9,12 @@ import {
   Grid,
   BottomNavigation,
   alpha,
+  Typography,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Dialog,
+  IconButton,
 } from "@mui/material";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
@@ -17,11 +23,14 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CloseIcon from "@mui/icons-material/Close";
+import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
+import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
+import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 
 export default function SearchProfile() {
   // STATES HANDLING AND VARIABLES
   const { employeeType, userid } = useSelector((state) => state.user);
-  const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
   const isAdmin = employeeType === "Admin";
   const navigate = useNavigate();
@@ -31,8 +40,29 @@ export default function SearchProfile() {
     email: "",
   });
   const [tableData, setTableData] = React.useState([]);
+  const [deleteData, setDeleteData] = React.useState({});
+  const [open, setOpen] = React.useState(false);
 
   // FUNCTIONS HANDLING AND SEARCH API CALLS
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
+        headers: {
+          authorization: JSON.parse(localStorage.getItem("user")).token,
+        },
+      });
+      setTableData(tableData.filter((d) => d._id !== id));
+      handleClose();
+    } catch (error) {}
+  };
+
   const handleSearch = async () => {
     if (
       searchParams.name === "" &&
@@ -44,7 +74,7 @@ export default function SearchProfile() {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/candidate/search",
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/search",
         { ...searchParams },
         {
           headers: {
@@ -89,54 +119,45 @@ export default function SearchProfile() {
           <>
             <Grid container columnSpacing={1}>
               <Grid item xs={isAdmin ? 4 : 6}>
-                <Button
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  size="small"
+                <IconButton
+                  color="primary"
                   onClick={() =>
                     navigate(`/EditCandidate/${props.data._id}?edit=false`)
                   }
                 >
-                  View
-                </Button>
+                  <VisibilityTwoToneIcon />
+                </IconButton>
               </Grid>
               <Grid item xs={isAdmin ? 4 : 6}>
-                <Button
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  size="small"
-                  color="secondary"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=true`)
-                  }
-                  disabled={
-                    !rtAccess
-                      ? false
-                      : props.data.assignedEmployee === empId
-                      ? false
-                      : true
-                  }
-                >
-                  Edit
-                </Button>
+                <a href={`/EditCandidate/${props.data._id}?edit=true`}>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() =>
+                      navigate(`/EditCandidate/${props.data._id}?edit=true`)
+                    }
+                  >
+                    <BorderColorTwoToneIcon />
+                  </IconButton>
+                </a>
               </Grid>
               {isAdmin && (
-                <>
-                  <Grid item xs={4}>
-                    <Button
-                      fullWidth
-                      margin="normal"
-                      variant="outlined"
-                      size="small"
-                      color="error"
-                      href="#contained-buttons"
-                    >
-                      Delete
-                    </Button>
-                  </Grid>
-                </>
+                <Grid item xs={4}>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => {
+                      setDeleteData({
+                        name: props.data.fullName,
+                        id: props.data.candidateId,
+                        _id: props.data._id,
+                      });
+                      handleClickOpen();
+                    }}
+                  >
+                    <DeleteSweepTwoToneIcon />
+                  </IconButton>
+                </Grid>
               )}
             </Grid>
           </>
@@ -185,7 +206,6 @@ export default function SearchProfile() {
             <Grid container rowSpacing={2} columnSpacing={1}>
               <Grid item xs={12} md={4}>
                 <TextField
-                  id="outlined-basic"
                   label="Name"
                   variant="outlined"
                   fullWidth
@@ -197,7 +217,6 @@ export default function SearchProfile() {
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextField
-                  id="outlined-basic"
                   type="number"
                   label="Mobile Number"
                   variant="outlined"
@@ -210,7 +229,6 @@ export default function SearchProfile() {
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextField
-                  id="outlined-basic"
                   label="Email ID"
                   variant="outlined"
                   fullWidth
@@ -303,6 +321,82 @@ export default function SearchProfile() {
           />
         </Card>
       </Container>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          backgroundColor: "transparent",
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            boxShadow: "none",
+            color: "white",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
+          id="customized-dialog-title"
+        >
+          Confirm Delete
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers className="dw">
+          <Typography
+            gutterBottom
+            sx={{
+              wordBreak: "break-word",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+            }}
+          >
+            Are you Sure that you want to Delete ?
+          </Typography>
+          <Typography sx={{ fontWeight: "bold", display: "inline" }}>
+            Candidate ID :
+          </Typography>
+          <Typography sx={{ display: "inline" }}> {deleteData.id}</Typography>
+          <Typography></Typography>
+          <Typography sx={{ fontWeight: "bold", display: "inline" }}>
+            Candidate Name :
+          </Typography>
+          <Typography sx={{ display: "inline" }}> {deleteData.name}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            size="large"
+            color="error"
+            sx={{ backgroundColor: alpha("#FF0000", 0.4) }}
+            onClick={() => {
+              handleDelete(deleteData._id);
+            }}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="contained"
+            size="large"
+            sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

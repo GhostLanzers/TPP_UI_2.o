@@ -16,14 +16,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function ChangePassword(props) {
+
+  // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const [warning, setWarning] = useState("");
-
   const [passwords, setPasswords] = React.useState({
     current: "",
     new: "",
     confirm: "",
   });
+
+  // FUNCTIONS HANDLING AND API POST CALLS
   const handlePasswordChange = async () => {
     if (passwords.new !== passwords.confirm) {
       setWarning("Confirm Password does not match. Please Check");
@@ -31,7 +34,7 @@ export default function ChangePassword(props) {
     }
     try {
       const res = await axios.patch(
-        "http://localhost:5000/api/v1/employee/" +
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" +
           props.user.userid +
           "/password",
         { ...passwords },
@@ -41,7 +44,6 @@ export default function ChangePassword(props) {
           },
         }
       );
-
       if (res.sucess === false) setWarning(res.message);
       props.setUser({});
       localStorage.setItem("user", JSON.stringify({ token: "" }));
@@ -52,6 +54,8 @@ export default function ChangePassword(props) {
       setWarning(error.response.data?.message);
     }
   };
+
+  //JSX CODE
   return (
     <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
       <Card

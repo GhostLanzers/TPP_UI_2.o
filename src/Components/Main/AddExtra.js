@@ -14,14 +14,11 @@ import { Autocomplete, TextField, Alert } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 export default function AddExtras() {
+  // STATES HANDLING AND VARIABLES
   const [locationList, setLocationList] = React.useState([]);
   const [qualificationList, setQualificationList] = React.useState([]);
   const [warning, setWarning] = React.useState("");
   const [languageList, setLanguageList] = React.useState([]);
-  const [languageLevelList, setlanguageLevelList] = React.useState([]);
-  const [assessment, setAssessment] = React.useState([]);
-  const [interviewStatus, setInterviewStatus] = React.useState([]);
-  const [select, setSelect] = React.useState([]);
   const [final, setFinal] = React.useState({
     location: [],
     language: [],
@@ -31,11 +28,13 @@ export default function AddExtras() {
     interviewStatus: [],
     select: [],
   });
+
+  // FUNCTIONS HANDLING AND API POST CALLS
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -46,11 +45,7 @@ export default function AddExtras() {
         extraRes.data.forEach(({ _id, data }) => {
           if (_id === "Locations") setLocationList(data);
           else if (_id === "Qualifications") setQualificationList(data);
-          else if (_id === "Languages") setLanguageList(data);
-          else if (_id === "Language Level") setlanguageLevelList(data);
-          else if (_id === "L1&L2") setAssessment(data);
-          else if (_id === "Interview Status") setInterviewStatus(data);
-          else if (_id === "Select") setSelect(data);
+          else if (_id === "Languages") setLanguageList(data);;
         });
       } catch (error) {}
     };
@@ -59,7 +54,7 @@ export default function AddExtras() {
   const handleLocation = async () => {
     try {
       const locationdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/locations",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/locations",
         { data: [...new Set([...final.location, ...locationList])] },
         {
           headers: {
@@ -83,7 +78,7 @@ export default function AddExtras() {
   const handleLanguage = async () => {
     try {
       const langdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/languages",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/languages",
         { data: [...new Set([...final.language, ...languageList])] },
         {
           headers: {
@@ -107,7 +102,7 @@ export default function AddExtras() {
   const handleQualification = async () => {
     try {
       const qualdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/qualifications",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/qualifications",
         { data: [...new Set([...final.qualification, ...qualificationList])] },
         {
           headers: {
@@ -128,6 +123,8 @@ export default function AddExtras() {
       setQualificationList(qualdata.data.data);
     } catch (error) {}
   };
+
+  //JSX CODE
   return (
     <>
       <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
