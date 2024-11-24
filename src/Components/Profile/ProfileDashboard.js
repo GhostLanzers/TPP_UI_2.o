@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
