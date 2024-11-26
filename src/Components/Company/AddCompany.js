@@ -105,7 +105,7 @@ export default function AddCompany() {
           .flat(1)
           .includes("")
       ) {
-        toast.error("Missing " + " Mobile Number");
+        toast.error("Missing  Mobile Number");
         flag = 1;
       }
       if (flag) return;

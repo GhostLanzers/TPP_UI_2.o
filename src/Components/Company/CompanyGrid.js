@@ -59,7 +59,7 @@ export default function CompanyGrid() {
       .catch((err) => {
         window.alert(err.response.data.message);
       });
-  }, []);
+  }, [searchParams]);
 
   // NEW BUTTON COLOURS THEME
   const { palette } = createTheme();

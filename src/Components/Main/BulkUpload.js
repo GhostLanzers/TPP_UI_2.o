@@ -150,7 +150,7 @@ export default function Bulkupload(props) {
         var languages = language?.split(",");
         var levels = level?.split(",");
         var languageRemarks = languageRemark?.split(",");
-        var languages = languages?.map((l, i) => {
+        languages = languages?.map((l, i) => {
           return { language: l, level: levels[i], remarks: languageRemarks[i] };
         });
         const skillList = skills.includes(",") ? skills.split(",") : skills;
@@ -323,7 +323,7 @@ export default function Bulkupload(props) {
                     Bulk Upload
                     <VisuallyHiddenInput
                       type="file"
-                      onChange={handleCompanyFileUpload}
+                      onChange={handleEmployeeFileUpload}
                     />
                   </Button>
                   <ExcelExport
@@ -378,7 +378,7 @@ export default function Bulkupload(props) {
                     Bulk Upload
                     <VisuallyHiddenInput
                       type="file"
-                      onChange={handleCompanyFileUpload}
+                      onChange={handleCandidateFileUpload}
                     />
                   </Button>
                   <ExcelExport

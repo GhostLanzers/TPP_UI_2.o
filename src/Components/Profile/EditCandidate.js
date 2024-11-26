@@ -138,7 +138,7 @@ export default function EditCandidate() {
       } catch (error) {}
     };
     fetchData();
-  }, []);
+  }, [url]);
 
   // FUNCTIONS HANDLING AND API POST CALLS
   const handleExpandCompany = () => {

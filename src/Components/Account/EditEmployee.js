@@ -113,7 +113,7 @@ export default function EditEmployee() {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
   const handleEditEmployee = async () => {
     var flag = 0;
     if (!employee.name) {
@@ -132,11 +132,11 @@ export default function EditEmployee() {
       const ind = employee.mobile.indexOf("");
       toast.error(
         "Missing " +
-          (ind == 0
+          (ind === 0
             ? "1st"
-            : ind == 1
+            : ind === 1
             ? "2nd"
-            : ind == 2
+            : ind === 2
             ? "3rd"
             : ind + 1 + "th") +
           " Mobile Number"
@@ -241,7 +241,7 @@ export default function EditEmployee() {
                   setEmployee({ ...employee, employeeId: e.target.value })
                 }
                 onBlur={(e) => {
-                  if (e.target.value.length == 0) return;
+                  if (e.target.value.length === 0) return;
                   checkId(e.target.value);
                 }}
                 InputProps={{
@@ -298,7 +298,7 @@ export default function EditEmployee() {
                     onBlur={(e) => {
                       if (!editable) return;
                       if (!/^\d{10}$/.test(e.target.value)) {
-                        if (e.target.value.length == 0) return;
+                        if (e.target.value.length === 0) return;
                         toast.warning("Mobile number should be 10 digits");
                         return;
                       }
@@ -364,7 +364,7 @@ export default function EditEmployee() {
                       e.target.value
                     )
                   ) {
-                    if (e.target.value.length == 0) return;
+                    if (e.target.value.length === 0) return;
                     toast.warning("Not a valid Email");
                     return;
                   }

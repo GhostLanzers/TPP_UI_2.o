@@ -7,14 +7,11 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 export default function CompanyDashboard(props) {
   const navigate = useNavigate();
   const [counts, setCounts] = useState({});
-  const { employeeType } = useSelector((state) => state.user);
-  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
 
   React.useEffect(() => {
     const fetchData = async () => {

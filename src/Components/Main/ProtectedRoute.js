@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }) => {
       }
     };
     fetchData();
-  }, [navigate, setUser]);
+  }, [navigate, dispatch]);
   if (check) {
     return children;
   }

@@ -34,7 +34,6 @@ export default function AccountGrid() {
   const navigate = useNavigate();
   const gridapi = React.useRef();
   const [fileName, setFileName] = useState(String(new Date()));
-  const [warning, setWarning] = useState("");
   const [count, setCount] = useState(0);
 
   // FUNCTIONS HANDLING AND SEARCH API CALLS
@@ -56,7 +55,7 @@ export default function AccountGrid() {
       }
     };
     fetchData();
-  }, [setEmployeeList]);
+  }, [setEmployeeList,searchParams]);
 
   // GRID HEADER/COLOUMS HANDLING
   const column = [

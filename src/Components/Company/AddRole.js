@@ -142,7 +142,7 @@ export default function AddRole() {
       } catch (error) {}
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   const handleAddRole = async () => {
     try {

@@ -74,7 +74,7 @@ export default function EditEmpanelled() {
       } catch (error) {}
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   //DROP DOWN OPTIONS AND VALUES
   const Empanelled = [
@@ -384,8 +384,8 @@ export default function EditEmpanelled() {
           .flat(1)
           .includes("")
       ) {
-        const ind = company.HRMobile.indexOf("");
-        toast.error("Missing " + " Mobile Number");
+        
+        toast.error("Missing Mobile Number");
         flag = 1;
       }
       if (flag) return;
@@ -537,7 +537,7 @@ export default function EditEmpanelled() {
                                 }}
                                 onBlur={(e) => {
                                   if (!/^\d{10}$/.test(e.target.value)) {
-                                    if (e.target.value.length == 0) return;
+                                    if (e.target.value.length === 0) return;
                                     toast.warning(
                                       "Mobile number should be 10 digits"
                                     );

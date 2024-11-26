@@ -119,7 +119,7 @@ export default function EditRole() {
       }
     };
     fetchData();
-  }, []);
+  }, [companyId,id]);
 
   const handleEditRole = async () => {
     try {

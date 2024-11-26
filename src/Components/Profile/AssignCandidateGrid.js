@@ -35,7 +35,7 @@ import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 
 export default function AssignCandidateGrid(props) {
   // STATES HANDLING AND VARIABLES
-  const [open, setOpen] = React.React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const { employeeType, userid } = useSelector((state) => state.user);
   const gridapi = React.useRef();
   const location = useLocation();
@@ -80,7 +80,7 @@ export default function AssignCandidateGrid(props) {
       }
     };
     fetchData();
-  }, []);
+  }, [location.state.query]);
 
   // GRID HEADER/COLOUMS HANDLING
   const column = [
