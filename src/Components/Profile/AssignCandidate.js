@@ -255,6 +255,7 @@ export default function AssignCandidate() {
       query.push({ interviewDate: { $gt: candidate.mininterviewDate } });
     if (candidate.maxinterviewDate)
       query.push({ interviewDate: { $lt: candidate.maxinterviewDate } });
+
     if (candidate.companyName)
       query.push({
         "experience.companyName": {
@@ -273,7 +274,7 @@ export default function AssignCandidate() {
     if (query.length > 0)
       if (candidate.all.length > 0)
         finalq = { skills: { $all: [...candidate.all] }, $or: [...query] };
-      else finalq = { $or: [...query] };
+      else finalq = { $and: [...query] };
     else {
       if (candidate.all.length > 0)
         finalq = { skills: { $all: [...candidate.all] } };
@@ -286,6 +287,7 @@ export default function AssignCandidate() {
       },
     });
   };
+  
 
   // JSX CODE
   return (
