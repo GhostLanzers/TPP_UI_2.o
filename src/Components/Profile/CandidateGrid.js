@@ -170,8 +170,8 @@ export default function CandidateGrid() {
                     !rtAccess
                       ? false
                       : props.data.assignedEmployee === empId
-                      ? false
-                      : true
+                      ? true
+                      : false
                   }
                 >
                   <BorderColorTwoToneIcon />
