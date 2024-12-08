@@ -255,21 +255,6 @@ export default function EditRole() {
                 />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextField
-                  id="roleHappens"
-                  label="What Happens in the Role"
-                  variant="outlined"
-                  value={role.happens}
-                  InputProps={{
-                    readOnly: !editable,
-                  }}
-                  onChange={(e) =>
-                    setRole({ ...role, happens: e.target.value })
-                  }
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
                 <Autocomplete
                   multiple
                   freeSolo
@@ -370,33 +355,6 @@ export default function EditRole() {
                   label="Shift & Week-Off"
                   value={role.shift}
                   onChange={(e) => setRole({ ...role, shift: e.target.value })}
-                  fullWidth
-                  InputProps={{
-                    readOnly: !editable,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <TextField
-                  id="roleExperience"
-                  label="Experience / Fresher"
-                  variant="outlined"
-                  value={role.experience}
-                  onChange={(e) =>
-                    setRole({ ...role, experience: e.target.value })
-                  }
-                  fullWidth
-                  InputProps={{
-                    readOnly: !editable,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <TextField
-                  id="roleSalary"
-                  label="Salary + Incentive + Bonus"
-                  value={role.salary}
-                  onChange={(e) => setRole({ ...role, salary: e.target.value })}
                   fullWidth
                   InputProps={{
                     readOnly: !editable,
@@ -526,6 +484,48 @@ export default function EditRole() {
                     </MenuItem>
                   ))}
                 </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="roleHappens"
+                  label="What Happens in the Role"
+                  variant="outlined"
+                  value={role.happens}
+                  InputProps={{
+                    readOnly: !editable,
+                  }}
+                  onChange={(e) =>
+                    setRole({ ...role, happens: e.target.value })
+                  }
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="roleExperience"
+                  label="Experience / Fresher"
+                  variant="outlined"
+                  value={role.experience}
+                  onChange={(e) =>
+                    setRole({ ...role, experience: e.target.value })
+                  }
+                  fullWidth
+                  InputProps={{
+                    readOnly: !editable,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="roleSalary"
+                  label="Salary + Incentive + Bonus"
+                  value={role.salary}
+                  onChange={(e) => setRole({ ...role, salary: e.target.value })}
+                  fullWidth
+                  InputProps={{
+                    readOnly: !editable,
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField

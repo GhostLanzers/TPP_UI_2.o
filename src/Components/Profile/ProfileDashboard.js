@@ -152,73 +152,6 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
-              onClick={() => navigate("/CandidateGrid?type=L1L2WrongNumbers")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    L1 & L2 WRONG NUMBERS
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["L1L2WrongNumbers"]
-                      ? counts["L1L2WrongNumbers"]
-                      : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/CandidateGrid?type=L1L2Blacklist")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    L1 & L2 BLACKLIST
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["L1L2Blacklist"]
-                      ? counts["L1L2Blacklist"]
-                      : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
-              onClick={() => navigate("/CandidateGrid?type=NonLeads")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    NON LEADS
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["NonLeads"] ? counts["NonLeads"] : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=L1WD")}
             >
               <Box>
@@ -239,7 +172,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=L2WD")}
             >
               <Box>
@@ -253,48 +186,6 @@ export default function ProfileDashboard() {
                 <CardContent>
                   <Typography variant="h5">
                     {counts && counts["L2WD"] ? counts["L2WD"] : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
-              onClick={() => navigate("/CandidateGrid?type=NSWI")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    NO SHOW WALK-IN
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["NSWI"] ? counts["NSWI"] : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/CandidateGrid?type=NSIC")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    NO SHOW IC
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["NSIC"] ? counts["NSIC"] : 0}
                   </Typography>
                 </CardContent>
               </Box>
@@ -345,21 +236,19 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
-              onClick={() => navigate("/CandidateGrid?type=InterviewScheduled")}
+              onClick={() => navigate("/CandidateGrid?type=NSWI")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    INTERVIEW SCHEDULED
+                    NO SHOW WALK-IN
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["InterviewScheduled"]
-                      ? counts["InterviewScheduled"]
-                      : 0}
+                    {counts && counts["NSWI"] ? counts["NSWI"] : 0}
                   </Typography>
                 </CardContent>
               </Box>
@@ -368,12 +257,33 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
+              onClick={() => navigate("/CandidateGrid?type=NSIC")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    NO SHOW IC
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["NSIC"] ? counts["NSIC"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
               onClick={() => navigate("/CandidateGrid?type=VirtualInterview")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    VIRTUAL INTERVIEW
+                    INTERVIEW SCHEDULED
                   </Typography>
                 </CardContent>
               </Box>
@@ -390,41 +300,22 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/CandidateGrid?type=Rejects")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    REJECTS
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["Rejects"] ? counts["Rejects"] : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
               sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
-              onClick={() => navigate("/CandidateGrid?type=OfferDrop")}
+              onClick={() => navigate("/CandidateGrid?type=InterviewScheduled")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    OFFER DROP
+                    INTERVIEW IN-PROCESS
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["OfferDrop"] ? counts["OfferDrop"] : 0}
+                    {counts && counts["InterviewScheduled"]
+                      ? counts["InterviewScheduled"]
+                      : 0}
                   </Typography>
                 </CardContent>
               </Box>
@@ -456,19 +347,19 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
-              onClick={() => navigate("/CandidateGrid?type=Hold")}
+              onClick={() => navigate("/CandidateGrid?type=OfferDrop")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    HOLD
+                    OFFER DROP
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["Hold"] ? counts["Hold"] : 0}
+                    {counts && counts["OfferDrop"] ? counts["OfferDrop"] : 0}
                   </Typography>
                 </CardContent>
               </Box>
@@ -500,27 +391,6 @@ export default function ProfileDashboard() {
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
               sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/CandidateGrid?type=Billed")}
-            >
-              <Box>
-                <CardContent sx={{ maxHeight: "5vh" }}>
-                  <Typography variant="h7" fontWeight="bold">
-                    BILLED
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box>
-                <CardContent>
-                  <Typography variant="h5">
-                    {counts && counts["Billed"] ? counts["Billed"] : 0}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={6} sm={4} md={12 / 5}>
-            <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
               onClick={() => navigate("/CandidateGrid?type=N2B")}
             >
               <Box>
@@ -541,7 +411,51 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
+              onClick={() => navigate("/CandidateGrid?type=InvoiceProcessed")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    INVOICE PROCESSED
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["InvoiceProcessed"]
+                      ? counts["InvoiceProcessed"]
+                      : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
               sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
+              onClick={() => navigate("/CandidateGrid?type=Billed")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    BILLED
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["Billed"] ? counts["Billed"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=NonTenure")}
             >
               <Box>
@@ -562,7 +476,70 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
+              onClick={() => navigate("/CandidateGrid?type=Hold")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    HOLD
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["Hold"] ? counts["Hold"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
+              onClick={() => navigate("/CandidateGrid?type=Rejects")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    REJECTS
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["Rejects"] ? counts["Rejects"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#FF00FF" }}
+              onClick={() => navigate("/CandidateGrid?type=NonLeads")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    NON LEADS
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["NonLeads"] ? counts["NonLeads"] : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#FF5C00" }}
               onClick={() => navigate("/CandidateGrid?type=ProcessRampdown")}
             >
               <Box>
@@ -585,7 +562,7 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
+              sx={{ ...cardsStyle, borderLeftColor: "#FF0000" }}
               onClick={() => navigate("/CandidateGrid?type=ClientRampdown")}
             >
               <Box>
@@ -608,21 +585,44 @@ export default function ProfileDashboard() {
           </Grid>
           <Grid item xs={6} sm={4} md={12 / 5}>
             <Card
-              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
-              onClick={() => navigate("/CandidateGrid?type=InvoiceProcessed")}
+              sx={{ ...cardsStyle, borderLeftColor: "#00FF00" }}
+              onClick={() => navigate("/CandidateGrid?type=L1L2WrongNumbers")}
             >
               <Box>
                 <CardContent sx={{ maxHeight: "5vh" }}>
                   <Typography variant="h7" fontWeight="bold">
-                    INVOICE PROCESSED
+                    L1 & L2 WRONG NUMBERS
                   </Typography>
                 </CardContent>
               </Box>
               <Box>
                 <CardContent>
                   <Typography variant="h5">
-                    {counts && counts["InvoiceProcessed"]
-                      ? counts["InvoiceProcessed"]
+                    {counts && counts["L1L2WrongNumbers"]
+                      ? counts["L1L2WrongNumbers"]
+                      : 0}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4} md={12 / 5}>
+            <Card
+              sx={{ ...cardsStyle, borderLeftColor: "#00FFFF" }}
+              onClick={() => navigate("/CandidateGrid?type=L1L2Blacklist")}
+            >
+              <Box>
+                <CardContent sx={{ maxHeight: "5vh" }}>
+                  <Typography variant="h7" fontWeight="bold">
+                    L1 & L2 BLACKLIST
+                  </Typography>
+                </CardContent>
+              </Box>
+              <Box>
+                <CardContent>
+                  <Typography variant="h5">
+                    {counts && counts["L1L2Blacklist"]
+                      ? counts["L1L2Blacklist"]
                       : 0}
                   </Typography>
                 </CardContent>

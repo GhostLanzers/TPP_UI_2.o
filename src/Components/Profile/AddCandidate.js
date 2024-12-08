@@ -371,7 +371,7 @@ export default function AddCandidate(props) {
                       }}
                       onBlur={(e) => {
                         if (
-                          !/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(
+                          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                             e.target.value
                           )
                         ) {
@@ -693,7 +693,18 @@ export default function AddCandidate(props) {
                   options={skillsList.map((skill) => skill)}
                   filterSelectedOptions
                   value={candidate.skills}
-                  onChange={(e, v) => setCandidate({ ...candidate, skills: v })}
+                  onChange={(e, v) => {
+                    const skillsToSplit = v.filter((v)=>v.includes(" "))
+                    const remSkills = v.filter((v)=>!v.includes(" "))
+                    const skillsToPush = []
+                    skillsToSplit.forEach(element => {
+                      skillsToPush.push(...element.split(" "))
+                      
+                    })
+                    setCandidate({ ...candidate, skills:[...new Set([...remSkills,...skillsToPush])]  })
+                  
+                  }}
+                  
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => {
                       const { key, ...tagProps } = getTagProps({ index });

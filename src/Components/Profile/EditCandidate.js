@@ -229,7 +229,7 @@ export default function EditCandidate() {
         }
       );
       toast.success("Candidate Edited Successfully");
-      navigate("/");
+      navigate(-1);
     } catch (error) {}
   };
 
@@ -733,7 +733,17 @@ export default function EditCandidate() {
                   options={skillsList.map((skill) => skill)}
                   filterSelectedOptions
                   value={candidate.skills}
-                  onChange={(e, v) => setCandidate({ ...candidate, skills: v })}
+                  onChange={(e, v) => {
+                    const skillsToSplit = v.filter((v)=>v.includes(" "))
+                    const remSkills = v.filter((v)=>!v.includes(" "))
+                    const skillsToPush = []
+                    skillsToSplit.forEach(element => {
+                      skillsToPush.push(...element.split(" "))
+                      
+                    })
+                    setCandidate({ ...candidate, skills:[...new Set([...remSkills,...skillsToPush])]  })
+                  
+                  }}
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => {
                       const { key, ...tagProps } = getTagProps({ index });
@@ -1026,7 +1036,7 @@ export default function EditCandidate() {
                         })
                       }
                       InputProps={{
-                        readOnly: !editable,
+                        readOnly: !(access && editable),
                       }}
                     >
                       {assessment.map((option) => (

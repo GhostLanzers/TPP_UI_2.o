@@ -264,9 +264,8 @@ export default function CompanyGrid() {
                 <IconButton
                   color="primary"
                   size="small"
-                  onClick={() =>
-                    navigate(`/EditEmpanelled/${props.data._id}?edit=false`)
-                  }
+                  href={`/EditEmpanelled/${props.data._id}?edit=false`}
+                  
                 >
                   <VisibilityTwoToneIcon />
                 </IconButton>
@@ -277,9 +276,7 @@ export default function CompanyGrid() {
                     <IconButton
                       size="small"
                       color="secondary"
-                      onClick={() =>
-                        navigate(`/EditEmpanelled/${props.data._id}?edit=true`)
-                      }
+                      href={`/EditEmpanelled/${props.data._id}?edit=true`}
                     >
                       <BorderColorTwoToneIcon />
                     </IconButton>

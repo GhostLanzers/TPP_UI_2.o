@@ -154,9 +154,7 @@ export default function CandidateGrid() {
                 <IconButton
                   color="primary"
                   size="small"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=false`)
-                  }
+                  href={`/EditCandidate/${props.data._id}?edit=false`}
                 >
                   <VisibilityTwoToneIcon />
                 </IconButton>
