@@ -35,6 +35,7 @@ export default function EditCandidate() {
   const navigate = useNavigate();
   const { employeeType } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
+  const TMAAccess = !["Recruiter", "Intern"].includes(employeeType);
   const [expandedCompany, setExpandedCompany] = React.useState(false);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -1036,7 +1037,7 @@ export default function EditCandidate() {
                         })
                       }
                       InputProps={{
-                        readOnly: !(access && editable),
+                        readOnly: !(TMAAccess && editable),
                       }}
                     >
                       {assessment.map((option) => (

@@ -154,7 +154,7 @@ export default function PotentialLeads() {
                 "Reject Ops/Client Communication",
                 "Reject Ops/Client Stability",
                 "Reject Ops/Client Domain",
-                "Reject Vice President",
+                "Reject Training",
               ],
             },
           });
@@ -222,7 +222,7 @@ export default function PotentialLeads() {
                 "Pending Typing",
                 "Pending Group Discussion",
                 "Pending Ops/Client",
-                "Pending Vice President",
+                "Pending Training",
               ],
             },
           });

@@ -33,7 +33,7 @@ export default function AddCandidate(props) {
 
   // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
-  const { employeeType } = useSelector((state) => state.user);
+  const { employeeType,userid } = useSelector((state) => state.user);
   const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
   const [companiesList, setCompaniesList] = React.useState([]);
   const [rolesList, setRolesList] = React.useState([]);
@@ -183,8 +183,8 @@ export default function AddCandidate(props) {
         "https://tpp-backend-eura.onrender.com/api/v1/candidate",
         {
           ...candidate,
-          assignedEmployee: props.user.userid,
-          createdByEmployee: props.user.userid,
+          assignedEmployee: userid,
+          createdByEmployee: userid,
         },
         {
           headers: {
@@ -1038,7 +1038,7 @@ export default function AddCandidate(props) {
                       id="Roles"
                       disableClearable
                       options={rolesList}
-                      getOptionLabel={(option) => option.designation}
+                      getOptionLabel={(option) => option.role}
                       onChange={(e, newValue) => {
                         setCandidate({ ...candidate, roleId: newValue._id });
                       }}

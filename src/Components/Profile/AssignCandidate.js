@@ -128,7 +128,7 @@ export default function AssignCandidate() {
     "Reject Ops/Client Communication",
     "Reject Ops/Client Stability",
     "Reject Ops/Client Domain",
-    "Reject Vice President",
+    "Reject Training",
     "No Show Walk-in",
     "No Show IC",
     "Hold",
@@ -139,7 +139,7 @@ export default function AssignCandidate() {
     "Pending Typing",
     "Pending Group Discussion",
     "Pending Ops/Client",
-    "Pending Vice President",
+    "Pending Training",
     "Offer Drop",
     "Select",
   ];
