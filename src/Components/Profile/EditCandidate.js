@@ -1159,7 +1159,7 @@ export default function EditCandidate() {
                       }
                       fullWidth
                       InputProps={{
-                        readOnly: !editable,
+                        readOnly: !(TMAAccess && editable),
                       }}
                     >
                       {interviewStatus.map((option) => (
@@ -1188,7 +1188,7 @@ export default function EditCandidate() {
                         }
                         fullWidth
                         InputProps={{
-                          readOnly: !editable,
+                          readOnly: !(TMAAccess && editable),
                         }}
                       />
                     </Grid>
@@ -1205,7 +1205,7 @@ export default function EditCandidate() {
                         }
                         fullWidth
                         InputProps={{
-                          readOnly: !editable,
+                          readOnly: !(TMAAccess && editable),
                         }}
                       />
                     </Grid>
@@ -1223,7 +1223,7 @@ export default function EditCandidate() {
                             });
                           }}
                           value={dayjs(candidate.invoiceDate)}
-                          readOnly={!editable}
+                          readOnly={!(TMAAccess && editable)}
                         />
                       </LocalizationProvider>
                     </Grid>
@@ -1241,7 +1241,7 @@ export default function EditCandidate() {
                         }
                         fullWidth
                         InputProps={{
-                          readOnly: !editable,
+                          readOnly: !(TMAAccess && editable),
                         }}
                       >
                         {select.map((option) => (
@@ -1271,7 +1271,7 @@ export default function EditCandidate() {
                           })
                         }
                         InputProps={{
-                          readOnly: !editable,
+                          readOnly: !(TMAAccess && editable),
                         }}
                       />
                     </Grid>
@@ -1309,7 +1309,7 @@ export default function EditCandidate() {
                           onChange={(e) =>
                             setCandidate({ ...candidate, onboardingDate: e })
                           }
-                          readOnly={!editable}
+                          readOnly={!(TMAAccess && editable)}
                         />
                       </LocalizationProvider>
                     </Grid>
@@ -1330,7 +1330,7 @@ export default function EditCandidate() {
                               nextTrackingDate: e,
                             });
                           }}
-                          readOnly={!editable}
+                          readOnly={!(TMAAccess && editable)}
                         />
                       </LocalizationProvider>
                     </Grid>
