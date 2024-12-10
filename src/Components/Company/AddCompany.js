@@ -140,7 +140,7 @@ export default function AddCompany() {
 
   //JSX CODE
   return (
-    <Container sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}>
+    <Container maxWidth={false} sx={{ paddingTop: "9.5vh", width: { sm: "90%", md: "70%" }, paddingBottom: "2vh" }}>
       <Card
         sx={{
           borderRadius: "20px",

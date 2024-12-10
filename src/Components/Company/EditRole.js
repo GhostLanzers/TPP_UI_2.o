@@ -17,11 +17,13 @@ import {
   RadioGroup,
   alpha,
 } from "@mui/material";
-import { useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function EditRole() {
   // STATES HANDLING AND VARIABLES
+  const navigate = useNavigate();
   const { companyId, id } = useParams();
   const [skillsList, setSkillsList] = React.useState([]);
   const [locationList, setLocationList] = React.useState([]);
@@ -119,10 +121,42 @@ export default function EditRole() {
       }
     };
     fetchData();
-  }, [companyId,id]);
+  }, []);
 
   const handleEditRole = async () => {
     try {
+      await axios.patch(
+        "https://tpp-backend-eura.onrender.com/api/v1/company/" +
+          companyId +
+          "/role/" +
+          id,
+        { ...role },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
+
+      await axios.patch(
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+        {
+          data: [
+            ...new Set([
+              ...role.mandatorySkills,
+              ...role.optionalSkills,
+              ...skillsList,
+            ]),
+          ],
+        },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
+      toast.success("Role Edited Successfully");
+      navigate(`/EditEmpanelled/${companyId}?edit=true`);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +165,7 @@ export default function EditRole() {
   //JSX CODE
   return (
     <>
-      <Container sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}>
+      <Container maxWidth={false} sx={{ paddingTop: "9vh", width: { sm: "90%", md: "70%" }, paddingBottom: "2vh" }}>
         <Card
           sx={{
             borderRadius: "20px",
@@ -210,7 +244,7 @@ export default function EditRole() {
                   }}
                   value={role.processWorkType}
                   onChange={(e) =>
-                    setCompany({ ...role, processWorkType: e.target.value })
+                    setRole({ ...role, processWorkType: e.target.value })
                   }
                 >
                   {["Insourcing", "Outsourcing"].map((option) => (

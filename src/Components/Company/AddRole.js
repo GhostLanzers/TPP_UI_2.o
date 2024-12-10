@@ -155,6 +155,24 @@ export default function AddRole() {
           },
         }
       );
+      await axios.patch(
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+        {
+          data: [
+            ...new Set([
+              ...role.mandatorySkills,
+              ...role.optionalSkills,
+
+              ...skillsList,
+            ]),
+          ],
+        },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       toast.success("Role Added Successfully");
       navigate(`/EditEmpanelled/${id}?edit=true`);
       console.log(newRole);
@@ -166,9 +184,7 @@ export default function AddRole() {
   //JSX
   return (
     <>
-      <Container
-        sx={{ paddingTop: "9.5vh", width: "96%", paddingBottom: "2vh" }}
-      >
+      <Container maxWidth={false} sx={{ paddingTop: "9.5vh", width: { sm: "90%", md: "70%" }, paddingBottom: "2vh" }} >
         <Card
           sx={{
             borderRadius: "20px",
@@ -322,7 +338,7 @@ export default function AddRole() {
           />
         </Card>
       </Container>
-      <Container sx={{ width: "96%", paddingBottom: "2vh" }}>
+      <Container maxWidth={false} sx={{ width: { sm: "90%", md: "70%" }, paddingBottom: "2vh" }} >
         <Card
           sx={{
             borderRadius: "20px",

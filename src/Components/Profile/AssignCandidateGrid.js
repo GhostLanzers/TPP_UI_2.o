@@ -85,60 +85,6 @@ export default function AssignCandidateGrid(props) {
   // GRID HEADER/COLOUMS HANDLING
   const column = [
     {
-      headerName: "Created By",
-      field: "createdByEmployee.name",
-      headerCheckboxSelection: true,
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-    },
-    { headerName: "Assigned to", field: "assignedEmployee.name" },
-    { headerName: "Candidate Name", field: "fullName" },
-    { headerName: "Candidate ID", field: "candidateId" },
-    { headerName: "Candidate Number", field: "mobile", sortable: false },
-    { headerName: "Candidate Email ID", field: "email" },
-    { headerName: "L1 Assessment", field: "l1Assessment" },
-    { headerName: "L2 Assessment", field: "l2Assessment" },
-    { headerName: "Company", field: "companyId.companyName" },
-    { headerName: "Role", field: "roleId.role" },
-    {
-      headerName: "Interview Date",
-      field: "interviewDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    { headerName: "Interview Status", field: "interviewStatus" },
-    { headerName: "Remarks", field: "remarks" },
-    { headerName: "Tenure Status", field: "select" },
-    {
-      headerName: "Onboarding Date",
-      field: "onboardingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Next Tracking Date",
-      field: "nextTrackingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    { headerName: "Rate", field: "rate", hide: !isAdmin },
-    {
-      headerName: "Billing Date",
-      field: "billingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Invoice Date",
-      field: "invoiceDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Invoice Number",
-      field: "invoiceNumber",
-    },
-    {
       headerName: "Actions",
       width: isAdmin ? "180px" : "150px",
       field: "assignedEmployee",
@@ -207,6 +153,60 @@ export default function AssignCandidateGrid(props) {
           </>
         );
       },
+    },
+    {
+      headerName: "Created By",
+      field: "createdByEmployee.name",
+      headerCheckboxSelection: true,
+      checkboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+    },
+    { headerName: "Assigned to", field: "assignedEmployee.name" },
+    { headerName: "Candidate Name", field: "fullName" },
+    { headerName: "Candidate ID", field: "candidateId" },
+    { headerName: "Candidate Number", field: "mobile", sortable: false },
+    { headerName: "Candidate Email ID", field: "email" },
+    { headerName: "L1 Assessment", field: "l1Assessment" },
+    { headerName: "L2 Assessment", field: "l2Assessment" },
+    { headerName: "Company", field: "companyId.companyName" },
+    { headerName: "Role", field: "roleId.role" },
+    {
+      headerName: "Interview Date",
+      field: "interviewDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    { headerName: "Interview Status", field: "interviewStatus" },
+    { headerName: "Remarks", field: "remarks" },
+    { headerName: "Tenure Status", field: "select" },
+    {
+      headerName: "Onboarding Date",
+      field: "onboardingDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    {
+      headerName: "Next Tracking Date",
+      field: "nextTrackingDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    { headerName: "Rate", field: "rate", hide: !isAdmin },
+    {
+      headerName: "Billing Date",
+      field: "billingDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    {
+      headerName: "Invoice Date",
+      field: "invoiceDate",
+      valueFormatter: (p) =>
+        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+    },
+    {
+      headerName: "Invoice Number",
+      field: "invoiceNumber",
     },
   ];
 
@@ -301,7 +301,8 @@ export default function AssignCandidateGrid(props) {
   return (
     <>
       <Container
-        sx={{ paddingTop: "9vh", width: "100%", paddingBottom: "2vh" }}
+        maxWidth={false}
+        sx={{ paddingTop: "9vh", width: "96%", paddingBottom: "2vh" }}
       >
         <Card
           sx={{

@@ -170,6 +170,14 @@ export default function AccountGrid() {
   // FUNCTIONS HANDLING
   const handleDelete = async (id) => {
     try {
+      axios.delete(
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       setEmployeeList(employeeList.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}

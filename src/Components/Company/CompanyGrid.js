@@ -75,6 +75,57 @@ export default function CompanyGrid() {
   // GRID HEADER/COLOUMS HANDLING
   const column = [
     {
+      headerName: "Actions",
+      width: !access ? "200px" : "200px",
+      cellRenderer: (props) => {
+        return (
+          <>
+            <Grid container columnSpacing={1}>
+              <Grid item xs={access ? 4 : 12}>
+                <IconButton
+                  color="primary"
+                  size="small"
+                  href={`/EditEmpanelled/${props.data._id}?edit=false`}
+                  
+                >
+                  <VisibilityTwoToneIcon />
+                </IconButton>
+              </Grid>
+              {access && (
+                <>
+                  <Grid item xs={4}>
+                    <IconButton
+                      size="small"
+                      color="secondary"
+                      href={`/EditEmpanelled/${props.data._id}?edit=true`}
+                    >
+                      <BorderColorTwoToneIcon />
+                    </IconButton>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => {
+                        setDeleteData({
+                          name: props.data.companyName,
+                          id: props.data.companyId,
+                          _id: props.data._id,
+                        });
+                        handleClickOpen();
+                      }}
+                    >
+                      <DeleteSweepTwoToneIcon />
+                    </IconButton>
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </>
+        );
+      },
+    },
+    {
       headerName: "Company Name",
       field: "companyName",
       headerCheckboxSelection: true,
@@ -253,57 +304,6 @@ export default function CompanyGrid() {
         );
       },
     },
-    {
-      headerName: "Actions",
-      width: !access ? "200px" : "200px",
-      cellRenderer: (props) => {
-        return (
-          <>
-            <Grid container columnSpacing={1}>
-              <Grid item xs={access ? 4 : 12}>
-                <IconButton
-                  color="primary"
-                  size="small"
-                  href={`/EditEmpanelled/${props.data._id}?edit=false`}
-                  
-                >
-                  <VisibilityTwoToneIcon />
-                </IconButton>
-              </Grid>
-              {access && (
-                <>
-                  <Grid item xs={4}>
-                    <IconButton
-                      size="small"
-                      color="secondary"
-                      href={`/EditEmpanelled/${props.data._id}?edit=true`}
-                    >
-                      <BorderColorTwoToneIcon />
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <IconButton
-                      size="small"
-                      color="error"
-                      onClick={() => {
-                        setDeleteData({
-                          name: props.data.companyName,
-                          id: props.data.companyId,
-                          _id: props.data._id,
-                        });
-                        handleClickOpen();
-                      }}
-                    >
-                      <DeleteSweepTwoToneIcon />
-                    </IconButton>
-                  </Grid>
-                </>
-              )}
-            </Grid>
-          </>
-        );
-      },
-    },
   ];
 
   const defaultColDef = {
@@ -332,6 +332,14 @@ export default function CompanyGrid() {
   };
   const handleDelete = async (id) => {
     try {
+      axios.delete(
+        "https://tpp-backend-eura.onrender.com/api/v1/company/" + id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       setTableData(tableData.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}

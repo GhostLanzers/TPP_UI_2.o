@@ -194,6 +194,7 @@ export default function NavBar(props) {
                   size="small"
                   sx={
                     location.pathname.toLowerCase().search("company") !== -1 ||
+                    location.pathname.toLowerCase().search("empanelled") !==-1 ||
                     location.pathname.toLowerCase().search("role") !== -1
                       ? liveLink
                       : normalLink
@@ -207,8 +208,7 @@ export default function NavBar(props) {
                     color="inherit"
                     size="small"
                     sx={
-                      location.pathname.toLowerCase().search("account") !==
-                        -1 ||
+                      location.pathname.toLowerCase().search("account") !==-1 ||
                       location.pathname.toLowerCase().search("employee") !== -1
                         ? liveLink
                         : normalLink

@@ -69,12 +69,11 @@ export default function EditEmpanelled() {
             },
           }
         );
-        console.log({ ...res.data });
         setCompany(res.data);
       } catch (error) {}
     };
     fetchData();
-  }, [id]);
+  }, []);
 
   //DROP DOWN OPTIONS AND VALUES
   const Empanelled = [
@@ -390,6 +389,15 @@ export default function EditEmpanelled() {
       }
       if (flag) return;
       delete company.__v;
+      await axios.patch(
+        "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
+        { ...company, roles: company.roles.map((r) => r._id) },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       toast.success("Company Edited Successfully");
       navigate(`/CompanyDashBoard`);
     } catch (error) {
@@ -398,6 +406,17 @@ export default function EditEmpanelled() {
   };
   const handleRoleDelete = () => {
     try {
+      axios.delete(
+        "https://tpp-backend-eura.onrender.com/api/v1/company/" +
+          id +
+          "/role/" +
+          deleteData._id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       setCompany({
         ...company,
         roles: company.roles.filter((r) => r._id !== deleteData._id),
@@ -423,7 +442,7 @@ export default function EditEmpanelled() {
   //JSX CODE
   return (
     <>
-      <Container sx={{ paddingTop: "9vh", width: "96%" }}>
+      <Container maxWidth={false} sx={{ paddingTop: "9vh", width: "96%" }}>
         <Card
           sx={{
             borderRadius: "20px",
@@ -754,7 +773,6 @@ export default function EditEmpanelled() {
         </Card>
       </Container>
       <Container
-        disableGutters
         maxWidth={false}
         sx={{ paddingTop: "2vh", width: "96%", paddingBottom: "2vh" }}
       >

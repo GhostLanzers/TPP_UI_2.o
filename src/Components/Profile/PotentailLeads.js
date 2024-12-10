@@ -329,7 +329,6 @@ export default function PotentialLeads() {
   return (
     <>
       <Container
-        disableGutters
         maxWidth={false}
         sx={{ paddingTop: "9vh", width: "96%" }}
       >
@@ -468,7 +467,6 @@ export default function PotentialLeads() {
         </Card>
       </Container>
       <Container
-        disableGutters
         maxWidth={false}
         sx={{ paddingTop: "2vh", width: "96%", paddingBottom: "2vh" }}
       >
