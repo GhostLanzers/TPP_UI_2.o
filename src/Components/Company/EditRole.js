@@ -523,6 +523,7 @@ export default function EditRole() {
                 <TextField
                   id="roleHappens"
                   label="What Happens in the Role"
+                  multiline
                   variant="outlined"
                   value={role.happens}
                   InputProps={{
@@ -538,6 +539,7 @@ export default function EditRole() {
                 <TextField
                   id="roleExperience"
                   label="Experience / Fresher"
+                  multiline 
                   variant="outlined"
                   value={role.experience}
                   onChange={(e) =>

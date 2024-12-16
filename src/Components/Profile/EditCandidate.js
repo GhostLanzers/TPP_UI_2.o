@@ -34,7 +34,7 @@ export default function EditCandidate() {
   // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const { employeeType } = useSelector((state) => state.user);
-  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
+  const access = !["Recruiter", "Intern"].includes(employeeType);
   const TMAAccess = !["Recruiter", "Intern"].includes(employeeType);
   const [expandedCompany, setExpandedCompany] = React.useState(false);
   const { id } = useParams();
@@ -1292,6 +1292,7 @@ export default function EditCandidate() {
                             });
                           }}
                           value={dayjs(candidate.billingDate)}
+                          readOnly={!(TMAAccess && editable)}
                         />
                       </LocalizationProvider>
                     </Grid>

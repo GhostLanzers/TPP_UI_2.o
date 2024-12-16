@@ -362,14 +362,10 @@ export default function PotentialLeads() {
                   disableClearable
                   options={companiesList}
                   getOptionLabel={(option) => option.companyName}
-                  inputValue={displayParams.company}
                   onChange={(e, newValue) => {
                     setSearchParams({ ...searchParams, company: newValue._id });
-                    setDisplayParams({
-                      ...displayParams,
-                      company: newValue.companyName,
-                    });
                     setRolesList(newValue.roles);
+                  
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -390,13 +386,10 @@ export default function PotentialLeads() {
                   disableClearable
                   options={rolesList}
                   getOptionLabel={(option) => option.role}
-                  inputValue={displayParams.role}
+                  
                   onChange={(e, newValue) => {
                     setSearchParams({ ...searchParams, role: newValue._id });
-                    setDisplayParams({
-                      ...displayParams,
-                      role: newValue.role,
-                    });
+                    
                   }}
                   renderInput={(params) => (
                     <TextField

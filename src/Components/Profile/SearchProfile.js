@@ -32,6 +32,7 @@ export default function SearchProfile() {
   // STATES HANDLING AND VARIABLES
   const { employeeType, userid } = useSelector((state) => state.user);
   const empId = userid;
+  const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const isAdmin = employeeType === "Admin";
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = React.useState({
@@ -135,6 +136,13 @@ export default function SearchProfile() {
                     color="secondary"
                     onClick={() =>
                       navigate(`/EditCandidate/${props.data._id}?edit=true`)
+                    }
+                    disabled={
+                      !rtAccess
+                        ? false
+                        : props.data.assignedEmployee === empId
+                        ? false
+                        : true
                     }
                   >
                     <BorderColorTwoToneIcon />

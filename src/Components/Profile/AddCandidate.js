@@ -34,7 +34,7 @@ export default function AddCandidate(props) {
   // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
   const { employeeType,userid } = useSelector((state) => state.user);
-  const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
+  const access = !["Recruiter", "Intern"].includes(employeeType);
   const [companiesList, setCompaniesList] = React.useState([]);
   const [rolesList, setRolesList] = React.useState([]);
   const [skillsList, setSkillsList] = React.useState([]);
