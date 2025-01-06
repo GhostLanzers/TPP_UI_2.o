@@ -268,6 +268,8 @@ export default function AssignCandidate() {
           $regex: ".*" + candidate.role + ".*",
         },
       });
+    if (candidate.companyId)
+        query.push({ companyId: candidate.companyId });
     if (candidate.roleId)
       query.push({ companyId: candidate.companyId, roleId: candidate.roleId });
     var finalq = {};
