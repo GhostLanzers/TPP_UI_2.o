@@ -54,7 +54,7 @@ export default function SearchProfile() {
 
   const handleDelete = async (id) => {
     try {
-      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
+      axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
         headers: {
           authorization: JSON.parse(localStorage.getItem("user")).token,
         },
@@ -75,7 +75,7 @@ export default function SearchProfile() {
     }
     try {
       const res = await axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/search",
+        "http://localhost:5000/api/v1/candidate/search",
         { ...searchParams },
         {
           headers: {

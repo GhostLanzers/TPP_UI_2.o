@@ -118,7 +118,7 @@ export default function AddRole() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
+          "http://localhost:5000/api/v1/company/company/" + id,
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -126,7 +126,7 @@ export default function AddRole() {
           }
         );
         const extraRes = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+          "http://localhost:5000/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -147,7 +147,7 @@ export default function AddRole() {
   const handleAddRole = async () => {
     try {
       const newRole = await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/company/" + id,
+        "http://localhost:5000/api/v1/company/" + id,
         { roles: [role] },
         {
           headers: {
@@ -156,7 +156,7 @@ export default function AddRole() {
         }
       );
       await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+        "http://localhost:5000/api/v1/extra/skills",
         {
           data: [
             ...new Set([

@@ -96,7 +96,7 @@ export default function PotentialLeads() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
+          "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -104,7 +104,7 @@ export default function PotentialLeads() {
           }
         );
         const empres = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/employee",
+          "http://localhost:5000/api/v1/employee",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -257,7 +257,7 @@ export default function PotentialLeads() {
 
     try {
       const res = await axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/candidate/potentialleads",
+        "http://localhost:5000/api/v1/candidate/candidate/potentialleads",
         {
           query: query,
           roleId: searchParams.role,
@@ -301,7 +301,7 @@ export default function PotentialLeads() {
     }
     try {
       await axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/candidate/assign",
+        "http://localhost:5000/api/v1/candidate/candidate/assign",
         {
           list: assignedData,
           companyId: searchParams.company,

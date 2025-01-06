@@ -33,7 +33,7 @@ export default function CandidateGrid() {
   const [open, setOpen] = React.useState(false);  
   const [deleteData, setDeleteData] = useState({});
   const { employeeType, userid } = useSelector((state) => state.user);
-  const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
+  const rtAccess = ["Recruiter", "Intern","Teamlead"].includes(employeeType);
   const empId = userid;
   const isAdmin = employeeType === "Admin";
   const [tableData, setTableData] = useState([]);
@@ -44,7 +44,7 @@ export default function CandidateGrid() {
 
   // API CALLS HANDLING
   var url =
-    "https://tpp-backend-eura.onrender.com/api/v1/candidate/data/" +
+    "http://localhost:5000/api/v1/candidate/data/" +
     searchParams.get("type") +
     "?";
 
@@ -74,7 +74,7 @@ export default function CandidateGrid() {
       } catch (error) {}
     };
     fetchData();
-  }, [url, setTableData]);
+  },[]);
 
 
   // GRID HEADER/COLOUMS HANDLING
@@ -255,7 +255,7 @@ export default function CandidateGrid() {
 
   const handleDelete = async (id) => {
     try {
-      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
+      axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
         headers: {
           authorization: JSON.parse(localStorage.getItem("user")).token,
         },
@@ -275,6 +275,8 @@ export default function CandidateGrid() {
           spacing={2}
           sx={{ paddingTop: "9vh", marginLeft: "0.5%", width: "98%" }}
         >
+          {!rtAccess&& <>
+          
           <Grid item xs={2} md={1}>
             <TextField
               fullWidth
@@ -319,6 +321,7 @@ export default function CandidateGrid() {
           <Grid item xs={3.5} md={2}>
             <ExcelExport height="100%" gridRef={gridapi} fileName={fileName} />
           </Grid>
+          </>}
         </Grid>
         <div
           className="ag-theme-quartz-dark"

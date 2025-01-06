@@ -62,7 +62,7 @@ export default function EditEmpanelled() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
+          "http://localhost:5000/api/v1/company/company/" + id,
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -390,7 +390,7 @@ export default function EditEmpanelled() {
       if (flag) return;
       delete company.__v;
       await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/company/company/" + id,
+        "http://localhost:5000/api/v1/company/company/" + id,
         { ...company, roles: company.roles.map((r) => r._id) },
         {
           headers: {
@@ -407,7 +407,7 @@ export default function EditEmpanelled() {
   const handleRoleDelete = () => {
     try {
       axios.delete(
-        "https://tpp-backend-eura.onrender.com/api/v1/company/" +
+        "http://localhost:5000/api/v1/company/" +
           id +
           "/role/" +
           deleteData._id,
@@ -427,7 +427,7 @@ export default function EditEmpanelled() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "https://tpp-backend-eura.onrender.com/api/v1/company/mobile/" + num,
+        "http://localhost:5000/api/v1/company/mobile/" + num,
 
         {
           headers: {

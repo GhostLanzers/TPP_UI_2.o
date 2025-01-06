@@ -100,7 +100,7 @@ export default function AddCandidate(props) {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
+          "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -108,7 +108,7 @@ export default function AddCandidate(props) {
           }
         );
         const extraRes = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+          "http://localhost:5000/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -180,7 +180,7 @@ export default function AddCandidate(props) {
       
       if (flag) return;
       await axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate",
+        "http://localhost:5000/api/v1/candidate",
         {
           ...candidate,
           assignedEmployee: userid,
@@ -193,7 +193,7 @@ export default function AddCandidate(props) {
         }
       );
       await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+        "http://localhost:5000/api/v1/extra/skills",
         { data: [...new Set([...candidate.skills, ...skillsList])] },
         {
           headers: {
@@ -203,6 +203,7 @@ export default function AddCandidate(props) {
       );
       toast.success("Candidate Added Successfully");
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +212,7 @@ export default function AddCandidate(props) {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/mobile/" + num,
+        "http://localhost:5000/api/v1/candidate/mobile/" + num,
 
         {
           headers: {

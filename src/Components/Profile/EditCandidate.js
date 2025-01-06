@@ -40,7 +40,7 @@ export default function EditCandidate() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const editable = searchParams.get("edit") === "true";
-  const url = "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id;
+  const url = "http://localhost:5000/api/v1/candidate/" + id;
   const [companiesList, setCompaniesList] = React.useState([]);
   const [rolesList, setRolesList] = React.useState([]);
   const [skillsList, setSkillsList] = React.useState([]);
@@ -108,7 +108,7 @@ export default function EditCandidate() {
           },
         });
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
+          "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -116,7 +116,7 @@ export default function EditCandidate() {
           }
         );
         const extraRes = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+          "http://localhost:5000/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -178,35 +178,57 @@ export default function EditCandidate() {
 
     if (flag) return;
     if (!["WD", "TAC", "GOOD"].includes(candidate.l1Assessment)) {
-      setCandidate({
-        ...candidate,
-        l2Assessment: null,
-        companyId: null,
-        roleId: null,
-        rate: 0,
-        interviewDate: null,
-        interviewStatus: null,
-        select: null,
-        EMP_ID: "",
-        onboardingDate: null,
-        nextTrackingDate: null,
-      });
+      var can = candidate;
+      can.l2Assessment = null;
+      can.companyId = null;
+      can.roleId = null;
+      can.interviewDate = null;
+      can.rate = 0;
+      can.interviewStatus = null;
+      can.select = null;
+      can.EMP_ID = "";
+      can.invoiceNumber = "";
+      can.invoiceDate = null;
+      can.billingDate = null;
+      can.onboardingDate = null;
+      can.nextTrackingDate = null;
+
+      setCandidate({ ...can });
     }
+
     if (!["TAC", "GOOD"].includes(candidate.l2Assessment)) {
+      var can = candidate;
+      can.interviewStatus = null;
+      can.rate = 0;
+      can.select = null;
+      can.EMP_ID = "";
+      can.invoiceNumber = "";
+      can.invoiceDate = null;
+      can.billingDate = null;
+      can.onboardingDate = null;
+      can.nextTrackingDate = null;
+
+      setCandidate({ ...can });
+    }
+    if (candidate.interviewStatus !== "Select") {
+      var can = candidate;
+      can.rate = 0;
+      can.select = null;
+      can.EMP_ID = "";
+      can.invoiceNumber = "";
+      can.invoiceDate = null;
+      can.billingDate = null;
+      can.onboardingDate = null;
+      can.nextTrackingDate = null;
+
       setCandidate({
-        ...candidate,
-        interviewStatus: null,
-        select: null,
-        rate: 0,
-        EMP_ID: "",
-        onboardingDate: null,
-        nextTrackingDate: null,
+        ...can,
       });
     }
 
     try {
       await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id,
+        "http://localhost:5000/api/v1/candidate/" + id,
         {
           ...candidate,
           companyId: candidate.companyId
@@ -221,7 +243,7 @@ export default function EditCandidate() {
         }
       );
       await axios.patch(
-        "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+        "http://localhost:5000/api/v1/extra/skills",
         { data: [...new Set([...candidate.skills, ...skillsList])] },
         {
           headers: {
@@ -231,13 +253,14 @@ export default function EditCandidate() {
       );
       toast.success("Candidate Edited Successfully");
       navigate(-1);
+      window.location.reload();
     } catch (error) {}
   };
 
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/mobile/" + num,
+        "http://localhost:5000/api/v1/candidate/mobile/" + num,
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,

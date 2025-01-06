@@ -17,7 +17,7 @@ export default function CompanyDashboard(props) {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://tpp-backend-eura.onrender.com/api/v1/company/counts",
+          "http://localhost:5000/api/v1/company/counts",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,

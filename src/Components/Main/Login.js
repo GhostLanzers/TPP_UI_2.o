@@ -37,7 +37,7 @@ export default function Login() {
   // FUNCTIONS HANDLING AND API POST CALLS
   const handleLogin = () => {
     axios
-      .post("https://tpp-backend-eura.onrender.com/api/v1/auth/login", {
+      .post("http://localhost:5000/api/v1/auth/login", {
         userMail: username,
         password: password,
       })
