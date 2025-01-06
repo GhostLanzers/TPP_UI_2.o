@@ -34,7 +34,7 @@ export default function AddExtras() {
     const fetchData = async () => {
       try {
         const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -54,7 +54,7 @@ export default function AddExtras() {
   const handleLocation = async () => {
     try {
       const locationdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/locations",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/locations",
         { data: [...new Set([...final.location, ...locationList])] },
         {
           headers: {
@@ -78,7 +78,7 @@ export default function AddExtras() {
   const handleLanguage = async () => {
     try {
       const langdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/languages",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/languages",
         { data: [...new Set([...final.language, ...languageList])] },
         {
           headers: {
@@ -102,7 +102,7 @@ export default function AddExtras() {
   const handleQualification = async () => {
     try {
       const qualdata = await axios.patch(
-        "http://localhost:5000/api/v1/extra/qualifications",
+        "https://tpp-backend-eura.onrender.com/api/v1/extra/qualifications",
         { data: [...new Set([...final.qualification, ...qualificationList])] },
         {
           headers: {

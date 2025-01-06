@@ -34,7 +34,7 @@ export default function ChangePassword(props) {
     }
     try {
       const res = await axios.patch(
-        "http://localhost:5000/api/v1/employee/" +
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" +
           props.user.userid +
           "/password",
         { ...passwords },

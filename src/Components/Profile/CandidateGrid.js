@@ -44,7 +44,7 @@ export default function CandidateGrid() {
 
   // API CALLS HANDLING
   var url =
-    "http://localhost:5000/api/v1/candidate/data/" +
+    "https://tpp-backend-eura.onrender.com/api/v1/candidate/data/" +
     searchParams.get("type") +
     "?";
 
@@ -255,7 +255,7 @@ export default function CandidateGrid() {
 
   const handleDelete = async (id) => {
     try {
-      axios.delete("http://localhost:5000/api/v1/candidate/" + id, {
+      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
         headers: {
           authorization: JSON.parse(localStorage.getItem("user")).token,
         },

@@ -99,7 +99,7 @@ export default function EditEmployee() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/employee/" + id,
+          "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
 
           {
             headers: {
@@ -147,7 +147,7 @@ export default function EditEmployee() {
     if (password) employee.password = "TPP@Pass";
     try {
       const res = await axios.patch(
-        "http://localhost:5000/api/v1/employee/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
         { ...employee },
         {
           headers: {
@@ -162,7 +162,7 @@ export default function EditEmployee() {
   const checkId = async (id) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/id/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/id/" + id,
 
         {
           headers: {
@@ -176,7 +176,7 @@ export default function EditEmployee() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mobile/" + num,
 
         {
           headers: {
@@ -190,7 +190,7 @@ export default function EditEmployee() {
   const checkMail = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/employee/mail/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/mail/" + num,
 
         {
           headers: {

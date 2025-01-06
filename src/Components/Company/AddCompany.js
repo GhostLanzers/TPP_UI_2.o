@@ -111,7 +111,7 @@ export default function AddCompany() {
       if (flag) return;
 
       const res = await axios.post(
-        "http://localhost:5000/api/v1/company",
+        "https://tpp-backend-eura.onrender.com/api/v1/company",
         { ...company },
         {
           headers: {
@@ -126,7 +126,7 @@ export default function AddCompany() {
   const checkNumber = async (num) => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/v1/company/mobile/" + num,
+        "https://tpp-backend-eura.onrender.com/api/v1/company/mobile/" + num,
 
         {
           headers: {

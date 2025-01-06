@@ -41,7 +41,7 @@ export default function AccountGrid() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/employee/employeeType/" +
+          "https://tpp-backend-eura.onrender.com/api/v1/employee/employeeType/" +
             searchParams.get("employeeType"),
           {
             headers: {
@@ -171,7 +171,7 @@ export default function AccountGrid() {
   const handleDelete = async (id) => {
     try {
       axios.delete(
-        "http://localhost:5000/api/v1/employee/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/" + id,
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,

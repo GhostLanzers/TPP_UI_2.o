@@ -44,10 +44,10 @@ export default function CompanyGrid() {
   // FUNCTIONS HANDLING AND SEARCH API CALLS
   React.useEffect(() => {
     var url =
-      "http://localhost:5000/api/v1/company/companyType/?companyType=" +
+      "https://tpp-backend-eura.onrender.com/api/v1/company/companyType/?companyType=" +
       searchParams.get("companyType");
     if (!searchParams.has("companyType")) {
-      url = "http://localhost:5000/api/v1/company/companyType";
+      url = "https://tpp-backend-eura.onrender.com/api/v1/company/companyType";
     }
     axios
       .get(url, {
@@ -333,7 +333,7 @@ export default function CompanyGrid() {
   const handleDelete = async (id) => {
     try {
       axios.delete(
-        "http://localhost:5000/api/v1/company/" + id,
+        "https://tpp-backend-eura.onrender.com/api/v1/company/" + id,
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,

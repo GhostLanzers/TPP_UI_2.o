@@ -50,7 +50,7 @@ export default function Bulkupload(props) {
       });
       console.log(data);
       const resp = axios.post(
-        "http://localhost:5000/api/v1/company/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/company/bulkinsert",
         data,
         {
           headers: {
@@ -96,7 +96,7 @@ export default function Bulkupload(props) {
         return { gender, documentation, status, DOJ, DOB, ...rest };
       });
       const resp = axios.post(
-        "http://localhost:5000/api/v1/employee/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/employee/bulkinsert",
         data,
         {
           headers: {
@@ -194,7 +194,7 @@ export default function Bulkupload(props) {
       console.log(data);
 
       const resp = axios.post(
-        "http://localhost:5000/api/v1/candidate/bulkinsert",
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/bulkinsert",
         data,
         {
           headers: {

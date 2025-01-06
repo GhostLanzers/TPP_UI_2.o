@@ -60,7 +60,7 @@ export default function AssignCandidate() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/v1/company/companyType?companyType=Empanelled",
+          "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -68,7 +68,7 @@ export default function AssignCandidate() {
           }
         );
         const extraRes = await axios.get(
-          "http://localhost:5000/api/v1/extra/all",
+          "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -76,7 +76,7 @@ export default function AssignCandidate() {
           }
         );
         const empres = await axios.get(
-          "http://localhost:5000/api/v1/employee",
+          "https://tpp-backend-eura.onrender.com/api/v1/employee",
           {
             headers: {
               authorization: JSON.parse(localStorage.getItem("user")).token,
