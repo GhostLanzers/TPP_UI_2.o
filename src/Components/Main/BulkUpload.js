@@ -342,7 +342,7 @@ export default function Bulkupload(props) {
                         employeeType: "",
                       },
                     ]}
-                    fileName={"Company Template"}
+                    fileName={"Employee Template"}
                     buttonName={"Bulk Template"}
                   />
                 </CardContent>
@@ -396,7 +396,7 @@ export default function Bulkupload(props) {
                         companyType: "",
                       },
                     ]}
-                    fileName={"Company Template"}
+                    fileName={"Candidate Template"}
                     buttonName={"Bulk Template"}
                   />
                 </CardContent>
