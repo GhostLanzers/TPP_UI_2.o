@@ -618,7 +618,7 @@ export default function AssignCandidate() {
                 id="Roles"
                 disableClearable
                 options={rolesList}
-                getOptionLabel={(option) => option.designation}
+                getOptionLabel={(option) => option.role}
                 onChange={(e, newValue) => {
                   setCandidate({ ...candidate, roleId: newValue._id });
                 }}

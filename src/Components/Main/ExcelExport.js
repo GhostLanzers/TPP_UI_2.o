@@ -5,10 +5,11 @@ import XLSX from "sheetjs-style";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { flatten } from "flat";
 
-const ExcelExport = ({ excelData=null,gridRef, fileName, buttonName = "Download" }) => {
+const ExcelExport = ({ excelData=null,gridRef, fileName, buttonName = "Download", disabled = false }) => {
   const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
   const exportToExcel = async () => {
+    if (disabled) return;
     let expdata = excelData
     if(gridRef?.current && !excelData)
       expdata = gridRef.current.api.getSelectedRows().map((l)=>flatten(l));
@@ -27,7 +28,16 @@ const ExcelExport = ({ excelData=null,gridRef, fileName, buttonName = "Download"
         startIcon={<CloudDownloadIcon />}
         onClick={(e) => exportToExcel(fileName)}
         color="success"
-        sx={{ cursor: "pointer", height:"100%", backgroundColor: alpha("#008000", 0.5) }}
+        sx={{
+          height: "100%",
+          cursor: disabled ? "not-allowed" : "pointer",
+          backgroundColor: disabled ? alpha("#808080", 0.5) : alpha("#008000", 0.5),
+          "&:hover": {
+            backgroundColor: disabled ? alpha("#808080", 0.5) : alpha("#008000", 0.7),
+          },
+          color: disabled ? "#bfbfbf" : "#fff",
+        }}
+        disabled={disabled}
         fullWidth
       >
         {buttonName}

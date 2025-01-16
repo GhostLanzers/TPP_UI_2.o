@@ -447,6 +447,7 @@ export default function Bulkupload(props) {
                     }}
                     variant="contained"
                     component="label"
+                    disabled={true}
                     tabIndex={-1}
                     startIcon={<CloudUploadIcon />}
                   >
@@ -474,6 +475,7 @@ export default function Bulkupload(props) {
                     ]}
                     fileName={"Role Template"}
                     buttonName={"Bulk Template"}
+                    disabled={true}
                   />
                 </CardContent>
               </Box>
