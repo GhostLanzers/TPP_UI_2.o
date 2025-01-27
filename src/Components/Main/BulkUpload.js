@@ -16,8 +16,11 @@ import axios from "axios";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { toast } from "react-toastify";
 import ExcelExport from "./ExcelExport";
+import { useSelector } from "react-redux";
 
 export default function Bulkupload(props) {
+  
+  const { employeeType,userid } = useSelector((state) => state.user);
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -187,8 +190,8 @@ export default function Bulkupload(props) {
               2
             ),
           },
-          assignedEmployee: props.user.userid,
-          createdByEmployee: props.user.userid,
+          assignedEmployee: userid,
+          createdByEmployee: userid,
         };
       });
       console.log(data);
