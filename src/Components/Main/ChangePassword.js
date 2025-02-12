@@ -12,6 +12,7 @@ import {
   alpha,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -19,6 +20,7 @@ export default function ChangePassword(props) {
 
   // STATES HANDLING AND VARIABLES
   const navigate = useNavigate();
+  const { userid } = useSelector((state) => state.user);
   const [warning, setWarning] = useState("");
   const [passwords, setPasswords] = React.useState({
     current: "",
@@ -35,7 +37,7 @@ export default function ChangePassword(props) {
     try {
       const res = await axios.patch(
         "https://tpp-backend-eura.onrender.com/api/v1/employee/" +
-          props.user.userid +
+          userid +
           "/password",
         { ...passwords },
         {
