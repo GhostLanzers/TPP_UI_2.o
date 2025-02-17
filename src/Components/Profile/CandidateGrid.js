@@ -108,7 +108,15 @@ export default function CandidateGrid() {
                 <IconButton
                   size="small"
                   color="secondary"
-                  href={`/EditCandidate/${props.data._id}?edit=true`}
+                  href={
+                    !rtAccess
+                      ? false
+                      : props.data.assignedEmployee === empId
+                      ? false
+                      : true
+                      ? "#"
+                      : `/EditCandidate/${props.data._id}?edit=true`
+                  }
                   disabled={
                     !rtAccess
                       ? false

@@ -130,7 +130,11 @@ export default function SearchProfile() {
                 </IconButton>
               </Grid>
               <Grid item xs={isAdmin ? 4 : 6}>
-                <a href={`/EditCandidate/${props.data._id}?edit=true`}>
+                <a href={!rtAccess
+                        ? false
+                        : props.data.assignedEmployee === empId
+                        ? false
+                        : true?'#':`/EditCandidate/${props.data._id}?edit=true`}>
                   <IconButton
                     size="small"
                     color="secondary"
