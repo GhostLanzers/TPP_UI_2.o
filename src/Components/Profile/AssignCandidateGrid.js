@@ -24,7 +24,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import dayjs from "dayjs";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExcelExport from "../Main/ExcelExport";
 import { flatten } from "flat";
@@ -47,7 +47,6 @@ export default function AssignCandidateGrid(props) {
   const [warning, setWarning] = React.useState("");
   const [deleteData, setDeleteData] = React.useState({});
   const isAdmin = employeeType === "Admin";
-  const navigate = useNavigate();
   const rtAccess = ["Recruiter", "Intern"].includes(employeeType);
   const empId = userid;
   const [tableData, setTableData] = React.useState([]);
@@ -104,31 +103,16 @@ export default function AssignCandidateGrid(props) {
                 <IconButton
                   color="primary"
                   size="small"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=false`)
-                  }
+                  href={`/EditCandidate/${props.data._id}?edit=false`}
                 >
                   <VisibilityTwoToneIcon />
                 </IconButton>
               </Grid>
               <Grid item xs={isAdmin ? 4 : 6}>
-                <a
-                  href={
-                    !rtAccess
-                      ? false
-                      : props.data.assignedEmployee === empId
-                      ? false
-                      : true
-                      ? "#"
-                      : `/EditCandidate/${props.data._id}?edit=true`
-                  }
-                >
                   <IconButton
                     size="small"
                     color="secondary"
-                    onClick={() =>
-                      navigate(`/EditCandidate/${props.data._id}?edit=true`)
-                    }
+                    href={`/EditCandidate/${props.data._id}?edit=true`}
                     disabled={
                       !rtAccess
                         ? false
@@ -139,7 +123,6 @@ export default function AssignCandidateGrid(props) {
                   >
                     <BorderColorTwoToneIcon />
                   </IconButton>
-                </a>
               </Grid>
               {isAdmin && (
                 <Grid item xs={4}>

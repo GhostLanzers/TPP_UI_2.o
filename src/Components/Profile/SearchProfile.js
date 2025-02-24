@@ -130,17 +130,10 @@ export default function SearchProfile() {
                 </IconButton>
               </Grid>
               <Grid item xs={isAdmin ? 4 : 6}>
-                <a href={!rtAccess
-                        ? false
-                        : props.data.assignedEmployee === empId
-                        ? false
-                        : true?'#':`/EditCandidate/${props.data._id}?edit=true`}>
                   <IconButton
                     size="small"
                     color="secondary"
-                    onClick={() =>
-                      navigate(`/EditCandidate/${props.data._id}?edit=true`)
-                    }
+                    href={`/EditCandidate/${props.data._id}?edit=true`}
                     disabled={
                       !rtAccess
                         ? false
@@ -151,7 +144,6 @@ export default function SearchProfile() {
                   >
                     <BorderColorTwoToneIcon />
                   </IconButton>
-                </a>
               </Grid>
               {isAdmin && (
                 <Grid item xs={4}>

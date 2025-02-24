@@ -86,7 +86,6 @@ export default function CompanyGrid() {
                   color="primary"
                   size="small"
                   href={`/EditEmpanelled/${props.data._id}?edit=false`}
-                  
                 >
                   <VisibilityTwoToneIcon />
                 </IconButton>
