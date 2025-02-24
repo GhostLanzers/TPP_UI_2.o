@@ -122,9 +122,7 @@ export default function SearchProfile() {
               <Grid item xs={isAdmin ? 4 : 6}>
                 <IconButton
                   color="primary"
-                  onClick={() =>
-                    navigate(`/EditCandidate/${props.data._id}?edit=false`)
-                  }
+                  href={`/EditCandidate/${props.data._id}?edit=false`}
                 >
                   <VisibilityTwoToneIcon />
                 </IconButton>
