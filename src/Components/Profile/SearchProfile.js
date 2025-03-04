@@ -73,10 +73,19 @@ export default function SearchProfile() {
       toast.warning("Handle");
       return;
     }
+    
     try {
+      
+      var nameLen = searchParams.name.length;
+      var newName = "";
+      for (var i = 0; i < nameLen; i++) {
+        if (searchParams.name[i] === "(" || searchParams.name[i] === "(")
+          newName += "\\";
+        newName += searchParams.name[i];
+      }
       const res = await axios.post(
         "https://tpp-backend-eura.onrender.com/api/v1/candidate/search",
-        { ...searchParams },
+        { ...searchParams,name:newName },
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("user")).token,

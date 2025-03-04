@@ -155,13 +155,20 @@ export default function AssignCandidate() {
   // FUNCTIONS HANDLING
   const handleAssignCandidate = async () => {
     var query = [];
-    if (candidate.fullName)
+    if (candidate.fullName){
+      var nameLen = candidate.fullName.length;
+      var newName = "";
+      for (var i = 0; i < nameLen; i++) {
+        if (candidate.fullName[i] === "(" || candidate.fullName[i] === "(")
+          newName += "\\";
+        newName += candidate.fullName[i];
+      }
       query.push({
         fullName: {
-          $regex: ".*" + candidate.fullName + ".*",
+          $regex: ".*" + newName + ".*",
           $options: "i",
         },
-      });
+      });}
     if (candidate.mobile)
       query.push({
         mobile: {
