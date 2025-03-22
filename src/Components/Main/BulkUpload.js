@@ -32,28 +32,43 @@ export default function Bulkupload(props) {
     whiteSpace: "nowrap",
     width: 1,
   });
-
   const handleCompanyFileUpload = (e) => {
     const file = e.target.files[0];
+
     const reader = new FileReader();
+
     reader.onload = async (event) => {
       const workbook = XLSX.read(event.target.result, { type: "binary" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       var sheetData = XLSX.utils.sheet_to_json(sheet);
+
       const data = sheetData.map((sheet) => {
-        var { HRMobile, empanelled, ...rest } = sheet;
+        var { HRMobile, HRName, HREmail, empanelled, ...rest } = sheet;
+        const HRMobileList = String(HRMobile).includes(", ")
+          ? HRMobile.split(", ")
+          : [HRMobile];
+        const HREmailList = String(HREmail).includes(",")
+          ? HREmail.split(",")
+          : [HREmail];
+        const HRNameList = String(HRName).includes(",")
+          ? HRName.split(",")
+          : [HRName];
+        const HRList = HRNameList.map((hrname, i) => {
+          return {
+            HRName: hrname,
+            HREmail: HREmailList[i],
+            HRMobile: [HRMobileList[i]],
+          };
+        });
         return {
           ...rest,
-          HRMobile: String(HRMobile).includes(",")
-            ? HRMobile.split(",")
-            : HRMobile,
+          HR: HRList,
           empanelled: empanelled === "TRUE",
         };
       });
-      console.log(data);
       const resp = axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/company/bulkinsert",
+        "http://localhost:5000/api/v1/company/bulkinsert",
         data,
         {
           headers: {
@@ -88,7 +103,6 @@ export default function Bulkupload(props) {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const sheetData = XLSX.utils.sheet_to_json(sheet);
-      console.log(sheetData);
       const data = sheetData.map((row) => {
         var { gender, documentation, status, DOJ, DOB, ...rest } = row;
         gender = !gender ? "Male" : gender;
@@ -99,7 +113,7 @@ export default function Bulkupload(props) {
         return { gender, documentation, status, DOJ, DOB, ...rest };
       });
       const resp = axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/employee/bulkinsert",
+        "http://localhost:5000/api/v1/employee/bulkinsert",
         data,
         {
           headers: {
@@ -143,29 +157,64 @@ export default function Bulkupload(props) {
           YOP = "",
           companyName = "",
           role = "",
-          startDate = new Date(),
-          endDate = new Date(),
+          startDate,
+          endDate,
           salary,
           languageRemark = "",
+          interviewDate,
+          onboardingDate,
+          nextTrackingDate,
+          billingDate,
+          invoiceDate,
+          mobile,
+          email = [""],
           ...rest
         } = sd;
-        console.log(language);
         var languages = language?.split(",");
         var levels = level?.split(",");
         var languageRemarks = languageRemark?.split(",");
-        languages = languages?.map((l, i) => {
+        var languages = languages?.map((l, i) => {
           return { language: l, level: levels[i], remarks: languageRemarks[i] };
         });
         const skillList = skills.includes(",") ? skills.split(",") : skills;
         const newStart = startDate
           ? new Date(Math.round((startDate - 25569) * 86400 * 1000))
-          : new Date();
+          : null;
+        const mobileList = String(mobile).includes(", ")
+          ? mobile.split(", ")
+          : mobile;
+        const emailList = email.includes(",") ? email.split(",") : email;
+
         const newEnd = endDate
           ? new Date(Math.round((endDate - 25569) * 86400 * 1000))
-          : new Date();
-        var YOPs = YOP.includes(",")
-          ? YOP.split(",")
-          : new Date().getFullYear();
+          : null;
+        const newInterviewDate = interviewDate
+          ? new Date(Math.round((interviewDate - 25569) * 86400 * 1000))
+          : null;
+        const newOnboardingDate = onboardingDate
+          ? new Date(Math.round((onboardingDate - 25569) * 86400 * 1000))
+          : null;
+        const newNextTrackingDate = nextTrackingDate
+          ? new Date(Math.round((nextTrackingDate - 25569) * 86400 * 1000))
+          : null;
+        const newBillingDate = billingDate
+          ? new Date(Math.round((billingDate - 25569) * 86400 * 1000))
+          : null;
+        const newInvoiceDate = invoiceDate
+          ? new Date(Math.round((invoiceDate - 25569) * 86400 * 1000))
+          : null;
+
+        const exp =
+          newStart !== null && newEnd !== null
+            ? Math.round(
+                (newEnd.getTime() - newStart.getTime()) /
+                  1000 /
+                  (60 * 60 * 24) /
+                  365.25,
+                2
+              )
+            : null;
+        var YOPs = YOP.includes(",") ? YOP.split(",") : null;
         var qualifications = qualification.includes(",")
           ? qualification.split((v, i) => {
               return { qualification: v, YOP: YOPs[i] };
@@ -174,30 +223,30 @@ export default function Bulkupload(props) {
         return {
           ...rest,
           languages: languages,
+          mobile: mobileList,
+          email: emailList,
           skills: skillList,
           qualifications: qualifications,
+          interviewDate: newInterviewDate,
+          onboardingDate: newOnboardingDate,
+          nextTrackingDate: newNextTrackingDate,
+          billingDate: newBillingDate,
+          invoiceDate: newInvoiceDate,
           experience: {
             companyName,
             role,
             salary,
             startDate: newStart,
             endDate: newEnd,
-            experience: Math.round(
-              (newEnd.getTime() - newStart.getTime()) /
-                1000 /
-                (60 * 60 * 24) /
-                365.25,
-              2
-            ),
+            experience: exp,
           },
-          assignedEmployee: userid,
-          createdByEmployee: userid,
+          assignedEmployee: props.user.userid,
+          createdByEmployee: props.user.userid,
         };
       });
-      console.log(data);
 
       const resp = axios.post(
-        "https://tpp-backend-eura.onrender.com/api/v1/candidate/bulkinsert",
+        "http://localhost:5000/api/v1/candidate/bulkinsert",
         data,
         {
           headers: {
