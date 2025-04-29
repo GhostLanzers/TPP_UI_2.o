@@ -109,20 +109,20 @@ export default function AssignCandidateGrid(props) {
                 </IconButton>
               </Grid>
               <Grid item xs={isAdmin ? 4 : 6}>
-                  <IconButton
-                    size="small"
-                    color="secondary"
-                    href={`/EditCandidate/${props.data._id}?edit=true`}
-                    disabled={
-                      !rtAccess
-                        ? false
-                        : props.data.assignedEmployee === empId
-                        ? false
-                        : true
-                    }
-                  >
-                    <BorderColorTwoToneIcon />
-                  </IconButton>
+                <IconButton
+                  size="small"
+                  color="secondary"
+                  href={`/EditCandidate/${props.data._id}?edit=true`}
+                  disabled={
+                    !rtAccess
+                      ? false
+                      : props.data.assignedEmployee === empId
+                      ? false
+                      : true
+                  }
+                >
+                  <BorderColorTwoToneIcon />
+                </IconButton>
               </Grid>
               {isAdmin && (
                 <Grid item xs={4}>
@@ -167,7 +167,7 @@ export default function AssignCandidateGrid(props) {
       headerName: "Interview Date",
       field: "interviewDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     { headerName: "Interview Status", field: "interviewStatus" },
     { headerName: "Remarks", field: "remarks" },
@@ -176,26 +176,26 @@ export default function AssignCandidateGrid(props) {
       headerName: "Onboarding Date",
       field: "onboardingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Next Tracking Date",
       field: "nextTrackingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     { headerName: "Rate", field: "rate", hide: !isAdmin },
     {
       headerName: "Billing Date",
       field: "billingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Invoice Date",
       field: "invoiceDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Invoice Number",
@@ -230,11 +230,14 @@ export default function AssignCandidateGrid(props) {
 
   const handleDelete = async (id) => {
     try {
-      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
-        headers: {
-          authorization: JSON.parse(localStorage.getItem("user")).token,
-        },
-      });
+      axios.delete(
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       setTableData(tableData.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}

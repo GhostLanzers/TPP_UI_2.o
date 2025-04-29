@@ -240,8 +240,8 @@ export default function Bulkupload(props) {
             endDate: newEnd,
             experience: exp,
           },
-          assignedEmployee: props.user.userid,
-          createdByEmployee: props.user.userid,
+          assignedEmployee: userid,
+          createdByEmployee: userid,
         };
       });
 

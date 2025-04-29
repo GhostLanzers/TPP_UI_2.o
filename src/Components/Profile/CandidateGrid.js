@@ -26,14 +26,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
-
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 export default function CandidateGrid() {
-
   // STATES HANDLING AND VARIABLES
-  const [open, setOpen] = React.useState(false);  
+  const [open, setOpen] = React.useState(false);
   const [deleteData, setDeleteData] = useState({});
   const { employeeType, userid } = useSelector((state) => state.user);
-  const rtAccess = ["Recruiter", "Intern","Teamlead"].includes(employeeType);
+  const rtAccess = ["Recruiter", "Intern", "Teamlead"].includes(employeeType);
   const empId = userid;
   const isAdmin = employeeType === "Admin";
   const [tableData, setTableData] = useState([]);
@@ -74,8 +74,7 @@ export default function CandidateGrid() {
       } catch (error) {}
     };
     fetchData();
-  },[]);
-
+  }, []);
 
   // GRID HEADER/COLOUMS HANDLING
   const column = [
@@ -190,7 +189,7 @@ export default function CandidateGrid() {
       headerName: "Interview Date",
       field: "interviewDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     { headerName: "Interview Status", field: "interviewStatus" },
     { headerName: "Remarks", field: "remarks" },
@@ -199,26 +198,26 @@ export default function CandidateGrid() {
       headerName: "Onboarding Date",
       field: "onboardingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Next Tracking Date",
       field: "nextTrackingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     { headerName: "Rate", field: "rate", hide: !isAdmin },
     {
       headerName: "Billing Date",
       field: "billingDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Invoice Date",
       field: "invoiceDate",
       valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+        p.value ? dayjs(p.value).utc().format("DD/MM/YYYY") : p.value,
     },
     {
       headerName: "Invoice Number",
@@ -244,7 +243,6 @@ export default function CandidateGrid() {
     return [200, 500, 1000];
   }, []);
 
-
   // FUNCTIONS HANDLING
   const handleClickOpen = () => {
     setOpen(true);
@@ -255,16 +253,18 @@ export default function CandidateGrid() {
 
   const handleDelete = async (id) => {
     try {
-      axios.delete("https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id, {
-        headers: {
-          authorization: JSON.parse(localStorage.getItem("user")).token,
-        },
-      });
+      axios.delete(
+        "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id,
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("user")).token,
+          },
+        }
+      );
       setTableData(tableData.filter((d) => d._id !== id));
       handleClose();
     } catch (error) {}
   };
-
 
   // JSX CODE
   return (
@@ -275,53 +275,65 @@ export default function CandidateGrid() {
           spacing={2}
           sx={{ paddingTop: "9vh", marginLeft: "0.5%", width: "98%" }}
         >
-          {!rtAccess&& <>
-          
-          <Grid item xs={2} md={1}>
-            <TextField
-              fullWidth
-              size="small"
-              type="number"
-              label="No.of Rows"
-              className="tw"
-              value={count}
-              onChange={(e) => setCount(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ height: "100%", backgroundColor: alpha("#0000FF", 0.4) }}
-              onClick={() => {
-                if (tableData.length === 0) {
-                  toast.error("No Rows to select");
-                  return;
-                }
-                for (var i = 0; i < Math.min(count, tableData.length); i++) {
-                  var node = gridapi?.current.api.getRowNode(i);
-                  node.setSelected(true);
-                }
-              }}
-            >
-              Select
-            </Button>
-          </Grid>
-          <Grid item xs={0.5} md={4} />
-          <Grid item xs={4} md={3}>
-            <TextField
-              size="small"
-              label="File Name"
-              value={fileName}
-              fullWidth
-              className="tw"
-              onChange={(e) => setFileName(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={3.5} md={2}>
-            <ExcelExport height="100%" gridRef={gridapi} fileName={fileName} />
-          </Grid>
-          </>}
+          {!rtAccess && (
+            <>
+              <Grid item xs={2} md={1}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  type="number"
+                  label="No.of Rows"
+                  className="tw"
+                  value={count}
+                  onChange={(e) => setCount(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    height: "100%",
+                    backgroundColor: alpha("#0000FF", 0.4),
+                  }}
+                  onClick={() => {
+                    if (tableData.length === 0) {
+                      toast.error("No Rows to select");
+                      return;
+                    }
+                    for (
+                      var i = 0;
+                      i < Math.min(count, tableData.length);
+                      i++
+                    ) {
+                      var node = gridapi?.current.api.getRowNode(i);
+                      node.setSelected(true);
+                    }
+                  }}
+                >
+                  Select
+                </Button>
+              </Grid>
+              <Grid item xs={0.5} md={4} />
+              <Grid item xs={4} md={3}>
+                <TextField
+                  size="small"
+                  label="File Name"
+                  value={fileName}
+                  fullWidth
+                  className="tw"
+                  onChange={(e) => setFileName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={3.5} md={2}>
+                <ExcelExport
+                  height="100%"
+                  gridRef={gridapi}
+                  fileName={fileName}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
         <div
           className="ag-theme-quartz-dark"
@@ -345,20 +357,20 @@ export default function CandidateGrid() {
           />
         </div>
         <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{
-          backgroundColor: "transparent",
-          "& .MuiDialog-paper": {
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{
             backgroundColor: "transparent",
-            backdropFilter: "blur(100px)",
-            boxShadow: "none",
-            color: "white",
-          },
-        }}
-      >
+            "& .MuiDialog-paper": {
+              backgroundColor: "transparent",
+              backdropFilter: "blur(100px)",
+              boxShadow: "none",
+              color: "white",
+            },
+          }}
+        >
           <DialogTitle
             sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
             id="customized-dialog-title"
@@ -377,10 +389,7 @@ export default function CandidateGrid() {
           >
             <CloseIcon />
           </IconButton>
-          <DialogContent
-            dividers
-            className="dw"
-          >
+          <DialogContent dividers className="dw">
             <Typography
               gutterBottom
               sx={{
