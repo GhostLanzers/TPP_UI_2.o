@@ -39,7 +39,7 @@ export default function EditCandidate() {
    const { id } = useParams();
    const [searchParams] = useSearchParams();
    const editable = searchParams.get("edit") === "true";
-   const url = "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id;
+   const url = "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id;
    const [companiesList, setCompaniesList] = React.useState([]);
    const [rolesList, setRolesList] = React.useState([]);
    const [skillsList, setSkillsList] = React.useState([]);
@@ -107,7 +107,7 @@ export default function EditCandidate() {
                },
             });
             const res = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType?companyType=Empanelled",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -116,7 +116,7 @@ export default function EditCandidate() {
                }
             );
             const extraRes = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -229,7 +229,7 @@ export default function EditCandidate() {
 
       try {
          await axios.patch(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id,
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
             {
                ...candidate,
                companyId: candidate.companyId
@@ -246,7 +246,7 @@ export default function EditCandidate() {
             }
          );
          await axios.patch(
-            "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
             { data: [...new Set([...candidate.skills, ...skillsList])] },
             {
                headers: {
@@ -262,7 +262,7 @@ export default function EditCandidate() {
    const checkNumber = async (num) => {
       try {
          const res = await axios.get(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate/mobile/" +
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/mobile/" +
                num,
             {
                headers: {

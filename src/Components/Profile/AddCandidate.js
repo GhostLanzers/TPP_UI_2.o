@@ -97,7 +97,7 @@ export default function AddCandidate(props) {
       const fetchData = async () => {
          try {
             const res = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/company/companyType?companyType=Empanelled",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType?companyType=Empanelled",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -106,7 +106,7 @@ export default function AddCandidate(props) {
                }
             );
             const extraRes = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -177,7 +177,7 @@ export default function AddCandidate(props) {
 
          if (flag) return;
          await axios.post(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate",
             {
                ...candidate,
                assignedEmployee: userid,
@@ -190,7 +190,7 @@ export default function AddCandidate(props) {
             }
          );
          await axios.patch(
-            "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
             { data: [...new Set([...candidate.skills, ...skillsList])] },
             {
                headers: {
@@ -209,7 +209,7 @@ export default function AddCandidate(props) {
    const checkNumber = async (num) => {
       try {
          const res = await axios.get(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate/mobile/" +
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/mobile/" +
                num,
 
             {
@@ -1236,7 +1236,7 @@ export default function AddCandidate(props) {
                                              invoiceDate: e,
                                           });
                                        }}
-                                       value={(candidate.invoiceDate)}
+                                       value={candidate.invoiceDate}
                                     />
                                  </LocalizationProvider>
                               </Grid>
@@ -1298,7 +1298,7 @@ export default function AddCandidate(props) {
                                              billingDate: e.target.value,
                                           });
                                        }}
-                                       value={(candidate.billingDate)}
+                                       value={candidate.billingDate}
                                     />
                                  </LocalizationProvider>
                               </Grid>

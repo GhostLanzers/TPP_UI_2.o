@@ -86,7 +86,7 @@ export default function EditRole() {
       const fetchData = async () => {
          try {
             const res = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/company/company/" +
+               "https://tpp-backend-9xoz.onrender.com/api/v1/company/company/" +
                   companyId,
                {
                   headers: {
@@ -96,7 +96,7 @@ export default function EditRole() {
                }
             );
             const roleres = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/company/" +
+               "https://tpp-backend-9xoz.onrender.com/api/v1/company/" +
                   companyId +
                   "/role/" +
                   id,
@@ -108,7 +108,7 @@ export default function EditRole() {
                }
             );
             const extraRes = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/extra/all",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -133,7 +133,7 @@ export default function EditRole() {
    const handleEditRole = async () => {
       try {
          await axios.patch(
-            "https://tpp-backend-eura.onrender.com/api/v1/company/" +
+            "https://tpp-backend-9xoz.onrender.com/api/v1/company/" +
                companyId +
                "/role/" +
                id,
@@ -146,7 +146,7 @@ export default function EditRole() {
          );
 
          await axios.patch(
-            "https://tpp-backend-eura.onrender.com/api/v1/extra/skills",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
             {
                data: [
                   ...new Set([

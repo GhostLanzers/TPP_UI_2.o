@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
       const fetchData = async () => {
          try {
             const res = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/status",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/status",
                {
                   headers: {
                      authorization: token,

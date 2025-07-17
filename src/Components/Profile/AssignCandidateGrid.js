@@ -56,7 +56,7 @@ export default function AssignCandidateGrid(props) {
       const fetchData = async () => {
          try {
             const candidates = await axios.post(
-               "https://tpp-backend-eura.onrender.com/api/v1/candidate/candidate/assignSearch",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/candidate/assignSearch",
                { query: { ...location.state.query } },
                {
                   headers: {
@@ -66,7 +66,7 @@ export default function AssignCandidateGrid(props) {
                }
             );
             const empres = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/employee",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/employee",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))
@@ -233,7 +233,7 @@ export default function AssignCandidateGrid(props) {
    const handleDelete = async (id) => {
       try {
          axios.delete(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate/" + id,
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
             {
                headers: {
                   authorization: JSON.parse(localStorage.getItem("user")).token,
@@ -273,7 +273,7 @@ export default function AssignCandidateGrid(props) {
       }
       try {
          await axios.post(
-            "https://tpp-backend-eura.onrender.com/api/v1/candidate/candidate/assign",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/candidate/assign",
             {
                list: assignedData,
             },

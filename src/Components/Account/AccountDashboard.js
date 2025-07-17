@@ -10,7 +10,7 @@ export default function AccountDashboard() {
       const fetchData = async () => {
          try {
             const res = await axios.get(
-               "https://tpp-backend-eura.onrender.com/api/v1/employee/counts/counts",
+               "https://tpp-backend-9xoz.onrender.com/api/v1/employee/counts/counts",
                {
                   headers: {
                      authorization: JSON.parse(localStorage.getItem("user"))

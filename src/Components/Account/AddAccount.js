@@ -124,7 +124,7 @@ export default function AddAccount() {
       if (flag) return;
       try {
          const res = await axios.post(
-            "https://tpp-backend-eura.onrender.com/api/v1/employee",
+            "https://tpp-backend-9xoz.onrender.com/api/v1/employee",
             { ...employee },
             {
                headers: {
@@ -142,7 +142,7 @@ export default function AddAccount() {
    const checkId = async (id) => {
       try {
          const res = await axios.get(
-            "https://tpp-backend-eura.onrender.com/api/v1/employee/id/" + id,
+            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/id/" + id,
 
             {
                headers: {
@@ -157,7 +157,7 @@ export default function AddAccount() {
    const checkNumber = async (num) => {
       try {
          const res = await axios.get(
-            "https://tpp-backend-eura.onrender.com/api/v1/employee/mobile/" +
+            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/mobile/" +
                num,
 
             {
@@ -172,7 +172,7 @@ export default function AddAccount() {
    const checkMail = async (num) => {
       try {
          const res = await axios.get(
-            "https://tpp-backend-eura.onrender.com/api/v1/employee/mail/" + num,
+            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/mail/" + num,
 
             {
                headers: {
