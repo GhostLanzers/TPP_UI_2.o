@@ -22,12 +22,12 @@ import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function EditCandidate() {
    // STATES HANDLING AND VARIABLES
@@ -39,7 +39,7 @@ export default function EditCandidate() {
    const { id } = useParams();
    const [searchParams] = useSearchParams();
    const editable = searchParams.get("edit") === "true";
-   const url = "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id;
+   const url = "/candidate/" + id;
    const [companiesList, setCompaniesList] = React.useState([]);
    const [rolesList, setRolesList] = React.useState([]);
    const [skillsList, setSkillsList] = React.useState([]);
@@ -101,29 +101,11 @@ export default function EditCandidate() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const canres = await axios.get(url, {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            });
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType?companyType=Empanelled",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const canres = await AxiosInstance.get(url);
+            const res = await AxiosInstance.get(
+               "/company/candidateCompanyType?companyType=Empanelled"
             );
-            const extraRes = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const extraRes = await AxiosInstance.get("/extra/all");
             setCandidate(canres.data);
             setCompaniesList(res.data);
             setExpandedCompany(canres.data.experience.length !== 0);
@@ -228,32 +210,16 @@ export default function EditCandidate() {
       }
 
       try {
-         await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
-            {
-               ...candidate,
-               companyId: candidate.companyId
-                  ? candidate.companyId._id
-                  : candidate.companyId,
-               roleId: candidate.roleId
-                  ? candidate.roleId._id
-                  : candidate.roleId,
-            },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
-         await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
-            { data: [...new Set([...candidate.skills, ...skillsList])] },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.patch("/candidate/" + id, {
+            ...candidate,
+            companyId: candidate.companyId
+               ? candidate.companyId._id
+               : candidate.companyId,
+            roleId: candidate.roleId ? candidate.roleId._id : candidate.roleId,
+         });
+         await AxiosInstance.patch("/extra/skills", {
+            data: [...new Set([...candidate.skills, ...skillsList])],
+         });
          toast.success("Candidate Edited Successfully");
          window.location.replace(document.referrer);
       } catch (error) {}
@@ -261,15 +227,7 @@ export default function EditCandidate() {
 
    const checkNumber = async (num) => {
       try {
-         const res = await axios.get(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/mobile/" +
-               num,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.get("/candidate/mobile/" + num);
          if (res.data.status === true) toast.error("Number already exists");
       } catch (error) {}
    };

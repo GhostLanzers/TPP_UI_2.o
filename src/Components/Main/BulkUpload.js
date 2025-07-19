@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import * as XLSX from "xlsx";
 import _ from "lodash";
-import axios from "axios";
+
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { toast } from "react-toastify";
 import ExcelExport from "./ExcelExport";
 import { useSelector } from "react-redux";
+import AxiosInstance from "./AxiosInstance";
 
 export default function Bulkupload(props) {
    const { employeeType, userid } = useSelector((state) => state.user);
@@ -31,7 +32,7 @@ export default function Bulkupload(props) {
       whiteSpace: "nowrap",
       width: 1,
    });
-   const handleCompanyFileUpload = (e) => {
+   const handleCompanyFileUpload = async (e) => {
       const file = e.target.files[0];
 
       const reader = new FileReader();
@@ -66,15 +67,7 @@ export default function Bulkupload(props) {
                empanelled: empanelled === "TRUE",
             };
          });
-         const resp = axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/bulkinsert",
-            data,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const resp = await AxiosInstance.post("/company/bulkinsert", data);
          toast.promise(resp, {
             pending: "Data is Uploading. Please wait....",
             success: "Company Data Uploaded",
@@ -93,7 +86,7 @@ export default function Bulkupload(props) {
       };
       reader.readAsBinaryString(file);
    };
-   const handleEmployeeFileUpload = (e) => {
+   const handleEmployeeFileUpload = async (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();
 
@@ -111,15 +104,7 @@ export default function Bulkupload(props) {
             DOB = !DOB ? new Date() : DOB;
             return { gender, documentation, status, DOJ, DOB, ...rest };
          });
-         const resp = axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/bulkinsert",
-            data,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const resp = await AxiosInstance.post("/employee/bulkinsert", data);
          toast.promise(resp, {
             pending: "Data is Uploading. Please wait....",
             success: "Employee Data Uploaded",
@@ -138,7 +123,7 @@ export default function Bulkupload(props) {
       };
       reader.readAsBinaryString(file);
    };
-   const handleCandidateFileUpload = (e) => {
+   const handleCandidateFileUpload = async (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();
 
@@ -248,15 +233,7 @@ export default function Bulkupload(props) {
             };
          });
 
-         const resp = axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/bulkinsert",
-            data,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const resp = await AxiosInstance.post("/candidate/bulkinsert", data);
          toast.promise(resp, {
             pending: "Data is Uploading. Please wait....",
             success: "Candidate Data Uploaded",

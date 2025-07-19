@@ -19,7 +19,6 @@ import {
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -27,6 +26,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function SearchProfile() {
    // STATES HANDLING AND VARIABLES
@@ -54,14 +54,7 @@ export default function SearchProfile() {
 
    const handleDelete = async (id) => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.delete("/candidate/" + id);
          setTableData(tableData.filter((d) => d._id !== id));
          handleClose();
       } catch (error) {}
@@ -85,15 +78,10 @@ export default function SearchProfile() {
                newName += "\\";
             newName += searchParams.name[i];
          }
-         const res = await axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/search",
-            { ...searchParams, name: newName },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.post("/candidate/search", {
+            ...searchParams,
+            name: newName,
+         });
          setTableData(res.data);
       } catch (error) {}
    };

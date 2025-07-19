@@ -15,7 +15,7 @@ import {
    InputAdornment,
    FormControl,
 } from "@mui/material";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import image from "../../Assets/Placement.jpeg";
@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import AxiosInstance from "./AxiosInstance";
 
 export default function Login() {
    // STATES HANDLING AND VARIABLES
@@ -34,32 +35,31 @@ export default function Login() {
    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
    // FUNCTIONS HANDLING AND API POST CALLS
-   const handleLogin = () => {
-      axios
-         .post("https://tpp-backend-9xoz.onrender.com/api/v1/auth/login", {
+   const handleLogin = async () => {
+      try {
+         const res = await AxiosInstance.post("/auth/login", {
             userMail: username,
             password: password,
-         })
-         .then((res) => {
-            localStorage.setItem(
-               "user",
-               JSON.stringify({ username, token: "Bearer " + res.data.token })
-            );
-
-            dispatch(
-               setUser({
-                  userMail: res.data.userMail,
-                  employeeType: res.data.employeeType,
-                  userid: res.data.userid,
-                  username: res.data.username,
-               })
-            );
-
-            navigate("/");
-         })
-         .catch((err) => {
-            toast.error(err.response.data.message);
          });
+
+         localStorage.setItem(
+            "user",
+            JSON.stringify({ username, token: "Bearer " + res.data.token })
+         );
+
+         dispatch(
+            setUser({
+               userMail: res.data.userMail,
+               employeeType: res.data.employeeType,
+               userid: res.data.userid,
+               username: res.data.username,
+            })
+         );
+
+         navigate("/");
+      } catch (err) {
+         toast.error(err?.response?.data?.message || "Login failed");
+      }
    };
 
    //CSS HANDLING FOR CARDS/BUTTON/PAGE ON XS AND SM

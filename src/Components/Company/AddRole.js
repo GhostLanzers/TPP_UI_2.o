@@ -19,8 +19,8 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 
+import AxiosInstance from "../Main/AxiosInstance";
 export default function AddRole() {
    //DROP DOWN OPTIONS AND VALUES
    const status = [
@@ -117,25 +117,8 @@ export default function AddRole() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/company/" +
-                  id,
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
-            const extraRes = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const res = await AxiosInstance.get("/company/company/" + id);
+            const extraRes = await AxiosInstance.get("/extra/all");
             setCompany(res.data);
             extraRes.data.forEach(({ _id, data }) => {
                if (_id === "Skills") setSkillsList(data);
@@ -149,33 +132,19 @@ export default function AddRole() {
 
    const handleAddRole = async () => {
       try {
-         const newRole = await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/" + id,
-            { roles: [role] },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
-         await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
-            {
-               data: [
-                  ...new Set([
-                     ...role.mandatorySkills,
-                     ...role.optionalSkills,
+         const newRole = await AxiosInstance.patch("/company/" + id, {
+            roles: [role],
+         });
+         await AxiosInstance.patch("/extra/skills", {
+            data: [
+               ...new Set([
+                  ...role.mandatorySkills,
+                  ...role.optionalSkills,
 
-                     ...skillsList,
-                  ]),
-               ],
-            },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+                  ...skillsList,
+               ]),
+            ],
+         });
          toast.success("Role Added Successfully");
          navigate(`/EditEmpanelled/${id}?edit=true`);
          console.log(newRole);

@@ -14,7 +14,7 @@ import {
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,6 +24,7 @@ import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../Main/ExcelExport";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AccountGrid() {
    // STATES HANDLING AND VARIABLES
@@ -40,15 +41,8 @@ export default function AccountGrid() {
    useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/employee/employeeType/" +
-                  searchParams.get("employeeType"),
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const res = await AxiosInstance.get(
+               "/employee/employeeType/" + searchParams.get("employeeType")
             );
             setEmployeeList(res.data);
          } catch (error) {
@@ -175,14 +169,7 @@ export default function AccountGrid() {
    // FUNCTIONS HANDLING
    const handleDelete = async (id) => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/" + id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.delete("/employee/" + id);
          setEmployeeList(employeeList.filter((d) => d._id !== id));
          handleClose();
       } catch (error) {}

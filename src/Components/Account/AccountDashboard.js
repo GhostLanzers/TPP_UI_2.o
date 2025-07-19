@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AccountDashboard() {
    const navigate = useNavigate();
@@ -9,15 +10,7 @@ export default function AccountDashboard() {
    useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/employee/counts/counts",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const res = await AxiosInstance.get("/employee/counts/counts");
 
             if (!res) console.log("Something went wrong");
             const counts = {};

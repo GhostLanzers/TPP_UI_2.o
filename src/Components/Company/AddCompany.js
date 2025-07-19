@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AddCompany() {
    //DROP DOWN OPTIONS AND VALUES
@@ -110,31 +111,14 @@ export default function AddCompany() {
          }
          if (flag) return;
 
-         const res = await axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company",
-            { ...company },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.post("/company", { ...company });
          toast.success("Company Added Successfully");
          navigate(`/EditEmpanelled/${res.data._id}?edit=true`);
       } catch (error) {}
    };
    const checkNumber = async (num) => {
       try {
-         const res = await axios.get(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/mobile/" +
-               num,
-
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.get("/company/mobile/" + num);
          if (res.data.status === true) toast.error("Number already exists");
       } catch (error) {}
    };

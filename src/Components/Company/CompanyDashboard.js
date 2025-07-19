@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function CompanyDashboard(props) {
    const navigate = useNavigate();
@@ -10,15 +11,7 @@ export default function CompanyDashboard(props) {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/counts",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const res = await AxiosInstance.get("/company/counts");
 
             if (!res) console.log("Something went wrong");
             var c = {};

@@ -15,7 +15,6 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import dayjs from "dayjs";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import ExcelExport from "../../Components/Main/ExcelExport";
@@ -26,11 +25,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
+import AxiosInstance from "../Main/AxiosInstance";
 var utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
+
 export default function CandidateGrid() {
    // STATES HANDLING AND VARIABLES
-   const [open, setOpen] = React.useState(false);
+   const [open, setOpen] = useState(false);
    const [deleteData, setDeleteData] = useState({});
    const { employeeType, userid } = useSelector((state) => state.user);
    const rtAccess = ["Recruiter", "Intern", "Teamlead"].includes(employeeType);
@@ -42,39 +43,31 @@ export default function CandidateGrid() {
    const [count, setCount] = useState(0);
    const [searchParams] = useSearchParams();
 
-   // API CALLS HANDLING
-   var url =
-      "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/data/" +
-      searchParams.get("type") +
-      "?";
-
-   var flag = 0;
-
-   if (searchParams.has("companyId")) {
-      if (flag === 1) url += "&&";
-      flag = 1;
-      url += "companyId=" + searchParams.get("companyId");
-   }
-   if (searchParams.has("roleId")) {
-      if (flag === 1) url += "&&";
-      flag = 1;
-      url += "roleId=" + searchParams.get("roleId");
-   }
-
+   // Build URL with URLSearchParams for safety
+   const type = searchParams.get("type") || "";
+   const paramsObj = {};
+   if (searchParams.has("companyId"))
+      paramsObj.companyId = searchParams.get("companyId");
+   if (searchParams.has("roleId"))
+      paramsObj.roleId = searchParams.get("roleId");
+   const urlParams = new URLSearchParams(paramsObj).toString();
+   const url = `/candidate/data/${type}${urlParams ? "?" + urlParams : ""}`;
+   const urlId = `/candidate/dataId/${type}${urlParams ? "?" + urlParams : ""}`;
    useEffect(() => {
+      let isMounted = true;
       const fetchData = async () => {
          try {
-            const res = await axios.get(url, {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            });
-
-            setTableData(res.data);
-         } catch (error) {}
+            const res = await AxiosInstance.get(url);
+            if (isMounted) setTableData(res.data);
+         } catch (error) {
+            toast.error("Failed to fetch candidate data");
+         }
       };
       fetchData();
-   }, []);
+      return () => {
+         isMounted = false;
+      };
+   }, [url]);
 
    // GRID HEADER/COLOUMS HANDLING
    const column = [
@@ -82,7 +75,6 @@ export default function CandidateGrid() {
          headerName: "Actions",
          width: isAdmin ? "180px" : "150px",
          field: "assignedEmployee",
-
          comparator: (a, b) => {
             if (a === empId && b !== empId) return -1;
             else if (b === empId && a !== empId) return 1;
@@ -91,54 +83,53 @@ export default function CandidateGrid() {
             else return 0;
          },
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <Grid container columnSpacing={0}>
-                     <Grid item xs={isAdmin ? 4 : 6}>
-                        <IconButton
-                           color="primary"
-                           size="small"
-                           href={`/EditCandidate/${props.data._id}?edit=false`}
-                        >
-                           <VisibilityTwoToneIcon />
-                        </IconButton>
-                     </Grid>
-                     <Grid item xs={isAdmin ? 4 : 6}>
-                        <IconButton
-                           size="small"
-                           color="secondary"
-                           href={`/EditCandidate/${props.data._id}?edit=true`}
-                           disabled={
-                              !rtAccess
-                                 ? false
-                                 : props.data.assignedEmployee === empId
-                                 ? true
-                                 : false
-                           }
-                        >
-                           <BorderColorTwoToneIcon />
-                        </IconButton>
-                     </Grid>
-                     {isAdmin && (
-                        <Grid item xs={4}>
-                           <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => {
-                                 setDeleteData({
-                                    name: props.data.fullName,
-                                    id: props.data.candidateId,
-                                    _id: props.data._id,
-                                 });
-                                 handleClickOpen();
-                              }}
-                           >
-                              <DeleteSweepTwoToneIcon />
-                           </IconButton>
-                        </Grid>
-                     )}
+               <Grid container columnSpacing={0}>
+                  <Grid item xs={isAdmin ? 4 : 6}>
+                     <IconButton
+                        color="primary"
+                        size="small"
+                        href={`/EditCandidate/${props.data._id}?edit=false`}
+                     >
+                        <VisibilityTwoToneIcon />
+                     </IconButton>
                   </Grid>
-               </>
+                  <Grid item xs={isAdmin ? 4 : 6}>
+                     <IconButton
+                        size="small"
+                        color="secondary"
+                        href={`/EditCandidate/${props.data._id}?edit=true`}
+                        disabled={
+                           !rtAccess
+                              ? false
+                              : props.data.assignedEmployee === empId
+                              ? true
+                              : false
+                        }
+                     >
+                        <BorderColorTwoToneIcon />
+                     </IconButton>
+                  </Grid>
+                  {isAdmin && (
+                     <Grid item xs={4}>
+                        <IconButton
+                           size="small"
+                           color="error"
+                           onClick={() => {
+                              setDeleteData({
+                                 name: props.data.fullName,
+                                 id: props.data.candidateId,
+                                 _id: props.data._id,
+                              });
+                              handleClickOpen();
+                           }}
+                        >
+                           <DeleteSweepTwoToneIcon />
+                        </IconButton>
+                     </Grid>
+                  )}
+               </Grid>
             );
          },
       },
@@ -146,45 +137,62 @@ export default function CandidateGrid() {
          headerName: "Contact",
          width: "140px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <Grid container columnSpacing={1}>
-                     <Grid item xs={6}>
-                        <IconButton
-                           aria-label="delete"
-                           color="success"
-                           href={`https://wa.me/${props.data.mobile[0]}`}
-                           target="_blank"
-                        >
-                           <WhatsAppIcon />
-                        </IconButton>
-                     </Grid>
-                     <Grid item xs={6}>
-                        <IconButton aria-label="delete" color="warning">
-                           <CallIcon />
-                        </IconButton>
-                     </Grid>
+               <Grid container columnSpacing={1}>
+                  <Grid item xs={6}>
+                     <IconButton
+                        aria-label="whatsapp"
+                        color="success"
+                        href={`https://wa.me/${props.data?.mobile?.[0] || ""}`}
+                        target="_blank"
+                        disabled={!props.data?.mobile?.[0]}
+                     >
+                        <WhatsAppIcon />
+                     </IconButton>
                   </Grid>
-               </>
+                  <Grid item xs={6}>
+                     <IconButton
+                        aria-label="call"
+                        color="warning"
+                        disabled={!props.data?.mobile?.[0]}
+                     >
+                        <CallIcon />
+                     </IconButton>
+                  </Grid>
+               </Grid>
             );
          },
       },
       {
          headerName: "Created By",
          field: "createdByEmployee.name",
+         valueGetter: (params) => params.data?.createdByEmployee?.name,
          headerCheckboxSelection: true,
          checkboxSelection: true,
          headerCheckboxSelectionFilteredOnly: true,
       },
-      { headerName: "Assigned to", field: "assignedEmployee.name" },
+      {
+         headerName: "Assigned to",
+         field: "assignedEmployee.name",
+         valueGetter: (params) => params.data?.assignedEmployee?.name,
+      },
       { headerName: "Candidate Name", field: "fullName" },
       { headerName: "Candidate ID", field: "candidateId" },
       { headerName: "Candidate Number", field: "mobile", sortable: false },
       { headerName: "Candidate Email ID", field: "email" },
       { headerName: "L1 Assessment", field: "l1Assessment" },
       { headerName: "L2 Assessment", field: "l2Assessment" },
-      { headerName: "Company", field: "companyId.companyName" },
-      { headerName: "Role", field: "roleId.role" },
+      {
+         headerName: "Company",
+         field: "companyId.companyName",
+         valueGetter: (params) => params.data?.companyId?.companyName,
+      },
+      {
+         headerName: "Role",
+         field: "roleId.role",
+         valueGetter: (params) => params.data?.roleId?.role,
+      },
       {
          headerName: "Interview Date",
          field: "interviewDate",
@@ -233,37 +241,56 @@ export default function CandidateGrid() {
       rowSelection: "multiple",
    };
 
-   const selection = useMemo(() => {
-      return {
+   const selection = useMemo(
+      () => ({
          mode: "multiRow",
          groupSelects: "descendants",
-      };
-   }, []);
-   const paginationPageSizeSelector = useMemo(() => {
-      return [200, 500, 1000];
-   }, []);
+      }),
+      []
+   );
+   const paginationPageSizeSelector = useMemo(() => [200, 500, 1000], []);
 
    // FUNCTIONS HANDLING
-   const handleClickOpen = () => {
-      setOpen(true);
-   };
-   const handleClose = () => {
-      setOpen(false);
-   };
+   const handleClickOpen = () => setOpen(true);
+   const handleClose = () => setOpen(false);
 
    const handleDelete = async (id) => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
-         setTableData(tableData.filter((d) => d._id !== id));
+         await AxiosInstance.delete("/candidate/" + id);
+         setTableData((prev) => prev.filter((d) => d._id !== id));
          handleClose();
-      } catch (error) {}
+         toast.success("Candidate deleted successfully");
+      } catch (error) {
+         toast.error("Failed to delete candidate");
+      }
+   };
+
+   // AG Grid Infinite Row Model datasource
+   const datasource = {
+      getRows: (params) => {
+         const { startRow, endRow } = params;
+         const limit = endRow - startRow;
+         const page = Math.floor(startRow / limit) + 1;
+
+         AxiosInstance.get(url, {
+            params: {
+               page: page,
+               limit: limit,
+            },
+         })
+            .then((response) => {
+               const data = response.data;
+
+               params.successCallback(data.candidates, data.total);
+            })
+            .catch(() => {
+               params.failCallback();
+            });
+      },
+   };
+
+   const onGridReady = (params) => {
+      params.api.setDatasource(datasource);
    };
 
    // JSX CODE
@@ -302,12 +329,13 @@ export default function CandidateGrid() {
                                  return;
                               }
                               for (
-                                 var i = 0;
+                                 let i = 0;
                                  i < Math.min(count, tableData.length);
                                  i++
                               ) {
-                                 var node = gridapi?.current.api.getRowNode(i);
-                                 node.setSelected(true);
+                                 const node =
+                                    gridapi?.current?.api?.getRowNode(i);
+                                 if (node) node.setSelected(true);
                               }
                            }}
                         >
@@ -346,14 +374,16 @@ export default function CandidateGrid() {
             >
                <AgGridReact
                   ref={gridapi}
-                  rowData={tableData}
                   columnDefs={column}
                   defaultColDef={defaultColDef}
                   pagination={true}
+                  rowModelType="infinite"
                   paginationPageSize={100}
                   selection={selection}
+                  cacheBlockSize={100}
                   paginationPageSizeSelector={paginationPageSizeSelector}
                   rowSelection={"multiple"}
+                  onGridReady={onGridReady}
                />
             </div>
             <Dialog

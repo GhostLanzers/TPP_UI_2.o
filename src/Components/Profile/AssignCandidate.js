@@ -15,8 +15,8 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AssignCandidate() {
    // STATES HANDLING AND VARIABLES
@@ -59,33 +59,11 @@ export default function AssignCandidate() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType?companyType=Empanelled",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const res = await AxiosInstance.get(
+               "/company/candidateCompanyType?companyType=Empanelled"
             );
-            const extraRes = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
-            const empres = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/employee",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const extraRes = await AxiosInstance.get("/extra/all");
+            const empres = await AxiosInstance.get("/employee");
             setEmployeeList(empres.data.employees);
             setCompaniesList(res.data);
             extraRes.data.forEach(({ _id, data }) => {

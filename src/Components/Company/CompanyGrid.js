@@ -16,7 +16,6 @@ import {
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -27,6 +26,7 @@ import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../../Components/Main/ExcelExport";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function CompanyGrid() {
    // STATES HANDLING AND VARIABLES
@@ -43,23 +43,20 @@ export default function CompanyGrid() {
 
    // FUNCTIONS HANDLING AND SEARCH API CALLS
    React.useEffect(() => {
-      var url =
-         "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType/?companyType=" +
-         searchParams.get("companyType");
-      if (!searchParams.has("companyType")) {
-         url =
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType";
+      const getData = async ()=>{
+         var url =
+            "/company/companyType" + searchParams.has("companyType")
+               ? "/?companyType=" + searchParams.get("companyType")
+               : "";
+
+         await AxiosInstance
+            .get(url)
+            .then((res) => setTableData(res.data))
+            .catch((err) => {
+               window.alert(err.response.data.message);
+            });
       }
-      axios
-         .get(url, {
-            headers: {
-               authorization: JSON.parse(localStorage.getItem("user")).token,
-            },
-         })
-         .then((res) => setTableData(res.data))
-         .catch((err) => {
-            window.alert(err.response.data.message);
-         });
+      
    }, [searchParams]);
 
    // NEW BUTTON COLOURS THEME
@@ -335,14 +332,7 @@ export default function CompanyGrid() {
    };
    const handleDelete = async (id) => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/" + id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.delete("/company/" + id);
          setTableData(tableData.filter((d) => d._id !== id));
          handleClose();
       } catch (error) {}

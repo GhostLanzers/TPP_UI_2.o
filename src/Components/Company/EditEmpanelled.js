@@ -20,7 +20,7 @@ import {
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import axios from "axios";
+
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -33,6 +33,7 @@ import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import ExcelExport from "../../Components/Main/ExcelExport";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function EditEmpanelled() {
    // STATES HANDLING AND VARIABLES
@@ -61,16 +62,7 @@ export default function EditEmpanelled() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/company/" +
-                  id,
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const res = await AxiosInstance.get("/company/company/" + id);
             setCompany(res.data);
          } catch (error) {}
       };
@@ -395,34 +387,20 @@ export default function EditEmpanelled() {
          }
          if (flag) return;
          delete company.__v;
-         await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/company/" +
-               id,
-            { ...company, roles: company.roles.map((r) => r._id) },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.patch("/company/company/" + id, {
+            ...company,
+            roles: company.roles.map((r) => r._id),
+         });
          toast.success("Company Edited Successfully");
          navigate(`/CompanyDashBoard`);
       } catch (error) {
          console.log(error);
       }
    };
-   const handleRoleDelete = () => {
+   const handleRoleDelete = async () => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/" +
-               id +
-               "/role/" +
-               deleteData._id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
+         await AxiosInstance.delete(
+            "/company/" + id + "/role/" + deleteData._id
          );
          setCompany({
             ...company,
@@ -433,16 +411,7 @@ export default function EditEmpanelled() {
    };
    const checkNumber = async (num) => {
       try {
-         const res = await axios.get(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/company/mobile/" +
-               num,
-
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.get("/company/mobile/" + num);
          if (res.data.status === true) toast.error("Number already exists");
       } catch (error) {}
    };

@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function ProfileDashboard() {
    // STATES HANDLING AND VARIABLES
@@ -15,14 +15,9 @@ export default function ProfileDashboard() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/values/counts",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const res = await AxiosInstance.get(
+               "/candidate/values/counts",
+               
             );
 
             setCounts(res.data);

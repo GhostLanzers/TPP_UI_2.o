@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import { toast } from "react-toastify";
 
+import { toast } from "react-toastify";
+import AxiosInstance from "./AxiosInstance";
 export default function ChangePassword(props) {
    // STATES HANDLING AND VARIABLES
    const navigate = useNavigate();
@@ -34,16 +34,9 @@ export default function ChangePassword(props) {
          return;
       }
       try {
-         const res = await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/employee/" +
-               userid +
-               "/password",
-            { ...passwords },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
+         const res = await AxiosInstance.patch(
+            "/employee/" + userid + "/password",
+            { ...passwords }
          );
          if (res.sucess === false) setWarning(res.message);
          props.setUser({});

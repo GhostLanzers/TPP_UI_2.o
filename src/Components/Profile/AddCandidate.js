@@ -22,12 +22,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AddCandidate(props) {
    // STATES HANDLING AND VARIABLES
@@ -96,24 +96,10 @@ export default function AddCandidate(props) {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const res = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/company/companyType?companyType=Empanelled",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const res = await AxiosInstance.get(
+               "/company/candidateCompanyType?companyType=Empanelled"
             );
-            const extraRes = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const extraRes = await AxiosInstance.get("/extra/all");
 
             setCompaniesList(res.data);
             extraRes.data.forEach(({ _id, data }) => {
@@ -176,31 +162,17 @@ export default function AddCandidate(props) {
          }
 
          if (flag) return;
-         await axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate",
-            {
-               ...candidate,
-               assignedEmployee: userid,
-               createdByEmployee: userid,
-            },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
-         await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/skills",
-            { data: [...new Set([...candidate.skills, ...skillsList])] },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.post("/candidate", {
+            ...candidate,
+            assignedEmployee: userid,
+            createdByEmployee: userid,
+         });
+         await AxiosInstance.patch("/extra/skills", {
+            data: [...new Set([...candidate.skills, ...skillsList])],
+         });
          toast.success("Candidate Added Successfully");
          navigate("/");
-         window.location.reload();
+         
       } catch (error) {
          console.log(error);
       }
@@ -208,16 +180,7 @@ export default function AddCandidate(props) {
 
    const checkNumber = async (num) => {
       try {
-         const res = await axios.get(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/mobile/" +
-               num,
-
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const res = await AxiosInstance.get("/candidate/mobile/" + num);
          if (res.data.status === true) toast.error("Number already exists");
       } catch (error) {}
    };

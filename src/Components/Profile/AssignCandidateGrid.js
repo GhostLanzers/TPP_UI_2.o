@@ -23,7 +23,6 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import dayjs from "dayjs";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExcelExport from "../Main/ExcelExport";
@@ -32,6 +31,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
+import AxiosInstance from "../Main/AxiosInstance";
 
 export default function AssignCandidateGrid(props) {
    // STATES HANDLING AND VARIABLES
@@ -55,25 +55,11 @@ export default function AssignCandidateGrid(props) {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const candidates = await axios.post(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/candidate/assignSearch",
-               { query: { ...location.state.query } },
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
+            const candidates = await AxiosInstance.post(
+               "/candidate/candidate/assignSearch",
+               { query: { ...location.state.query } }
             );
-            const empres = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/employee",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const empres = await AxiosInstance.get("/employee");
             setEmployeeList(empres.data.employees);
             setPotentialLeadList(candidates.data.candidates);
          } catch (error) {
@@ -232,14 +218,7 @@ export default function AssignCandidateGrid(props) {
 
    const handleDelete = async (id) => {
       try {
-         axios.delete(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/" + id,
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.delete("/candidate/" + id);
          setTableData(tableData.filter((d) => d._id !== id));
          handleClose();
       } catch (error) {}
@@ -272,17 +251,9 @@ export default function AssignCandidateGrid(props) {
          ind += count;
       }
       try {
-         await axios.post(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/candidate/candidate/assign",
-            {
-               list: assignedData,
-            },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         await AxiosInstance.post("/candidate/candidate/assign", {
+            list: assignedData,
+         });
          setTimeout(
             () =>
                setPotentialLeadList(

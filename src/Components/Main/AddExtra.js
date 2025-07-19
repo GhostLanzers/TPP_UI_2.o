@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+
 import {
    Card,
    Container,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Autocomplete, TextField, Alert } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import AxiosInstance from "./AxiosInstance";
 
 export default function AddExtras() {
    // STATES HANDLING AND VARIABLES
@@ -33,15 +34,7 @@ export default function AddExtras() {
    React.useEffect(() => {
       const fetchData = async () => {
          try {
-            const extraRes = await axios.get(
-               "https://tpp-backend-9xoz.onrender.com/api/v1/extra/all",
-               {
-                  headers: {
-                     authorization: JSON.parse(localStorage.getItem("user"))
-                        .token,
-                  },
-               }
-            );
+            const extraRes = await AxiosInstance.get("/extra/all");
 
             extraRes.data.forEach(({ _id, data }) => {
                if (_id === "Locations") setLocationList(data);
@@ -54,15 +47,9 @@ export default function AddExtras() {
    }, []);
    const handleLocation = async () => {
       try {
-         const locationdata = await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/locations",
-            { data: [...new Set([...final.location, ...locationList])] },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const locationdata = await AxiosInstance.patch("/extra/locations", {
+            data: [...new Set([...final.location, ...locationList])],
+         });
          setFinal({
             location: [],
             language: [],
@@ -78,15 +65,9 @@ export default function AddExtras() {
    };
    const handleLanguage = async () => {
       try {
-         const langdata = await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/languages",
-            { data: [...new Set([...final.language, ...languageList])] },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const langdata = await AxiosInstance.patch("/extra/languages", {
+            data: [...new Set([...final.language, ...languageList])],
+         });
          setFinal({
             location: [],
             language: [],
@@ -102,19 +83,9 @@ export default function AddExtras() {
    };
    const handleQualification = async () => {
       try {
-         const qualdata = await axios.patch(
-            "https://tpp-backend-9xoz.onrender.com/api/v1/extra/qualifications",
-            {
-               data: [
-                  ...new Set([...final.qualification, ...qualificationList]),
-               ],
-            },
-            {
-               headers: {
-                  authorization: JSON.parse(localStorage.getItem("user")).token,
-               },
-            }
-         );
+         const qualdata = await AxiosInstance.patch("/extra/qualifications", {
+            data: [...new Set([...final.qualification, ...qualificationList])],
+         });
          setFinal({
             location: [],
             language: [],
