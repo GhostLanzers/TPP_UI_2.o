@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
    Button,
    Grid,
@@ -30,34 +30,54 @@ import AxiosInstance from "../Main/AxiosInstance";
 
 export default function CompanyGrid() {
    // STATES HANDLING AND VARIABLES
-   const [open, setOpen] = React.useState(false);
+   const [open, setOpen] = useState(false);
    const { employeeType } = useSelector((state) => state.user);
-   const [tableData, setTableData] = React.useState([]);
+   const [tableData, setTableData] = useState([]);
    const access = !["Recruiter", "Teamlead", "Intern"].includes(employeeType);
-   const [deleteData, setDeleteData] = React.useState({});
+   const [deleteData, setDeleteData] = useState({});
    const [searchParams] = useSearchParams();
-   const gridapi = React.useRef();
-   const [fileName, setFileName] = React.useState(String(new Date()));
-   const [count, setCount] = React.useState(0);
+   const gridapi = useRef();
+   const [fileName, setFileName] = useState(String(new Date()));
+   const [count, setCount] = useState(0);
    const navigate = useNavigate();
 
-   // FUNCTIONS HANDLING AND SEARCH API CALLS
-   React.useEffect(() => {
-      const getData = async ()=>{
-         var url =
-            "/company/companyType" + searchParams.has("companyType")
-               ? "/?companyType=" + searchParams.get("companyType")
-               : "";
+   // Build URL with URLSearchParams
+   const type = searchParams.get("companyType") || "";
+   const paramsObj = {};
+   if (searchParams.has("companyType")) {
+      paramsObj.companyType = searchParams.get("companyType");
+   }
+   const urlParams = new URLSearchParams(paramsObj).toString();
+   const baseUrl = `/company/companyType${urlParams ? "?" + urlParams : ""}`;
 
-         await AxiosInstance
-            .get(url)
-            .then((res) => setTableData(res.data))
-            .catch((err) => {
-               window.alert(err.response.data.message);
+   // AG Grid Infinite Row Model datasource
+   const datasource = {
+      getRows: (params) => {
+         const { startRow, endRow } = params;
+         const limit = endRow - startRow;
+         const page = Math.floor(startRow / limit) + 1;
+
+         AxiosInstance.get(baseUrl, {
+            params: {
+               page: page,
+               limit: limit,
+            },
+         })
+            .then((response) => {
+               const data = response.data;
+               setTableData(data.companies || []); // Keep local state for export functionality
+               params.successCallback(data.companies, data.total);
+            })
+            .catch((error) => {
+               toast.error("Failed to fetch company data");
+               params.failCallback();
             });
-      }
-      
-   }, [searchParams]);
+      },
+   };
+
+   const onGridReady = (params) => {
+      params.api.setDatasource(datasource);
+   };
 
    // NEW BUTTON COLOURS THEME
    const { palette } = createTheme();
@@ -76,49 +96,48 @@ export default function CompanyGrid() {
          headerName: "Actions",
          width: !access ? "200px" : "200px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <Grid container columnSpacing={1}>
-                     <Grid item xs={access ? 4 : 12}>
-                        <IconButton
-                           color="primary"
-                           size="small"
-                           href={`/EditEmpanelled/${props.data._id}?edit=false`}
-                        >
-                           <VisibilityTwoToneIcon />
-                        </IconButton>
-                     </Grid>
-                     {access && (
-                        <>
-                           <Grid item xs={4}>
-                              <IconButton
-                                 size="small"
-                                 color="secondary"
-                                 href={`/EditEmpanelled/${props.data._id}?edit=true`}
-                              >
-                                 <BorderColorTwoToneIcon />
-                              </IconButton>
-                           </Grid>
-                           <Grid item xs={4}>
-                              <IconButton
-                                 size="small"
-                                 color="error"
-                                 onClick={() => {
-                                    setDeleteData({
-                                       name: props.data.companyName,
-                                       id: props.data.companyId,
-                                       _id: props.data._id,
-                                    });
-                                    handleClickOpen();
-                                 }}
-                              >
-                                 <DeleteSweepTwoToneIcon />
-                              </IconButton>
-                           </Grid>
-                        </>
-                     )}
+               <Grid container columnSpacing={1}>
+                  <Grid item xs={access ? 4 : 12}>
+                     <IconButton
+                        color="primary"
+                        size="small"
+                        href={`/EditEmpanelled/${props.data._id}?edit=false`}
+                     >
+                        <VisibilityTwoToneIcon />
+                     </IconButton>
                   </Grid>
-               </>
+                  {access && (
+                     <>
+                        <Grid item xs={4}>
+                           <IconButton
+                              size="small"
+                              color="secondary"
+                              href={`/EditEmpanelled/${props.data._id}?edit=true`}
+                           >
+                              <BorderColorTwoToneIcon />
+                           </IconButton>
+                        </Grid>
+                        <Grid item xs={4}>
+                           <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => {
+                                 setDeleteData({
+                                    name: props.data.companyName,
+                                    id: props.data.companyId,
+                                    _id: props.data._id,
+                                 });
+                                 handleClickOpen();
+                              }}
+                           >
+                              <DeleteSweepTwoToneIcon />
+                           </IconButton>
+                        </Grid>
+                     </>
+                  )}
+               </Grid>
             );
          },
       },
@@ -133,20 +152,20 @@ export default function CompanyGrid() {
          headerName: "HR Name",
          field: "HR.HRName",
          hide: !access,
-         valueFormatter: (p) => p.data.HR.map((hr) => hr.HRName),
+         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HRName).join(", "),
       },
       {
          headerName: "HR Mobile",
          field: "HR.HRMobile",
          hide: !access,
-         valueFormatter: (p) => p.data.HR.map((hr) => hr.HRMobile).flat(1),
+         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HRMobile).flat().join(", "),
          filter: true,
       },
       {
          headerName: "HR Email",
          field: "HR.HREmail",
          hide: !access,
-         valueFormatter: (p) => p.data.HR.map((hr) => hr.HREmail),
+         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HREmail).join(", "),
       },
       { headerName: "Remarks", field: "remarks", hide: !access },
 
@@ -154,20 +173,17 @@ export default function CompanyGrid() {
          headerName: "Status",
          width: "100px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
                <>
                   {props.data.empanelled ? (
-                     <>
-                        <IconButton color="success">
-                           <CheckCircleTwoToneIcon />
-                        </IconButton>
-                     </>
+                     <IconButton color="success">
+                        <CheckCircleTwoToneIcon />
+                     </IconButton>
                   ) : (
-                     <>
-                        <IconButton color="error">
-                           <CancelTwoToneIcon />
-                        </IconButton>
-                     </>
+                     <IconButton color="error">
+                        <CancelTwoToneIcon />
+                     </IconButton>
                   )}
                </>
             );
@@ -178,25 +194,24 @@ export default function CompanyGrid() {
          suppressSizeToFit: true,
          width: "120px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <ThemeProvider theme={theme}>
-                     <Grid item xs={12}>
-                        <Button
-                           color="white"
-                           size="small"
-                           onClick={() =>
-                              navigate(
-                                 "/CandidateGrid?type=CompanyInterviewScheduled&&companyId=" +
-                                    props.data._id
-                              )
-                           }
-                        >
-                           {props.data.inProcess}
-                        </Button>
-                     </Grid>
-                  </ThemeProvider>
-               </>
+               <ThemeProvider theme={theme}>
+                  <Grid item xs={12}>
+                     <Button
+                        color="white"
+                        size="small"
+                        onClick={() =>
+                           navigate(
+                              "/CandidateGrid?type=CompanyInterviewScheduled&&companyId=" +
+                                 props.data._id
+                           )
+                        }
+                     >
+                        {props.data.inProcess || 0}
+                     </Button>
+                  </Grid>
+               </ThemeProvider>
             );
          },
       },
@@ -204,25 +219,24 @@ export default function CompanyGrid() {
          headerName: "Rejected",
          width: "115px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <ThemeProvider theme={theme}>
-                     <Grid item xs={12}>
-                        <Button
-                           color="white"
-                           size="small"
-                           onClick={() =>
-                              navigate(
-                                 "/CandidateGrid?type=Rejects&&companyId=" +
-                                    props.data._id
-                              )
-                           }
-                        >
-                           {props.data.rejected}
-                        </Button>
-                     </Grid>
-                  </ThemeProvider>
-               </>
+               <ThemeProvider theme={theme}>
+                  <Grid item xs={12}>
+                     <Button
+                        color="white"
+                        size="small"
+                        onClick={() =>
+                           navigate(
+                              "/CandidateGrid?type=Rejects&&companyId=" +
+                                 props.data._id
+                           )
+                        }
+                     >
+                        {props.data.rejected || 0}
+                     </Button>
+                  </Grid>
+               </ThemeProvider>
             );
          },
       },
@@ -230,25 +244,24 @@ export default function CompanyGrid() {
          headerName: "Awaiting Joining",
          width: "120px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <ThemeProvider theme={theme}>
-                     <Grid item xs={12}>
-                        <Button
-                           color="white"
-                           size="small"
-                           onClick={() =>
-                              navigate(
-                                 "/CandidateGrid?type=AwaitingJoining&&companyId=" +
-                                    props.data._id
-                              )
-                           }
-                        >
-                           {props.data.awaiting}
-                        </Button>
-                     </Grid>
-                  </ThemeProvider>
-               </>
+               <ThemeProvider theme={theme}>
+                  <Grid item xs={12}>
+                     <Button
+                        color="white"
+                        size="small"
+                        onClick={() =>
+                           navigate(
+                              "/CandidateGrid?type=AwaitingJoining&&companyId=" +
+                                 props.data._id
+                           )
+                        }
+                     >
+                        {props.data.awaiting || 0}
+                     </Button>
+                  </Grid>
+               </ThemeProvider>
             );
          },
       },
@@ -256,25 +269,24 @@ export default function CompanyGrid() {
          headerName: "Offer Drop",
          width: "120px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <ThemeProvider theme={theme}>
-                     <Grid item xs={12}>
-                        <Button
-                           color="white"
-                           size="small"
-                           onClick={() =>
-                              navigate(
-                                 "/CandidateGrid?type=OfferDrop&&companyId=" +
-                                    props.data._id
-                              )
-                           }
-                        >
-                           {props.data.offerDrop}
-                        </Button>
-                     </Grid>
-                  </ThemeProvider>
-               </>
+               <ThemeProvider theme={theme}>
+                  <Grid item xs={12}>
+                     <Button
+                        color="white"
+                        size="small"
+                        onClick={() =>
+                           navigate(
+                              "/CandidateGrid?type=OfferDrop&&companyId=" +
+                                 props.data._id
+                           )
+                        }
+                     >
+                        {props.data.offerDrop || 0}
+                     </Button>
+                  </Grid>
+               </ThemeProvider>
             );
          },
       },
@@ -282,25 +294,24 @@ export default function CompanyGrid() {
          headerName: "Joined",
          width: "100px",
          cellRenderer: (props) => {
+            if (!props.data) return null;
             return (
-               <>
-                  <ThemeProvider theme={theme}>
-                     <Grid item xs={12}>
-                        <Button
-                           color="white"
-                           size="small"
-                           onClick={() =>
-                              navigate(
-                                 "/CandidateGrid?type=joined&&companyId=" +
-                                    props.data._id
-                              )
-                           }
-                        >
-                           {props.data.joined}
-                        </Button>
-                     </Grid>
-                  </ThemeProvider>
-               </>
+               <ThemeProvider theme={theme}>
+                  <Grid item xs={12}>
+                     <Button
+                        color="white"
+                        size="small"
+                        onClick={() =>
+                           navigate(
+                              "/CandidateGrid?type=joined&&companyId=" +
+                                 props.data._id
+                           )
+                        }
+                     >
+                        {props.data.joined || 0}
+                     </Button>
+                  </Grid>
+               </ThemeProvider>
             );
          },
       },
@@ -313,29 +324,28 @@ export default function CompanyGrid() {
       filter: true,
       rowSelection: "multiple",
    };
-   const selection = React.useMemo(() => {
-      return {
-         mode: "multiRow",
-         groupSelects: "descendants",
-      };
-   }, []);
-   const paginationPageSizeSelector = React.useMemo(() => {
-      return [200, 500, 1000];
-   }, []);
+
+   const selection = useMemo(() => ({
+      mode: "multiRow",
+      groupSelects: "descendants",
+   }), []);
+
+   const paginationPageSizeSelector = useMemo(() => [200, 500, 1000], []);
 
    // FUNCTIONS HANDLING
-   const handleClickOpen = () => {
-      setOpen(true);
-   };
-   const handleClose = () => {
-      setOpen(false);
-   };
+   const handleClickOpen = () => setOpen(true);
+   const handleClose = () => setOpen(false);
+
    const handleDelete = async (id) => {
       try {
          await AxiosInstance.delete("/company/" + id);
-         setTableData(tableData.filter((d) => d._id !== id));
+         // Refresh the grid after deletion
+         gridapi.current?.api?.refreshInfiniteCache();
          handleClose();
-      } catch (error) {}
+         toast.success("Company deleted successfully");
+      } catch (error) {
+         toast.error("Failed to delete company");
+      }
    };
 
    //JSX CODE
@@ -372,12 +382,12 @@ export default function CompanyGrid() {
                            return;
                         }
                         for (
-                           var i = 0;
+                           let i = 0;
                            i < Math.min(count, tableData.length);
                            i++
                         ) {
-                           var node = gridapi?.current.api.getRowNode(i);
-                           node.setSelected(true);
+                           const node = gridapi?.current?.api?.getRowNode(i);
+                           if (node) node.setSelected(true);
                         }
                      }}
                   >
@@ -400,7 +410,7 @@ export default function CompanyGrid() {
                      height="100%"
                      gridRef={gridapi}
                      fileName={fileName}
-                  ></ExcelExport>
+                  />
                </Grid>
             </Grid>
             <div
@@ -414,14 +424,18 @@ export default function CompanyGrid() {
             >
                <AgGridReact
                   ref={gridapi}
-                  rowData={tableData}
                   columnDefs={column}
                   defaultColDef={defaultColDef}
+                  rowModelType="infinite"
                   pagination={true}
+                  cacheBlockSize={100}
                   paginationPageSize={100}
                   selection={selection}
                   paginationPageSizeSelector={paginationPageSizeSelector}
                   rowSelection={"multiple"}
+                  onGridReady={onGridReady}
+                  maxConcurrentDatasourceRequests={1}
+                  infiniteInitialRowCount={100}
                />
             </div>
             <Dialog
@@ -474,7 +488,7 @@ export default function CompanyGrid() {
                      Are you Sure that you want to Delete ?
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                     Candidate ID :
+                     Company ID :
                   </Typography>
                   <Typography sx={{ display: "inline" }}>
                      {" "}
@@ -482,7 +496,7 @@ export default function CompanyGrid() {
                   </Typography>
                   <Typography></Typography>
                   <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                     Candidate Name :
+                     Company Name :
                   </Typography>
                   <Typography sx={{ display: "inline" }}>
                      {" "}
