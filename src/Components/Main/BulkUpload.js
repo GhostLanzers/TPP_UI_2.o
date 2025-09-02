@@ -123,135 +123,196 @@ export default function Bulkupload(props) {
       };
       reader.readAsBinaryString(file);
    };
-   const handleCandidateFileUpload = async (e) => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
+const handleCandidateFileUpload = async (e) => {
+   const file = e.target.files[0];
+   const reader = new FileReader();
 
-      reader.onload = async (event) => {
-         const workbook = XLSX.read(event.target.result, { type: "binary" });
-         const sheetName = workbook.SheetNames[0];
-         const sheet = workbook.Sheets[sheetName];
-         const sheetData = XLSX.utils.sheet_to_json(sheet);
-         const data = sheetData.map((sd) => {
-            const {
-               skills = "",
-               language = "",
-               level = "",
-               qualification = "",
-               YOP = "",
-               companyName = "",
-               role = "",
-               startDate,
-               endDate,
-               salary,
-               languageRemark = "",
-               interviewDate,
-               onboardingDate,
-               nextTrackingDate,
-               billingDate,
-               invoiceDate,
-               mobile,
-               email = [""],
-               ...rest
-            } = sd;
-            var languages = language?.split(",");
-            var levels = level?.split(",");
-            var languageRemarks = languageRemark?.split(",");
-            var languages = languages?.map((l, i) => {
-               return {
-                  language: l,
-                  level: levels[i],
-                  remarks: languageRemarks[i],
-               };
-            });
-            const skillList = skills.includes(",") ? skills.split(",") : skills;
-            const newStart = startDate
-               ? new Date(Math.round((startDate - 25569) * 86400 * 1000))
-               : null;
-            const mobileList = String(mobile).includes(", ")
-               ? mobile.split(", ")
-               : mobile;
-            const emailList = email.includes(",") ? email.split(",") : email;
+   reader.onload = async (event) => {
+      const workbook = XLSX.read(event.target.result, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const sheetData = XLSX.utils.sheet_to_json(sheet);
 
-            const newEnd = endDate
-               ? new Date(Math.round((endDate - 25569) * 86400 * 1000))
-               : null;
-            const newInterviewDate = interviewDate
-               ? new Date(Math.round((interviewDate - 25569) * 86400 * 1000))
-               : null;
-            const newOnboardingDate = onboardingDate
-               ? new Date(Math.round((onboardingDate - 25569) * 86400 * 1000))
-               : null;
-            const newNextTrackingDate = nextTrackingDate
-               ? new Date(Math.round((nextTrackingDate - 25569) * 86400 * 1000))
-               : null;
-            const newBillingDate = billingDate
-               ? new Date(Math.round((billingDate - 25569) * 86400 * 1000))
-               : null;
-            const newInvoiceDate = invoiceDate
-               ? new Date(Math.round((invoiceDate - 25569) * 86400 * 1000))
-               : null;
-
-            const exp =
-               newStart !== null && newEnd !== null
-                  ? Math.round(
-                       (newEnd.getTime() - newStart.getTime()) /
-                          1000 /
-                          (60 * 60 * 24) /
-                          365.25,
-                       2
-                    )
-                  : null;
-            var YOPs = YOP.includes(",") ? YOP.split(",") : null;
-            var qualifications = qualification.includes(",")
-               ? qualification.split((v, i) => {
-                    return { qualification: v, YOP: YOPs[i] };
-                 })
-               : [{ qualification: "", YOP: new Date().getFullYear() }];
-            return {
-               ...rest,
-               languages: languages,
-               mobile: mobileList,
-               email: emailList,
-               skills: skillList,
-               qualifications: qualifications,
-               interviewDate: newInterviewDate,
-               onboardingDate: newOnboardingDate,
-               nextTrackingDate: newNextTrackingDate,
-               billingDate: newBillingDate,
-               invoiceDate: newInvoiceDate,
-               experience: {
-                  companyName,
-                  role,
-                  salary,
-                  startDate: newStart,
-                  endDate: newEnd,
-                  experience: exp,
-               },
-               assignedEmployee: userid,
-               createdByEmployee: userid,
-            };
-         });
-
-         const resp = await AxiosInstance.post("/candidate/bulkinsert", data);
-         toast.promise(resp, {
-            pending: "Data is Uploading. Please wait....",
-            success: "Candidate Data Uploaded",
-            error: {
-               render({ data }) {
-                  return (
-                     "Could insert only " +
-                     String(data.response.data.message.result.insertedCount) +
-                     " Rows"
-                  );
-               },
-            },
-         });
-
-         e.target.value = null;
+      // Helper to convert Excel date to JS Date
+      const excelDateToJSDate = (excelDate) => {
+         if (!excelDate) return null;
+         // If already a string, try to parse
+         if (typeof excelDate === "string" && !isNaN(Date.parse(excelDate))) {
+            return new Date(excelDate);
+         }
+         // Excel stores dates as numbers (days since 1899-12-31)
+         return new Date(Math.round((excelDate - 25569) * 86400 * 1000));
       };
-      reader.readAsBinaryString(file);
+
+      const data = sheetData.map((sd, idx) => {
+         // Parse and validate fields
+         const errors = [];
+
+         // Required fields
+         if (
+            !sd.fullName ||
+            typeof sd.fullName !== "string" ||
+            sd.fullName.trim() === ""
+         ) {
+            errors.push("Full Name is required");
+         }
+
+         // Mobile validation
+         let mobileList = [];
+         if (sd.mobile) {
+            mobileList = String(sd.mobile)
+               .split(",")
+               .map((m) => m.trim());
+            if (!mobileList.every((v) => /^[0-9]{10}$/.test(v))) {
+               errors.push("Each mobile must be a 10-digit number");
+            }
+         } else {
+            errors.push("Mobile is required");
+         }
+
+         // Email validation
+         let emailList = [];
+         if (sd.email) {
+            emailList = String(sd.email)
+               .split(",")
+               .map((e) => e.trim());
+            if (!emailList.every((v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))) {
+               errors.push("Invalid email format");
+            }
+         }
+
+         // Skills
+         const skillList = sd.skills
+            ? String(sd.skills)
+                 .split(",")
+                 .map((s) => s.trim())
+            : [];
+
+         // Qualifications
+         let qualifications = [];
+         if (sd.qualification && sd.YOP) {
+            const qualArr = String(sd.qualification).split(",");
+            const yopArr = String(sd.YOP).split(",");
+            qualifications = qualArr.map((q, i) => ({
+               qualification: q.trim(),
+               YOP: yopArr[i] ? yopArr[i].trim() : "",
+            }));
+         }
+
+         // Languages
+         let languages = [];
+         if (sd.language && sd.level) {
+            const langArr = String(sd.language).split(",");
+            const levelArr = String(sd.level).split(",");
+            const remarkArr = sd.languageRemark
+               ? String(sd.languageRemark).split(",")
+               : [];
+            languages = langArr.map((l, i) => ({
+               language: l.trim(),
+               level: levelArr[i] ? levelArr[i].trim() : "Poor",
+               remarks: remarkArr[i] ? remarkArr[i].trim() : "",
+            }));
+         }
+
+         // Experience
+         let experience = [];
+         if (
+            sd.companyName &&
+            sd.role &&
+            sd.salary &&
+            sd.startDate &&
+            sd.endDate
+         ) {
+            experience = [
+               {
+                  companyName: sd.companyName,
+                  role: sd.role,
+                  salary: Number(sd.salary),
+                  startDate: excelDateToJSDate(sd.startDate),
+                  endDate: excelDateToJSDate(sd.endDate),
+                  experience:
+                     sd.startDate && sd.endDate
+                        ? Math.round(
+                             (excelDateToJSDate(sd.endDate).getTime() -
+                                excelDateToJSDate(sd.startDate).getTime()) /
+                                1000 /
+                                (60 * 60 * 24) /
+                                365.25
+                          )
+                        : null,
+               },
+            ];
+         }
+
+         // Date fields
+         const interviewDate = excelDateToJSDate(sd.interviewDate);
+         const onboardingDate = excelDateToJSDate(sd.onboardingDate);
+         const nextTrackingDate = excelDateToJSDate(sd.nextTrackingDate);
+         const billingDate = excelDateToJSDate(sd.billingDate);
+         const invoiceDate = excelDateToJSDate(sd.invoiceDate);
+
+         // Numeric validations
+         if (sd.rate && isNaN(Number(sd.rate))) {
+            errors.push("Rate must be a number");
+         }
+
+         // Final object
+         return {
+            ...sd,
+            errors,
+            languages,
+            mobile: mobileList,
+            email: emailList,
+            skills: skillList,
+            qualifications,
+            interviewDate,
+            onboardingDate,
+            nextTrackingDate,
+            billingDate,
+            invoiceDate,
+            experience,
+            assignedEmployee: userid,
+            createdByEmployee: userid,
+         };
+      });
+
+      // Filter out invalid rows and show errors
+      const invalidRows = data.filter(
+         (row) => row.errors && row.errors.length > 0
+      );
+      if (invalidRows.length > 0) {
+         toast.error(
+            `Validation failed for ${invalidRows.length} row(s):\n` +
+               invalidRows
+                  .map((row, idx) => `Row ${idx + 2}: ${row.errors.join(", ")}`)
+                  .join("\n")
+         );
+         e.target.value = null;
+         return;
+      }
+
+      // Remove errors property before sending to backend
+      const validData = data.map(({ errors, ...rest }) => rest);
+
+      const resp = await AxiosInstance.post("/candidate/bulkinsert", validData);
+      toast.promise(resp, {
+         pending: "Data is Uploading. Please wait....",
+         success: "Candidate Data Uploaded",
+         error: {
+            render({ data }) {
+               return (
+                  "Could insert only " +
+                  String(data.response.data.message.result.insertedCount) +
+                  " Rows"
+               );
+            },
+         },
+      });
+
+      e.target.value = null;
    };
+   reader.readAsBinaryString(file);
+};
 
    //CARDS INLINE CSS
    const cardsStyle = {
@@ -440,35 +501,30 @@ export default function Bulkupload(props) {
                               excelData={[
                                  {
                                     fullName: "",
-                                    mobile: "value1, value2",
-                                    email: "value1,value2",
+                                    mobile: "9876543210,9123456789", // comma separated, 10 digits each
+                                    email: "abc@example.com,xyz@example.com", // comma separated
                                     homeTown: "",
                                     currentCity: "",
-                                    language: "value1,value2",
-                                    level: "value1,value2",
-                                    languageRemark: "value1,value2",
-                                    qualification: "value1,value2",
-                                    YOP: "value1,value2",
-                                    companyName: "",
-                                    role: "",
-                                    salary: "",
-                                    startDate: "",
-                                    endDate: "",
-                                    skills: "",
-                                    l1Assessment: "",
-                                    l2Assessment: "",
+                                    skills: "Java,Python", // comma separated
+                                    qualifications: "B.Tech,2020;M.Tech,2022", // semicolon separated pairs
+                                    languages:
+                                       "English:Good:Remark1,Hindi:Poor:Remark2", // language:level:remark, comma separated
+                                    experience:
+                                       "CompanyA:Developer:50000:2020-01-01:2021-01-01:1", // company:role:salary:start:end:years, comma separated
+                                    companyId: "",
+                                    roleId: "",
+                                    interviewDate: "",
                                     remarks: "",
                                     interviewStatus: "",
                                     select: "",
                                     EMP_ID: "",
                                     onboardingDate: "",
                                     nextTrackingDate: "",
-                                    rate: "",
                                     billingDate: "",
                                     invoiceNumber: "",
                                     invoiceDate: "",
-                                    companyId: "",
-                                    roleId: "",
+                                    l1Assessment: "",
+                                    l2Assessment: "",
                                  },
                               ]}
                               fileName={"Candidate Template"}

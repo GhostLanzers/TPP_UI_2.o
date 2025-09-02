@@ -15,7 +15,7 @@ export default function CompanyDashboard(props) {
 
             if (!res) console.log("Something went wrong");
             var c = {};
-            res.data.forEach((response) => {
+            res.data.data.forEach((response) => {
                c[response._id] = response.count;
             });
             setCounts(c);

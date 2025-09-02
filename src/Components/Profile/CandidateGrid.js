@@ -51,23 +51,102 @@ export default function CandidateGrid() {
    if (searchParams.has("roleId"))
       paramsObj.roleId = searchParams.get("roleId");
    const urlParams = new URLSearchParams(paramsObj).toString();
+   const [loadingToastId, setLoadingToastId] = useState(null);
    const url = `/candidate/data/${type}${urlParams ? "?" + urlParams : ""}`;
    const urlId = `/candidate/dataId/${type}${urlParams ? "?" + urlParams : ""}`;
    useEffect(() => {
       let isMounted = true;
-      const fetchData = async () => {
+      const fetchAllPages = async () => {
+         const startTime = performance.now();
+         const toastId = toast.loading("Loading candidate data...");
+         setLoadingToastId(toastId);
          try {
-            const res = await AxiosInstance.get(url);
-            if (isMounted) setTableData(res.data);
+            // Fetch first page
+            const firstRes = await AxiosInstance.get(url, {
+               params: { page: 1, limit: 1000 },
+            });
+            if (isMounted) setTableData(firstRes.data.candidates);
+
+            // Fetch all pages in background
+            const total = firstRes.data.total;
+            const pageSize = 1000;
+            const totalPages = Math.ceil(total / pageSize);
+
+            let allCandidates = [...firstRes.data.candidates];
+
+            // Start from page 2
+            for (let page = 2; page <= totalPages; page++) {
+               const res = await AxiosInstance.get(url, {
+                  params: { page, limit: pageSize },
+               });
+               allCandidates = allCandidates.concat(res.data.candidates);
+            }
+
+            // After all pages fetched, update tableData
+            if (isMounted) setTableData(allCandidates);
+
+            const endTime = performance.now();
+            const seconds = ((endTime - startTime) / 1000).toFixed(2);
+            toast.update(toastId, {
+               render: `Loaded ${allCandidates.length} candidates in ${seconds} seconds.`,
+               type: "success",
+               isLoading: false,
+               autoClose: 4000,
+            });
          } catch (error) {
-            toast.error("Failed to fetch candidate data");
+            toast.update(toastId, {
+               render: "Failed to fetch candidate data",
+               type: "error",
+               isLoading: false,
+               autoClose: 4000,
+            });
          }
       };
-      fetchData();
+      fetchAllPages();
       return () => {
          isMounted = false;
+         if (loadingToastId) toast.dismiss(loadingToastId);
       };
    }, [url]);
+
+   const handleExcelExport = async () => {
+      const selectedIds = gridapi.current.api
+         .getSelectedRows()
+         .map((row) => row._id);
+      if (selectedIds.length === 0) {
+         toast.error("No Rows selected");
+         return;
+      }
+      const toastId = toast.loading("Exporting Excel...");
+      try {
+         const response = await AxiosInstance.post(
+            "/candidate/excelExport",
+            { ids: selectedIds, name: fileName },
+            { responseType: "blob" }
+         );
+         // Create a link to download the file
+         const url = window.URL.createObjectURL(new Blob([response.data]));
+         const link = document.createElement("a");
+         link.href = url;
+         link.setAttribute("download", `${fileName || "candidates"}.xlsx`);
+         document.body.appendChild(link);
+         link.click();
+         link.remove();
+         toast.update(toastId, {
+            render: "Excel exported successfully!",
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      } catch (error) {
+         toast.update(toastId, {
+            render: "Failed to export Excel",
+            type: "error",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      }
+   };
 
    // GRID HEADER/COLOUMS HANDLING
    const column = [
@@ -266,32 +345,32 @@ export default function CandidateGrid() {
    };
 
    // AG Grid Infinite Row Model datasource
-   const datasource = {
-      getRows: (params) => {
-         const { startRow, endRow } = params;
-         const limit = endRow - startRow;
-         const page = Math.floor(startRow / limit) + 1;
+   // const datasource = {
+   //    getRows: (params) => {
+   //       const { startRow, endRow } = params;
+   //       const limit = endRow - startRow;
+   //       const page = Math.floor(startRow / limit) + 1;
 
-         AxiosInstance.get(url, {
-            params: {
-               page: page,
-               limit: limit,
-            },
-         })
-            .then((response) => {
-               const data = response.data;
+   //       AxiosInstance.get(url, {
+   //          params: {
+   //             page: page,
+   //             limit: limit,
+   //          },
+   //       })
+   //          .then((response) => {
+   //             const data = response.data;
 
-               params.successCallback(data.candidates, data.total);
-            })
-            .catch(() => {
-               params.failCallback();
-            });
-      },
-   };
+   //             params.successCallback(data.candidates, data.total);
+   //          })
+   //          .catch(() => {
+   //             params.failCallback();
+   //          });
+   //    },
+   // };
 
-   const onGridReady = (params) => {
-      params.api.setDatasource(datasource);
-   };
+   // const onGridReady = (params) => {
+   //    params.api.setDatasource(datasource);
+   // };
 
    // JSX CODE
    return (
@@ -354,11 +433,14 @@ export default function CandidateGrid() {
                         />
                      </Grid>
                      <Grid item xs={3.5} md={2}>
-                        <ExcelExport
-                           height="100%"
-                           gridRef={gridapi}
-                           fileName={fileName}
-                        />
+                        <Button
+                           fullWidth
+                           variant="contained"
+                           sx={{ height: "100%" }}
+                           onClick={handleExcelExport}
+                        >
+                           Export Excel
+                        </Button>
                      </Grid>
                   </>
                )}
@@ -374,16 +456,15 @@ export default function CandidateGrid() {
             >
                <AgGridReact
                   ref={gridapi}
+                  rowData={tableData}
                   columnDefs={column}
                   defaultColDef={defaultColDef}
                   pagination={true}
-                  rowModelType="infinite"
                   paginationPageSize={100}
                   selection={selection}
                   cacheBlockSize={100}
                   paginationPageSizeSelector={paginationPageSizeSelector}
                   rowSelection={"multiple"}
-                  onGridReady={onGridReady}
                />
             </div>
             <Dialog

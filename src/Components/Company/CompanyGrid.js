@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
    Button,
    Grid,
@@ -39,6 +39,8 @@ export default function CompanyGrid() {
    const gridapi = useRef();
    const [fileName, setFileName] = useState(String(new Date()));
    const [count, setCount] = useState(0);
+   const [loadingToastId, setLoadingToastId] = useState(null);
+
    const navigate = useNavigate();
 
    // Build URL with URLSearchParams
@@ -51,34 +53,58 @@ export default function CompanyGrid() {
    const baseUrl = `/company/companyType${urlParams ? "?" + urlParams : ""}`;
 
    // AG Grid Infinite Row Model datasource
-   const datasource = {
-      getRows: (params) => {
-         const { startRow, endRow } = params;
-         const limit = endRow - startRow;
-         const page = Math.floor(startRow / limit) + 1;
-
-         AxiosInstance.get(baseUrl, {
-            params: {
-               page: page,
-               limit: limit,
-            },
-         })
-            .then((response) => {
-               const data = response.data;
-               setTableData(data.companies || []); // Keep local state for export functionality
-               params.successCallback(data.companies, data.total);
-            })
-            .catch((error) => {
-               toast.error("Failed to fetch company data");
-               params.failCallback();
+   useEffect(() => {
+      let isMounted = true;
+      const fetchAllPages = async () => {
+         const startTime = performance.now();
+         const toastId = toast.loading("Loading company data...");
+         setLoadingToastId(toastId);
+         try {
+            // Fetch first page
+            const firstRes = await AxiosInstance.get(baseUrl, {
+               params: { page: 1, limit: 100 },
             });
-      },
-   };
+            if (isMounted) setTableData(firstRes.data.companies);
 
-   const onGridReady = (params) => {
-      params.api.setDatasource(datasource);
-   };
+            // Fetch all pages in background
+            const total = firstRes.data.total;
+            const pageSize = 100;
+            const totalPages = Math.ceil(total / pageSize);
 
+            let allCompanies = [...firstRes.data.companies];
+
+            for (let page = 2; page <= totalPages; page++) {
+               const res = await AxiosInstance.get(baseUrl, {
+                  params: { page, limit: pageSize },
+               });
+               allCompanies = allCompanies.concat(res.data.companies);
+            }
+
+            if (isMounted) setTableData(allCompanies);
+
+            const endTime = performance.now();
+            const seconds = ((endTime - startTime) / 1000).toFixed(2);
+            toast.update(toastId, {
+               render: `Loaded ${allCompanies.length} companies in ${seconds} seconds.`,
+               type: "success",
+               isLoading: false,
+               autoClose: 4000,
+            });
+         } catch (error) {
+            toast.update(toastId, {
+               render: "Failed to fetch company data",
+               type: "error",
+               isLoading: false,
+               autoClose: 4000,
+            });
+         }
+      };
+      fetchAllPages();
+      return () => {
+         isMounted = false;
+         if (loadingToastId) toast.dismiss(loadingToastId);
+      };
+   }, [baseUrl]);
    // NEW BUTTON COLOURS THEME
    const { palette } = createTheme();
    const { augmentColor } = palette;
@@ -152,20 +178,25 @@ export default function CompanyGrid() {
          headerName: "HR Name",
          field: "HR.HRName",
          hide: !access,
-         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HRName).join(", "),
+         valueGetter: (params) =>
+            params.data?.HR?.map((hr) => hr.HRName).join(", "),
       },
       {
          headerName: "HR Mobile",
          field: "HR.HRMobile",
          hide: !access,
-         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HRMobile).flat().join(", "),
+         valueGetter: (params) =>
+            params.data?.HR?.map((hr) => hr.HRMobile)
+               .flat()
+               .join(", "),
          filter: true,
       },
       {
          headerName: "HR Email",
          field: "HR.HREmail",
          hide: !access,
-         valueGetter: (params) => params.data?.HR?.map((hr) => hr.HREmail).join(", "),
+         valueGetter: (params) =>
+            params.data?.HR?.map((hr) => hr.HREmail).join(", "),
       },
       { headerName: "Remarks", field: "remarks", hide: !access },
 
@@ -325,10 +356,13 @@ export default function CompanyGrid() {
       rowSelection: "multiple",
    };
 
-   const selection = useMemo(() => ({
-      mode: "multiRow",
-      groupSelects: "descendants",
-   }), []);
+   const selection = useMemo(
+      () => ({
+         mode: "multiRow",
+         groupSelects: "descendants",
+      }),
+      []
+   );
 
    const paginationPageSizeSelector = useMemo(() => [200, 500, 1000], []);
 
@@ -345,6 +379,44 @@ export default function CompanyGrid() {
          toast.success("Company deleted successfully");
       } catch (error) {
          toast.error("Failed to delete company");
+      }
+   };
+   const handleExcelExport = async () => {
+      const selectedIds = gridapi.current.api
+         .getSelectedRows()
+         .map((row) => row._id);
+      if (selectedIds.length === 0) {
+         toast.error("No Rows selected");
+         return;
+      }
+      const toastId = toast.loading("Exporting Excel...");
+      try {
+         const response = await AxiosInstance.post(
+            "/company/excelExport",
+            { ids: selectedIds, name: fileName },
+            { responseType: "blob" }
+         );
+         // Create a link to download the file
+         const url = window.URL.createObjectURL(new Blob([response.data]));
+         const link = document.createElement("a");
+         link.href = url;
+         link.setAttribute("download", `${fileName || "companies"}.xlsx`);
+         document.body.appendChild(link);
+         link.click();
+         link.remove();
+         toast.update(toastId, {
+            render: "Excel exported successfully!",
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      } catch (error) {
+         toast.update(toastId, {
+            render: "Failed to export Excel",
+            type: "error",
+            isLoading: false,
+            autoClose: 4000,
+         });
       }
    };
 
@@ -406,11 +478,14 @@ export default function CompanyGrid() {
                   />
                </Grid>
                <Grid item xs={3.5} md={2}>
-                  <ExcelExport
-                     height="100%"
-                     gridRef={gridapi}
-                     fileName={fileName}
-                  />
+                  <Button
+                     fullWidth
+                     variant="contained"
+                     sx={{ height: "100%" }}
+                     onClick={handleExcelExport}
+                  >
+                     Export Excel
+                  </Button>
                </Grid>
             </Grid>
             <div
@@ -426,14 +501,13 @@ export default function CompanyGrid() {
                   ref={gridapi}
                   columnDefs={column}
                   defaultColDef={defaultColDef}
-                  rowModelType="infinite"
+                  rowData={tableData}
                   pagination={true}
                   cacheBlockSize={100}
                   paginationPageSize={100}
                   selection={selection}
                   paginationPageSizeSelector={paginationPageSizeSelector}
                   rowSelection={"multiple"}
-                  onGridReady={onGridReady}
                   maxConcurrentDatasourceRequests={1}
                   infiniteInitialRowCount={100}
                />

@@ -63,7 +63,7 @@ export default function EditEmpanelled() {
       const fetchData = async () => {
          try {
             const res = await AxiosInstance.get("/company/company/" + id);
-            setCompany(res.data);
+            setCompany(res.data.data);
          } catch (error) {}
       };
       fetchData();
