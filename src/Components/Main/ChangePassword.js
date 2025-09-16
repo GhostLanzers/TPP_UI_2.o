@@ -39,26 +39,34 @@ export default function ChangePassword(props) {
 
    // FUNCTIONS HANDLING AND API POST CALLS
    const handlePasswordChange = async () => {
+      setWarning("");
       if (passwords.new !== passwords.confirm) {
          setWarning("Confirm Password does not match. Please Check");
          return;
       }
       try {
-         const res = await AxiosInstance.patch(
-            "/employee/" + userid + "/password",
-            { ...passwords }
-         );
-         if (res.sucess === false) setWarning(res.message);
-         props.setUser({});
-         localStorage.setItem("user", JSON.stringify({ token: "" }));
-         toast.success("Password Changed Successfully");
-         navigate("/");
+         const res = await AxiosInstance.patch(`/employee/${userid}/password`, {
+            current: passwords.current,
+            new: passwords.new,
+         });
+
+         console.log(res.status);
+         
+         if (res.status.toString()==="200") {
+            
+            localStorage.setItem("user", JSON.stringify({ token: "" }));
+            toast.success("Password Changed Successfully");
+            navigate("/");
+         } else {
+            setWarning("Password change failed. Please try again.");
+         }
       } catch (error) {
-         console.log(error);
-         setWarning(error.response?.data?.message);
+         setWarning(
+            error.response?.data?.message ||
+               "Error: Password change failed. Please try again."
+         );
       }
    };
-
    //JSX CODE
    return (
       <Container
