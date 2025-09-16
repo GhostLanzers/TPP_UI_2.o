@@ -27,6 +27,16 @@ export default function ChangePassword(props) {
       confirm: "",
    });
 
+     // password strength checker
+   const getPasswordStrength = (password) => {
+      if (!password) return "";
+      if (password.length < 6) return "Weak";
+      if (/[A-Z]/.test(password) && /\d/.test(password) && /[@$!%*?&]/.test(password)) {
+         return "Strong";
+      }
+      return "Medium";
+   };
+
    // FUNCTIONS HANDLING AND API POST CALLS
    const handlePasswordChange = async () => {
       if (passwords.new !== passwords.confirm) {
@@ -45,7 +55,7 @@ export default function ChangePassword(props) {
          navigate("/");
       } catch (error) {
          console.log(error);
-         setWarning(error.response.data?.message);
+         setWarning(error.response?.data?.message);
       }
    };
 
@@ -102,6 +112,7 @@ export default function ChangePassword(props) {
                         onChange={(e, v) =>
                            setPasswords({ ...passwords, new: e.target.value })
                         }
+                        helperText={getPasswordStrength(passwords.new) && `Strength: ${getPasswordStrength(passwords.new)}`}
                      />
                   </Grid>
                   <Grid item xs={12} md={6}>
