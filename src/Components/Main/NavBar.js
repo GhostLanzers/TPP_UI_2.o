@@ -217,6 +217,18 @@ export default function NavBar(props) {
                 >
                   Company
                 </Button>
+                <Button
+                  color="inherit"
+                  size="small"
+                  sx={
+                    location.pathname.toLowerCase().includes("company")
+                      ? liveLink
+                      : normalLink
+                  }
+                  onClick={() => navigate("/companydashboard")}
+                >
+                  Institute
+                </Button>
                 {access && (
                   <Button
                     color="inherit"
@@ -231,7 +243,7 @@ export default function NavBar(props) {
                     Account
                   </Button>
                 )}
-                {employeeType === "Admin" && (
+                {/* {employeeType === "Admin" && (
                   <>
                     <Divider orientation="vertical" color="white" flexItem />
                     <Button
@@ -247,15 +259,15 @@ export default function NavBar(props) {
                       Bulk Upload
                     </Button>
                   </>
-                )}
+                )} */}
                 <Divider orientation="vertical" color="white" flexItem />
 
                 {/* Username Button */}
                 <Button
                   color="inherit"
                   sx={{
-                    //maxWidth: { xs: "20vw", sm: "15vw", md: "12vw", lg: "10vw" },
-                    ...(location.pathname
+                    maxWidth: { xs: "20vw", sm: "15vw", md: "12vw", lg: "10vw" },
+                    ...(location.pathname.toLowerCase().includes("bulkupload") || location.pathname.toLowerCase().includes("addextras") || location.pathname
                       .toLowerCase()
                       .includes("changepassword")
                       ? liveLink
@@ -296,6 +308,7 @@ export default function NavBar(props) {
                     Change Password
                   </MenuItem>
                   {employeeType === "Admin" && (
+                  <>
                     <MenuItem
                       onClick={() => navigate("/AddExtras")}
                       sx={{ color: "white" }}
@@ -308,6 +321,19 @@ export default function NavBar(props) {
                       </ListItemIcon>
                       Add Extras
                     </MenuItem>
+                      <MenuItem
+                      onClick={() => navigate("/bulkupload")}
+                      sx={{ color: "white" }}
+                    >
+                      <ListItemIcon>
+                        <GroupAddOutlinedIcon
+                          fontSize="small"
+                          sx={{ color: "white" }}
+                        />
+                      </ListItemIcon>
+                      Bulk Uploads
+                    </MenuItem>
+                  </>
                   )}
                 </Menu>
               </Stack>
