@@ -8,12 +8,9 @@
   min-height: 100vh;
 }
 
-/* ::-webkit-scrollbar {
-  display: none;
-} */
- 
-.dbButton{
-  height: 7vh;
+/* Transparent responsive button cards */
+.dbButton {
+  height: 6vh; /* card/button height */
   background-color: transparent;
   backdrop-filter: blur(70px);
   border-radius: 20px;
@@ -24,10 +21,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 6px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.dbCards{
-  height: 14.5vh;
+.dbButton:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive fix for smaller devices */
+@media (max-width: 600px) {
+  .dbButton {
+    height: 7vh;
+    padding: 0 4px;
+  }
+  .dbButton p,
+  .dbButton span,
+  .dbButton h6 {
+    font-size: 0.7rem !important;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+/* Dashboard cards */
+.dbCards {
+  height: 13vh; /* reduced from 14.5vh */
   background-color: transparent;
   backdrop-filter: blur(70px);
   color: white;
@@ -37,32 +60,7 @@
   border-left-width: 0.5vh;
 }
 
-/* CSS for Dividers to turn white in dark */
-.dw.MuiDialogContent-dividers {
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
-}
-
+/* Hide scrollbar */
 ::-webkit-scrollbar {
   display: none;
-}
-
-/* CSS for MUI TextFields to turn white in dark */
-.tw .MuiOutlinedInput-root {
-  color: white; /* Text color */
-}
-.tw .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: white; /* Unfocused border color */
-}
-.tw .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgb(0, 204, 255); /* Hover border color */
-}
-.tw .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: rgb(0, 204, 255); /* Focused border color */
-}
-.tw .MuiInputLabel-root {
-  color: white; /* Label color */
-}
-.tw .MuiInputLabel-root.Mui-focused {
-  color: rgb(0, 204, 255); /* Focused label color */
 }
