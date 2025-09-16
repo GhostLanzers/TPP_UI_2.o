@@ -43,14 +43,15 @@ export default function ProfileDashboard() {
   return (
     <div style={{ paddingLeft: "1vw", paddingRight: "1vw", paddingTop: "3vh" }}>
       {/* Top Buttons */}
-      <Box sx={{ px: "1vw" }}>
+      <Box sx={{ px: "1vw", paddingBottom: "0.8vh" }}>
         <Grid container spacing={1} sx={{ pt: "6vh" }}>
           <Grid item xs={6} md={3}>
             <div className="dbButton" onClick={() => navigate("AddCandidate")}>
               <Typography
                 variant="subtitle2"
                 color="white"
-                fontWeight="bold"
+                fontWeight="light"
+                letterSpacing={2.5}
                 sx={{
                   fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
                   textAlign: "center",
@@ -68,7 +69,8 @@ export default function ProfileDashboard() {
               <Typography
                 variant="subtitle2"
                 color="white"
-                fontWeight="bold"
+                fontWeight="light"
+                letterSpacing={2.5}
                 sx={{
                   fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
                   textAlign: "center",
@@ -93,7 +95,8 @@ export default function ProfileDashboard() {
                   <Typography
                     variant="subtitle2"
                     color="white"
-                    fontWeight="bold"
+                    fontWeight="light"
+                    letterSpacing={2.5}
                     sx={{
                       fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
                       textAlign: "center",
@@ -116,7 +119,8 @@ export default function ProfileDashboard() {
                   <Typography
                     variant="subtitle2"
                     color="white"
-                    fontWeight="bold"
+                    fontWeight="light"
+                    letterSpacing={2.5}
                     sx={{
                       fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
                       textAlign: "center",
@@ -176,13 +180,13 @@ export default function ProfileDashboard() {
                 <CardContent sx={{ py: 0 }}>
                   <Typography
                     variant="subtitle2"
-                    fontWeight="bold"
+                    fontWeight="light"
                     sx={{
-                      fontSize: { xs: "0.6rem", sm: "0.75rem", md: "0.9rem" },
+                      fontSize: { xs: "0.75rem", sm: "0.85rem", md: "1rem" },
                       whiteSpace: "normal",
                       overflowWrap: "break-word",
                       lineHeight: 1.2,
-                      textAlign: "center",
+                      textAlign: "left",
                     }}
                   >
                     {card.label}
@@ -195,7 +199,7 @@ export default function ProfileDashboard() {
                     variant="h6"
                     sx={{
                       fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.25rem" },
-                      textAlign: "center",
+                      textAlign: "left",
                       fontWeight: "bold",
                     }}
                   >

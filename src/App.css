@@ -35,7 +35,7 @@
 /* Responsive fix for smaller devices */
 @media (max-width: 600px) {
   .dbButton {
-    height: 11vh;
+    height: 7vh;
     padding: 0 4px;
   }
   .dbButton p,

@@ -53,7 +53,9 @@ export default function NavBar(props) {
   const handleClickOpenDrawer = () => setOpenPopDrawer(true);
   const handleClosePopDrawer = () => setOpenPopDrawer(false);
   const handleLogout = () => {
-    dispatch(setUser({ employeeType: "", username: "", userMail: "", userid: "" }));
+    dispatch(
+      setUser({ employeeType: "", username: "", userMail: "", userid: "" })
+    );
     localStorage.setItem("user", JSON.stringify({ token: "" }));
     navigate("/login");
   };
@@ -62,51 +64,109 @@ export default function NavBar(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
 
-  // Live link styling
-  const liveLink = {
+  // Shared link styles
+  const baseLink = {
     fontWeight: "bold",
-    color: "rgb(0, 204, 255)",
-    fontSize: "2.8vh",
-    letterSpacing: "8px",
+    fontSize: { xs: "1.2vh", sm: "1.5vh", md: "1.8vh", lg: "2vh" },
+    letterSpacing: { xs: "1px", sm: "2px", md: "3px", lg: "4px" },
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: { xs: "65px", sm: "120px", md: "180px", lg: "100%" },
   };
-  const normalLink = {
+
+  const liveLink = {
+    ...baseLink,
+    color: "rgb(0, 204, 255)",
     fontWeight: "bold",
+    fontSize: "3vh",
+    textAlign: "center"
+  };
+
+  const normalLink = {
+    ...baseLink,
     color: "white",
-    fontSize: "1.7vh",
+    borderBottom: "none",
+    fontWeight: "light",
   };
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h5" sx={{ my: 2, fontWeight: "bold", color: "white" }}>
+      <Typography
+        variant="h5"
+        sx={{
+          my: 2,
+          fontWeight: "bold",
+          color: "white",
+          fontSize: { xs: "1.5vh", sm: "2vh", md: "2.5vh" },
+          letterSpacing: { xs: "2px", sm: "4px", md: "6px" },
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
         THE PLACEMENT PARK
       </Typography>
       <Divider sx={{ borderColor: "white" }} />
       <Box>
         <Stack direction="column" spacing={2} paddingTop={3}>
-          <Button sx={{ color: "white" }} onClick={() => navigate("/")}>Profile</Button>
-          <Button sx={{ color: "white" }} onClick={() => navigate("companydashboard")}>Company</Button>
-          {access && <Button sx={{ color: "white" }} onClick={() => navigate("accountdashboard")}>Account</Button>}
-          <Button sx={{ color: "white" }} onClick={() => navigate("/ChangePassword")}>Change Password</Button>
-          <Button sx={{ color: "white" }} onClick={handleClickOpenDrawer}>{username}</Button>
+          <Button sx={{ color: "white" }} onClick={() => navigate("/")}>
+            Profile
+          </Button>
+          <Button
+            sx={{ color: "white" }}
+            onClick={() => navigate("companydashboard")}
+          >
+            Company
+          </Button>
+          {access && (
+            <Button
+              sx={{ color: "white" }}
+              onClick={() => navigate("accountdashboard")}
+            >
+              Account
+            </Button>
+          )}
+          <Button
+            sx={{ color: "white" }}
+            onClick={() => navigate("/ChangePassword")}
+          >
+            Change Password
+          </Button>
+          <Button sx={{ color: "white" }} onClick={handleClickOpenDrawer}>
+            {username}
+          </Button>
         </Stack>
       </Box>
     </Box>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <>
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
-        <AppBar sx={{ backgroundColor: alpha("#0B0B0B", 0.7), height: "7vh", justifyContent: "center" }}>
+        <AppBar
+          sx={{
+            backgroundColor: alpha("#0B0B0B", 0.7),
+            height: "7vh",
+            justifyContent: "center",
+          }}
+        >
           <Toolbar>
             <Tooltip title="Open settings">
               <IconButton sx={{ p: 0 }} onClick={handleDrawerToggle}>
-                <Avatar alt="THE PLACEMENT PARK LOGO" src={img} sx={{ width: "max-content" }} />
+                <Avatar
+                  alt="THE PLACEMENT PARK LOGO"
+                  src={img}
+                  sx={{ width: "max-content" }}
+                />
               </IconButton>
             </Tooltip>
 
+            {/* Company Name */}
             <Typography
               variant="h6"
               component="div"
@@ -115,20 +175,32 @@ export default function NavBar(props) {
                 ml: 1,
                 display: { xs: "none", sm: "block" },
                 fontWeight: "bold",
-                fontSize: { sm: "2vh", md: "3vh" },
+                fontSize: { xs: "1.4vh", sm: "2vh", md: "2.5vh", lg: "3vh" },
                 color: "white",
-                letterSpacing: "8px",
+                letterSpacing: { xs: "2px", sm: "4px", md: "6px", lg: "8px" },
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: { xs: "120px", sm: "250px", md: "400px", lg: "100%" },
               }}
             >
               THE PLACEMENT PARK
             </Typography>
 
+            {/* Navbar Links */}
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               <Stack direction="row" spacing={1}>
                 <Button
                   color="inherit"
                   size="small"
-                  sx={location.pathname.toLowerCase().search("candidate") !== -1 || location.pathname.toLowerCase().search("profile") !== -1 || location.pathname.toLowerCase().search("leads") !== -1 || location.pathname === "/" ? liveLink : normalLink}
+                  sx={
+                    location.pathname.toLowerCase().includes("candidate") ||
+                    location.pathname.toLowerCase().includes("profile") ||
+                    location.pathname.toLowerCase().includes("leads") ||
+                    location.pathname === "/"
+                      ? liveLink
+                      : normalLink
+                  }
                   onClick={() => navigate("/")}
                 >
                   Profile
@@ -136,7 +208,11 @@ export default function NavBar(props) {
                 <Button
                   color="inherit"
                   size="small"
-                  sx={location.pathname.toLowerCase().includes("company") ? liveLink : normalLink}
+                  sx={
+                    location.pathname.toLowerCase().includes("company")
+                      ? liveLink
+                      : normalLink
+                  }
                   onClick={() => navigate("/companydashboard")}
                 >
                   Company
@@ -145,7 +221,11 @@ export default function NavBar(props) {
                   <Button
                     color="inherit"
                     size="small"
-                    sx={location.pathname.toLowerCase().includes("account") ? liveLink : normalLink}
+                    sx={
+                      location.pathname.toLowerCase().includes("account")
+                        ? liveLink
+                        : normalLink
+                    }
                     onClick={() => navigate("/accountdashboard")}
                   >
                     Account
@@ -157,7 +237,11 @@ export default function NavBar(props) {
                     <Button
                       color="inherit"
                       size="small"
-                      sx={location.pathname === "/bulkupload" ? liveLink : normalLink}
+                      sx={
+                        location.pathname === "/bulkupload"
+                          ? liveLink
+                          : normalLink
+                      }
                       onClick={() => navigate("/bulkupload")}
                     >
                       Bulk Upload
@@ -165,32 +249,63 @@ export default function NavBar(props) {
                   </>
                 )}
                 <Divider orientation="vertical" color="white" flexItem />
+
+                {/* Username Button */}
                 <Button
                   color="inherit"
+                  sx={{
+                    //maxWidth: { xs: "20vw", sm: "15vw", md: "12vw", lg: "10vw" },
+                    ...(location.pathname
+                      .toLowerCase()
+                      .includes("changepassword")
+                      ? liveLink
+                      : normalLink),
+                  }}
                   endIcon={<KeyboardDoubleArrowDown />}
                   onClick={handleClick}
-                  sx={location.pathname.toLowerCase().includes("changepassword") ? liveLink : normalLink}
                 >
                   {username}
                 </Button>
+
+                {/* Dropdown Menu */}
                 <Menu
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleClose}
                   MenuListProps={{ "aria-labelledby": "settings-button" }}
-                  sx={{ "& .MuiMenu-paper": { color: "white", backgroundColor: alpha("#0B0B0B", 0.9) } }}
+                  sx={{
+                    "& .MuiMenu-paper": {
+                      color: "white",
+                      backgroundColor: alpha("#0B0B0B", 0.9),
+                    },
+                  }}
                 >
                   <MenuItem onClick={handleClickOpen} sx={{ color: "white" }}>
-                    <ListItemIcon><Logout fontSize="small" sx={{ color: "white" }} /></ListItemIcon>
+                    <ListItemIcon>
+                      <Logout fontSize="small" sx={{ color: "white" }} />
+                    </ListItemIcon>
                     Logout
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/ChangePassword")} sx={{ color: "white" }}>
-                    <ListItemIcon><Settings fontSize="small" sx={{ color: "white" }} /></ListItemIcon>
+                  <MenuItem
+                    onClick={() => navigate("/ChangePassword")}
+                    sx={{ color: "white" }}
+                  >
+                    <ListItemIcon>
+                      <Settings fontSize="small" sx={{ color: "white" }} />
+                    </ListItemIcon>
                     Change Password
                   </MenuItem>
                   {employeeType === "Admin" && (
-                    <MenuItem onClick={() => navigate("/AddExtras")} sx={{ color: "white" }}>
-                      <ListItemIcon><GroupAddOutlinedIcon fontSize="small" sx={{ color: "white" }} /></ListItemIcon>
+                    <MenuItem
+                      onClick={() => navigate("/AddExtras")}
+                      sx={{ color: "white" }}
+                    >
+                      <ListItemIcon>
+                        <GroupAddOutlinedIcon
+                          fontSize="small"
+                          sx={{ color: "white" }}
+                        />
+                      </ListItemIcon>
                       Add Extras
                     </MenuItem>
                   )}
@@ -200,6 +315,7 @@ export default function NavBar(props) {
           </Toolbar>
         </AppBar>
 
+        {/* Drawer for Mobile */}
         <nav>
           <Drawer
             container={container}
@@ -209,7 +325,12 @@ export default function NavBar(props) {
             ModalProps={{ keepMounted: true }}
             sx={{
               display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, color: "white", backgroundColor:"transparent" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                color: "white",
+                backgroundColor: "transparent",
+              },
             }}
           >
             {drawer}
@@ -218,36 +339,91 @@ export default function NavBar(props) {
       </Box>
 
       {/* Logout Dialog */}
-      <Dialog open={openpop} onClose={handleClosePop} sx={{ "& .MuiDialog-paper": { backgroundColor: "transparent", backdropFilter: "blur(100px)", color: "white" } }}>
-        <DialogTitle sx={{ p: 2, textTransform: "uppercase", letterSpacing: 6 }}>Logout</DialogTitle>
+      <Dialog
+        open={openpop}
+        onClose={handleClosePop}
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            color: "white",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ p: 2, textTransform: "uppercase", letterSpacing: 6 }}
+        >
+          Logout
+        </DialogTitle>
         <DialogContent dividers>
-          <IconButton aria-label="close" onClick={handleClosePop} sx={{ position: "absolute", right: 8, top: 8, color: "white" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClosePop}
+            sx={{ position: "absolute", right: 8, top: 8, color: "white" }}
+          >
             <CloseIcon />
           </IconButton>
-          <Typography gutterBottom sx={{ wordBreak: "break-word", fontWeight: "bold" }}>
+          <Typography
+            gutterBottom
+            sx={{ wordBreak: "break-word", fontWeight: "bold" }}
+          >
             Hey {username}, confirm your Logout!
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleLogout}>Logout</Button>
-          <Button variant="contained" onClick={handleClosePop}>Cancel</Button>
+          <Button variant="contained" color="error" onClick={handleLogout}>
+            Logout
+          </Button>
+          <Button variant="contained" onClick={handleClosePop}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openpopDrawer} onClose={handleClosePopDrawer} sx={{ "& .MuiDialog-paper": { backgroundColor: "transparent", backdropFilter: "blur(100px)", color: "white" } }}>
-        <DialogTitle sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}>Logout</DialogTitle>
+      {/* Drawer Logout */}
+      <Dialog
+        open={openpopDrawer}
+        onClose={handleClosePopDrawer}
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "transparent",
+            backdropFilter: "blur(100px)",
+            color: "white",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ m: 0, p: 2, textTransform: "uppercase", letterSpacing: 6 }}
+        >
+          Logout
+        </DialogTitle>
         <DialogContent dividers>
-          <IconButton aria-label="close" onClick={handleClosePopDrawer} sx={{ position: "absolute", right: 8, top: 8, color: "white" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClosePopDrawer}
+            sx={{ position: "absolute", right: 8, top: 8, color: "white" }}
+          >
             <CloseIcon />
           </IconButton>
-          {employeeType === "Admin" && <Typography gutterBottom sx={{ wordBreak: "break-word" }}>For Bulk-Upload & Add-Extras use Tab / Laptop.</Typography>}
-          <Typography gutterBottom sx={{ wordBreak: "break-word", fontWeight: "bold" }}>
+          {employeeType === "Admin" && (
+            <Typography gutterBottom sx={{ wordBreak: "break-word" }}>
+              For Bulk-Upload & Add-Extras use Tab / Laptop.
+            </Typography>
+          )}
+          <Typography
+            gutterBottom
+            sx={{ wordBreak: "break-word", fontWeight: "bold" }}
+          >
             Hey {username}, confirm your Logout!
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleLogout}>Logout</Button>
-          <Button variant="contained" onClick={handleClosePopDrawer}>Cancel</Button>
+          <Button variant="contained" color="error" onClick={handleLogout}>
+            Logout
+          </Button>
+          <Button variant="contained" onClick={handleClosePopDrawer}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </>
