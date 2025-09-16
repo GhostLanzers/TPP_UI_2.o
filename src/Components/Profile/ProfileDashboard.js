@@ -182,7 +182,7 @@ export default function ProfileDashboard() {
                     variant="subtitle2"
                     fontWeight="light"
                     sx={{
-                      fontSize: { xs: "0.75rem", sm: "0.85rem", md: "1rem" },
+                      fontSize: { xs: "0.9rem", sm: "0.85rem", md: "1rem" },
                       whiteSpace: "normal",
                       overflowWrap: "break-word",
                       lineHeight: 1.2,
@@ -198,7 +198,7 @@ export default function ProfileDashboard() {
                   <Typography
                     variant="h6"
                     sx={{
-                      fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.25rem" },
+                      fontSize: { xs: "1.15rem", sm: "1.35rem", md: "1.49rem" },
                       textAlign: "left",
                       fontWeight: "bold",
                     }}
