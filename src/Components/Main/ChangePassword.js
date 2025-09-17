@@ -79,13 +79,15 @@ export default function ChangePassword(props) {
             backdropFilter: "blur(5px)",
             minHeight: "7vh",
             color: "white",
+            fontWeight: "bold",
           }}
           title="CHANGE PASSWORD"
           titleTypographyProps={{
             sx: {
               fontSize: { xs: "2vh", sm: "2.4vh", md: "2.8vh" },
-              letterSpacing: "3px",
+              letterSpacing: "4px",
               textAlign: "center",
+              fontWeight: "light",
             },
           }}
         />
@@ -95,7 +97,7 @@ export default function ChangePassword(props) {
               <TextField
                 id="currentPassword"
                 label="Current Password"
-                type="password"
+                type="text"
                 variant="outlined"
                 fullWidth
                 autoComplete="new-password"
@@ -112,7 +114,7 @@ export default function ChangePassword(props) {
               <TextField
                 id="NewPassword"
                 label="New Password"
-                type="password"
+                type="text"
                 variant="outlined"
                 fullWidth
                 autoComplete="new-password"

@@ -64,3 +64,32 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.cardsStyle {
+  height: 13vh;
+  background-color: transparent;
+  backdrop-filter: blur(70px);
+  color: white;
+  border-radius: 16px;
+  border-left-style: solid;
+  border-left-width: 0.4vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 0.8rem;
+  padding-top: 4vh;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.5s ease;
+}
+
+.cardsStyle:hover {
+  transform: translateY(-5px) scale(1.06); /* lift effect */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.1); /* brighten on hover */
+  color: #00FFEF;
+  border-color: #FFF700;
+  border-left-width: 1vh;
+  letter-spacing: 0.5vh;
+}
+

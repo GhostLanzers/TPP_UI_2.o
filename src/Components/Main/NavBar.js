@@ -26,6 +26,7 @@ import { KeyboardDoubleArrowDown } from "@mui/icons-material";
 import Settings from "@mui/icons-material/Settings";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Logout from "@mui/icons-material/Logout";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
@@ -77,10 +78,14 @@ export default function NavBar(props) {
 
   const liveLink = {
     ...baseLink,
-    color: "rgb(0, 204, 255)",
+    //color: "rgb(0, 204, 255)",
+    color: "#00FFEF",
     fontWeight: "bold",
-    fontSize: "3vh",
-    textAlign: "center"
+    fontSize: "2.8vh",
+    letterSpacing: "1vh",
+    transition: "all 0.8s ease",
+    transform: "translateY(-1.2px) scale(1.09)",
+    //textAlign: "center"
   };
 
   const normalLink = {
@@ -156,7 +161,7 @@ export default function NavBar(props) {
           }}
         >
           <Toolbar>
-            <Tooltip title="Open settings">
+            <Tooltip title="Open Developer settings">
               <IconButton sx={{ p: 0 }} onClick={handleDrawerToggle}>
                 <Avatar
                   alt="THE PLACEMENT PARK LOGO"
@@ -221,7 +226,7 @@ export default function NavBar(props) {
                   color="inherit"
                   size="small"
                   sx={
-                    location.pathname.toLowerCase().includes("company")
+                    location.pathname.toLowerCase().includes("institute")
                       ? liveLink
                       : normalLink
                   }
@@ -326,7 +331,7 @@ export default function NavBar(props) {
                       sx={{ color: "white" }}
                     >
                       <ListItemIcon>
-                        <GroupAddOutlinedIcon
+                        <FileUploadIcon
                           fontSize="small"
                           sx={{ color: "white" }}
                         />
