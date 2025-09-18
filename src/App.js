@@ -39,6 +39,7 @@ import AccountGrid from "./Components/Account/AccountGrid";
 import Bulkupload from "./Components/Main/BulkUpload";
 import ChangePassword from "./Components/Main/ChangePassword";
 import AddExtras from "./Components/Main/AddExtra";
+import UnderDevelopment from "./Components/Main/UnderDevelopment";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -95,6 +96,7 @@ function Layout() {
         <Route path="/bulkupload" element={<Bulkupload />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/addextras" element={<AddExtras />} />
+        <Route path="/underdevelopment" element={<UnderDevelopment />} />
 
         {/* Candidate Routes */}
         <Route path="/addcandidate" element={<AddCandidate />} />

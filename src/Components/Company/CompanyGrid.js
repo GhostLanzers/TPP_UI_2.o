@@ -142,7 +142,7 @@ export default function CompanyGrid() {
                         <Grid item xs={4}>
                            <IconButton
                               size="small"
-                              color="secondary"
+                              color="warning"
                               href={`/EditEmpanelled/${props.data._id}?edit=true`}
                            >
                               <BorderColorTwoToneIcon />
@@ -232,7 +232,7 @@ export default function CompanyGrid() {
                      <Grid item xs={12}>
                         <Button
                            color="white"
-                           size="small"
+                           size="large"
                            onClick={() =>
                               navigate(
                                  `/CandidateGrid?type=${

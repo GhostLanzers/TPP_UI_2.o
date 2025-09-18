@@ -60,6 +60,7 @@ export default function CandidateGrid() {
    useEffect(() => {
       let isMounted = true;
       const fetchAllPages = async () => {
+         const startTime = performance.now();
          const toastId = toast.loading("Loading candidate data...");
          setLoadingToastId(toastId);
          try {
@@ -82,9 +83,9 @@ export default function CandidateGrid() {
             }
 
             if (isMounted) setTableData(allCandidates);
-
+            const seconds = ((performance.now() - startTime) / 1000).toFixed(2);
             toast.update(toastId, {
-               render: `Loaded ${allCandidates.length} candidates`,
+               render: `Loaded ${allCandidates.length} candidates in ${seconds} seconds.`,
                type: "success",
                isLoading: false,
                autoClose: 4000,

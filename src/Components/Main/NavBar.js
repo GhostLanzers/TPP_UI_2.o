@@ -28,6 +28,7 @@ import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Logout from "@mui/icons-material/Logout";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from "@mui/icons-material/Close";
+import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined';
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
 import img from "../../Assets/./Park_Logo.png";
@@ -86,7 +87,7 @@ export default function NavBar(props) {
     letterSpacing: "1vh",
     transition: "all 0.8s ease",
     transform: "translateY(-1.2px) scale(1.09)",
-    //textAlign: "center"
+    paddingLeft: "2vw"
   };
 
   const normalLink = {
@@ -167,7 +168,7 @@ export default function NavBar(props) {
                 <Avatar
                   alt="THE PLACEMENT PARK LOGO"
                   src={img}
-                  sx={{ width: "max-content" }}
+                  sx={{ width: "max-content", p: 0.25 }}
                 />
               </IconButton>
             </Tooltip>
@@ -231,7 +232,7 @@ export default function NavBar(props) {
                       ? liveLink
                       : normalLink
                   }
-                  onClick={() => navigate("/companydashboard")}
+                  onClick={() => navigate("/underdevelopment")}
                 >
                   Institute
                 </Button>
@@ -273,7 +274,7 @@ export default function NavBar(props) {
                   color="inherit"
                   sx={{
                     maxWidth: { xs: "20vw", sm: "15vw", md: "12vw", lg: "10vw" },
-                    ...(location.pathname.toLowerCase().includes("bulkupload") || location.pathname.toLowerCase().includes("addextras") || location.pathname
+                    ...(location.pathname.toLowerCase().includes("development") ||location.pathname.toLowerCase().includes("bulkupload") || location.pathname.toLowerCase().includes("addextras") || location.pathname
                       .toLowerCase()
                       .includes("changepassword")
                       ? liveLink
@@ -338,6 +339,18 @@ export default function NavBar(props) {
                         />
                       </ListItemIcon>
                       Bulk Uploads
+                    </MenuItem>
+                      <MenuItem
+                      onClick={() => navigate("/underdevelopment")}
+                      sx={{ color: "white" }}
+                    >
+                      <ListItemIcon>
+                        <AnalyticsOutlinedIcon
+                          fontSize="small"
+                          sx={{ color: "white" }}
+                        />
+                      </ListItemIcon>
+                      Admin Stats
                     </MenuItem>
                   </>
                   )}
