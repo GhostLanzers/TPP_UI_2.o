@@ -93,3 +93,37 @@
   letter-spacing: 0.5vh;
 }
 
+.gridButton {
+  letter-spacing: 1vh;
+  font-weight: light;
+}
+
+/* CSS for Dividers to turn white in dark */
+.dw.MuiDialogContent-dividers {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* CSS for MUI TextFields to turn white in dark */
+.tw .MuiOutlinedInput-root {
+  color: white; /* Text color */
+}
+.tw .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: white; /* Unfocused border color */
+}
+.tw .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #00FFEF; /* Hover border color */
+}
+.tw .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #00FFEF; /* Focused border color */
+}
+.tw .MuiInputLabel-root {
+  color: white; /* Label color */
+}
+.tw .MuiInputLabel-root.Mui-focused {
+  color: #00FFEF; /* Focused label color */
+}
