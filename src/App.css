@@ -127,3 +127,51 @@
 .tw .MuiInputLabel-root.Mui-focused {
   color: #00FFEF; /* Focused label color */
 }
+
+/* Input text */
+.calenderMUI .MuiInputBase-input {
+  color: white !important;
+}
+
+/* Label text */
+.calenderMUI .MuiInputLabel-root {
+  color: white !important;
+}
+
+/* Border - normal */
+.calenderMUI .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+/* Border - hover */
+.calenderMUI:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #00FFEF !important;
+}
+
+/* Border - focus */
+.calenderMUI .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #00FFEF !important;
+}
+
+/* Label - focus */
+.calenderMUI .MuiInputLabel-root.Mui-focused {
+  color: #00FFEF !important;
+}
+
+/* Input text - focus */
+.calenderMUI .MuiInputBase-input:focus {
+  color: white !important;
+}
+
+/* Calendar icon - hover/focus */
+.calenderMUI .MuiSvgIcon-root {
+  color: white !important;
+}
+.calenderMUI:hover .MuiSvgIcon-root,
+.calenderMUI .Mui-focused .MuiSvgIcon-root {
+  color: #00FFEF !important;
+}
+
+
+
+

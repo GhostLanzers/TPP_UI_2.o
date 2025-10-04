@@ -82,9 +82,17 @@ export default function SearchProfile() {
             ...searchParams,
             name: newName,
          });
+
+         // 🔎 log the entire response
+         console.log("Full API Response:", res);
+
+         // 🔎 log only the array of candidates
+         console.log("Candidate Data:", res.data);
          setTableData(res.data);
       } catch (error) {}
    };
+
+   //console.log(assignedEmployee.name);
 
    // GRID HEADER/COLOUMS HANDLING
    const selection = React.useMemo(() => {
@@ -101,7 +109,13 @@ export default function SearchProfile() {
       { headerName: "Candidate Name", field: "fullName" },
       { headerName: "Candidate ID", field: "candidateId" },
       { headerName: "Candidate Number", field: "mobile", sortable: false },
-      { headerName: "Candidate Status", field: "status" },
+      { headerName: "Created By", field:"createdByEmployee"},
+      { headerName: "Created & Assigned Dates", field: "" },
+      { headerName: "L1 Status", field:"l1Assessment"},
+      //{ headerName: "Candidate Status", field: "status" },
+      { headerName: "L1 Status", field:"l1Assessment"},
+      { headerName: "L2 Status", field:"l2Assessment"},
+      { headerName: "Interview Status", field:"interviewStatus"},
       {
          headerName: "Actions",
          width: isAdmin ? "350px" : "250px",

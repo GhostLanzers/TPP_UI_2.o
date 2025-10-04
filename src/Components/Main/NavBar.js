@@ -87,7 +87,7 @@ export default function NavBar(props) {
     letterSpacing: "1vh",
     transition: "all 0.8s ease",
     transform: "translateY(-1.2px) scale(1.09)",
-    paddingLeft: "2vw"
+    paddingLeft: "1vw"
   };
 
   const normalLink = {

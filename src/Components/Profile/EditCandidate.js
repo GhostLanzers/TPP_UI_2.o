@@ -1212,6 +1212,7 @@ export default function EditCandidate() {
                                     className="candidateCompanyEndDate"
                                     sx={{ width: "100%" }}
                                     fullWidth
+                                    format="DD/MM/YYYY"
                                     onChange={(e) => {
                                        setCandidate({
                                           ...candidate,
