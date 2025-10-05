@@ -40,6 +40,7 @@ import Bulkupload from "./Components/Main/BulkUpload";
 import ChangePassword from "./Components/Main/ChangePassword";
 import AddExtras from "./Components/Main/AddExtra";
 import UnderDevelopment from "./Components/Main/UnderDevelopment";
+import InstitueDashboard from "./Components/Institiue/InstitueDashboard";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -113,6 +114,9 @@ function Layout() {
         <Route path="/editempanelled/:id" element={<EditEmpanelled />} />
         <Route path="/addrole/:id" element={<AddRole />} />
         <Route path="/editrole/:companyId/:id" element={<EditRole />} />
+
+        {/* Institue Routes */}
+        <Route path="/instituedashboard" element={<InstitueDashboard />} />
 
         {/* Account Routes */}
         <Route path="/addaccount" element={<AddAccount />} />

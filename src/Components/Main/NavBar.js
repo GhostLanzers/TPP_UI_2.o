@@ -228,11 +228,11 @@ export default function NavBar(props) {
                   color="inherit"
                   size="small"
                   sx={
-                    location.pathname.toLowerCase().includes("institute")
+                    location.pathname.toLowerCase().includes("institue")
                       ? liveLink
                       : normalLink
                   }
-                  onClick={() => navigate("/underdevelopment")}
+                  onClick={() => navigate("/instituedashboard")}
                 >
                   Institute
                 </Button>

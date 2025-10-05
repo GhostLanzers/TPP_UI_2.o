@@ -82,11 +82,7 @@ export default function SearchProfile() {
             ...searchParams,
             name: newName,
          });
-
-         // 🔎 log the entire response
-         console.log("Full API Response:", res);
-
-         // 🔎 log only the array of candidates
+         //log the array of candidates
          console.log("Candidate Data:", res.data);
          setTableData(res.data);
       } catch (error) {}
@@ -110,9 +106,8 @@ export default function SearchProfile() {
       { headerName: "Candidate ID", field: "candidateId" },
       { headerName: "Candidate Number", field: "mobile", sortable: false },
       { headerName: "Created By", field:"createdByEmployee"},
+      { headerName: "Assigned to", field:"assignedEmployee"},
       { headerName: "Created & Assigned Dates", field: "" },
-      { headerName: "L1 Status", field:"l1Assessment"},
-      //{ headerName: "Candidate Status", field: "status" },
       { headerName: "L1 Status", field:"l1Assessment"},
       { headerName: "L2 Status", field:"l2Assessment"},
       { headerName: "Interview Status", field:"interviewStatus"},

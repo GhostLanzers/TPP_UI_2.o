@@ -114,8 +114,8 @@ export default function CompanyDashboard() {
       }}
     >
       {/* Add Company Button */}
-      <Grid container justifyContent="center">
-        <Grid item xs={12} sm={8}>
+      <Grid container spacing={1} justifyContent="center">
+        <Grid item xs={6}>
           <div
             className="dbButton"
             onClick={() => navigate("/addcompany")}
@@ -134,6 +134,24 @@ export default function CompanyDashboard() {
               }}
             >
               ADD COMPANY
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={6} onClick={() => navigate("SearchProfile")}>
+          <div className="dbButton">
+            <Typography
+              variant="subtitle2"
+              color="white"
+              fontWeight="light"
+              letterSpacing={2.5}
+              sx={{
+                fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
+                textAlign: "center",
+                whiteSpace: "normal",
+                lineHeight: 1.2,
+              }}
+            >
+              SEARCH COMPANY
             </Typography>
           </div>
         </Grid>

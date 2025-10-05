@@ -79,7 +79,7 @@ export default function CandidateGrid() {
         const totalPages = Math.ceil(total / pageSize);
 
         let allCandidates = [...firstRes.data.candidates];
-        console.log(allCandidates)
+        console.log(allCandidates);
 
         for (let page = 2; page <= totalPages; page++) {
           const res = await AxiosInstance.get(url, {
@@ -153,13 +153,14 @@ export default function CandidateGrid() {
   const column = [
     {
       headerName: "Actions",
-      width: isAdmin ? "180px" : "150px",
+      width: isAdmin ? 180 : 150,
       field: "assignedEmployee",
+      pinned: "left",
       cellRenderer: (props) => {
         if (!props.data) return null;
         return (
           <Grid container columnSpacing={0}>
-            <Grid item xs={isAdmin ? 4 : 6}>
+            <Grid item xs={isAdmin ? 3 : 4}>
               <IconButton
                 color="primary"
                 size="small"
@@ -168,7 +169,7 @@ export default function CandidateGrid() {
                 <VisibilityTwoToneIcon />
               </IconButton>
             </Grid>
-            <Grid item xs={isAdmin ? 4 : 6}>
+            <Grid item xs={isAdmin ? 3 : 4}>
               <IconButton
                 size="small"
                 color="warning"
@@ -184,8 +185,28 @@ export default function CandidateGrid() {
                 <BorderColorTwoToneIcon />
               </IconButton>
             </Grid>
+            <Grid item xs={isAdmin ? 3 : 4}>
+              <IconButton
+                color="success"
+                size="small"
+                onClick={() => {
+                  setEditData({
+                    name: props.data.fullName,
+                    id: props.data.candidateId,
+                    interviewDate: props.data.interviewDate,
+                    interviewStatus: props.data.interviewStatus,
+                    nextTrackingDate: props.data.nextTrackingDate,
+                    remarks: props.data.remarks,
+                    _id: props.data._id,
+                  });
+                  setEditOpen(true);
+                }}
+              >
+                <EditAttributesTwoToneIcon />
+              </IconButton>
+            </Grid>
             {isAdmin && (
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <IconButton
                   size="small"
                   color="error"
@@ -206,62 +227,44 @@ export default function CandidateGrid() {
         );
       },
     },
-    {
-      headerName: "Quick Actions",
-      width: "140px",
-      cellRenderer: (props) => {
-        return (
-          <>
-            <Grid item xs={isAdmin ? 0 : 12}>
-              <IconButton
-                color="success"
-                size="small"
-                onClick={() => {
-                  setEditData({
-                    name: props.data.fullName,
-                    id: props.data.candidateId,
-                    interviewDate: props.data.interviewDate,
-                    interviewStatus: props.data.interviewStatus,
-                    nextTrackingDate: props.data.nextTrackingDate,
-                    remarks: props.data.remarks,
-                    _id: props.data._id,
-                  });
-                  setEditOpen(true);
-                }}
-              >
-                <EditAttributesTwoToneIcon />
-              </IconButton>
-            </Grid>
-            {/* <Grid container columnSpacing={1}>
-                     <Grid item xs={6}>
-                        <IconButton
-                           aria-label="delete"
-                           color="success"
-                           href={`https://wa.me/${props.data.mobile[0]}`}
-                           target="_blank"
-                        >
-                           <WhatsAppIcon />
-                        </IconButton>
-                     </Grid>
-                     <Grid item xs={6}>
-                        <IconButton aria-label="delete" color="warning">
-                           <CallIcon />
-                        </IconButton>
-                     </Grid>
-                  </Grid> */}
-          </>
-        );
-      },
-    },
+    // {
+    //   headerName: "Contacts",
+    //   width: 140,
+    //   pinned: "right",
+    //   cellRenderer: (props) => {
+    //     return (
+    //       <>
+    //         <Grid container columnSpacing={1}>
+    //           <Grid item xs={6}>
+    //             <IconButton
+    //               aria-label="delete"
+    //               color="success"
+    //               href={`https://wa.me/${props.data.mobile[0]}`}
+    //               target="_blank"
+    //             >
+    //               <WhatsAppIcon />
+    //             </IconButton>
+    //           </Grid>
+    //           <Grid item xs={6}>
+    //             <IconButton aria-label="delete" color="warning">
+    //               <CallIcon />
+    //             </IconButton>
+    //           </Grid>
+    //         </Grid>
+    //       </>
+    //     );
+    //   },
+    // },
     {
       headerName: "Created By",
       field: "createdByEmployee.name",
       headerCheckboxSelection: true,
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
+      width: 200,
     },
     { headerName: "Assigned to", field: "assignedEmployee.name" },
-    { headerName: "Candidate Name", field: "fullName" },
+    { headerName: "Candidate Name", field: "fullName", pinned: "left" },
     { headerName: "Candidate ID", field: "candidateId" },
     { headerName: "Candidate Number", field: "mobile", sortable: false },
     { headerName: "Candidate Email ID", field: "email" },
@@ -404,6 +407,8 @@ export default function CandidateGrid() {
           pagination={true}
           paginationPageSize={100}
           rowSelection="multiple"
+          domLayout="normal"
+          suppressHorizontalScroll={false} // <-- allow scroll
         />
       </div>
 
@@ -559,7 +564,7 @@ export default function CandidateGrid() {
               value={dayjs(editData.interviewDate)}
             />
           </LocalizationProvider>
-                    <LocalizationProvider
+          <LocalizationProvider
             gutterBottom
             dateAdapter={AdapterDayjs}
             fullWidth
