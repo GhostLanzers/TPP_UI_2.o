@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../Main/AxiosInstance";
-
+import { useSelector } from "react-redux";
 export default function CompanyDashboard() {
   const navigate = useNavigate();
   const [counts, setCounts] = useState({});
-
+  const { employeeType } = useSelector((state) => state.user);
+  const access = employeeType ==="Recruiter";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,56 +55,65 @@ export default function CompanyDashboard() {
     },
   };
 
-  const cardItems = [
-    {
-      label: "ALL COMPANIES",
-      color: "#00FFFF",
-      path: "/CompanyGrid",
-      count: Object.values(counts).reduce((a, b) => a + b, 0),
-    },
-    {
-      label: "EMPANELLED",
-      color: "#FF00FF",
-      path: "/CompanyGrid?companyType=Empanelled",
-      count: counts["Empanelled"] || 0,
-    },
-    {
-      label: "NEED TO APPROACH",
-      color: "#FF5C00",
-      path: "/CompanyGrid?companyType=Need to Approach",
-      count: counts["Need to Approach"] || 0,
-    },
-    {
-      label: "IN PROCESS",
-      color: "#FF0000",
-      path: "/CompanyGrid?companyType=In Process",
-      count: counts["In Process"] || 0,
-    },
-    {
-      label: "FUTURE",
-      color: "#00FF00",
-      path: "/CompanyGrid?companyType=Future",
-      count: counts["Future"] || 0,
-    },
-    {
-      label: "NOT INTERESTED",
-      color: "#00FFFF",
-      path: "/CompanyGrid?companyType=Not Intrested",
-      count: counts["Not Intrested"] || 0,
-    },
-    {
-      label: "REJECTED",
-      color: "#FF00FF",
-      path: "/CompanyGrid?companyType=Rejected",
-      count: counts["Rejected"] || 0,
-    },
-    {
-      label: "NO RESPONSE",
-      color: "#FF5C00",
-      path: "/CompanyGrid?companyType=No Response",
-      count: counts["No Response"] || 0,
-    },
-  ];
+  const cardItems = access
+     ? [
+          {
+             label: "EMPANELLED",
+             color: "#FF00FF",
+             path: "/CompanyGrid?companyType=Empanelled",
+             count: counts["Empanelled"] || 0,
+          },
+       ]
+     : [
+          {
+             label: "ALL COMPANIES",
+             color: "#00FFFF",
+             path: "/CompanyGrid",
+             count: Object.values(counts).reduce((a, b) => a + b, 0),
+          },
+          {
+             label: "EMPANELLED",
+             color: "#FF00FF",
+             path: "/CompanyGrid?companyType=Empanelled",
+             count: counts["Empanelled"] || 0,
+          },
+          {
+             label: "NEED TO APPROACH",
+             color: "#FF5C00",
+             path: "/CompanyGrid?companyType=Need to Approach",
+             count: counts["Need to Approach"] || 0,
+          },
+          {
+             label: "IN PROCESS",
+             color: "#FF0000",
+             path: "/CompanyGrid?companyType=In Process",
+             count: counts["In Process"] || 0,
+          },
+          {
+             label: "FUTURE",
+             color: "#00FF00",
+             path: "/CompanyGrid?companyType=Future",
+             count: counts["Future"] || 0,
+          },
+          {
+             label: "NOT INTERESTED",
+             color: "#00FFFF",
+             path: "/CompanyGrid?companyType=Not Intrested",
+             count: counts["Not Intrested"] || 0,
+          },
+          {
+             label: "REJECTED",
+             color: "#FF00FF",
+             path: "/CompanyGrid?companyType=Rejected",
+             count: counts["Rejected"] || 0,
+          },
+          {
+             label: "NO RESPONSE",
+             color: "#FF5C00",
+             path: "/CompanyGrid?companyType=No Response",
+             count: counts["No Response"] || 0,
+          },
+       ];
 
   return (
     <Box
@@ -160,7 +170,7 @@ export default function CompanyDashboard() {
       {/* Cards */}
       <Grid container spacing={3}>
         {cardItems.map((item, index) => (
-          <Grid item xs={12} sm={6} key={index}>
+          <Grid item xs={12} sm={access?12:6} key={index}>
             <Card
               sx={{
                 ...cardsStyle,

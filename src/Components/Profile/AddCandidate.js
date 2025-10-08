@@ -172,7 +172,6 @@ export default function AddCandidate(props) {
          });
          toast.success("Candidate Added Successfully");
          navigate("/");
-         
       } catch (error) {
          console.log(error);
       }
@@ -610,6 +609,7 @@ export default function AddCandidate(props) {
                                  fullWidth
                               >
                                  <DatePicker
+                                    format="DD/MM/YYYY"
                                     label="Year of Passing"
                                     views={["year"]}
                                     sx={{ width: "100%" }}
@@ -823,6 +823,7 @@ export default function AddCandidate(props) {
                                              fullWidth
                                           >
                                              <DatePicker
+                                                format="DD/MM/YYYY"
                                                 label="Start Year"
                                                 className="candidateCompanyStartDate"
                                                 sx={{ width: "100%" }}
@@ -847,6 +848,7 @@ export default function AddCandidate(props) {
                                              fullWidth
                                           >
                                              <DatePicker
+                                                format="DD/MM/YYYY"
                                                 label="End Year"
                                                 className="candidateCompanyEndDate"
                                                 sx={{ width: "100%" }}
@@ -1109,6 +1111,7 @@ export default function AddCandidate(props) {
                                  fullWidth
                               >
                                  <DatePicker
+                                    format="DD/MM/YYYY"
                                     label="Interview Date"
                                     className="candidateCompanyEndDate"
                                     sx={{ width: "100%" }}
@@ -1152,7 +1155,8 @@ export default function AddCandidate(props) {
                         </>
                      )}
                      {["TAC", "GOOD"].includes(candidate.l2Assessment) &&
-                        candidate.interviewStatus === "Select" && (
+                        (candidate.interviewStatus === "Select" ||
+                           candidate.interviewStatus === "Offer Drop") && (
                            <>
                               <Grid item xs={4}>
                                  <TextField
@@ -1189,6 +1193,7 @@ export default function AddCandidate(props) {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Invoice Date"
                                        className="candidateInvoiceDate"
                                        sx={{ width: "100%" }}
@@ -1251,6 +1256,7 @@ export default function AddCandidate(props) {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Billing Date"
                                        className="candidateBillingDate"
                                        sx={{ width: "100%" }}
@@ -1271,6 +1277,7 @@ export default function AddCandidate(props) {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Onboarding Date"
                                        className="candidateonboardingDate"
                                        sx={{ width: "100%" }}
@@ -1298,6 +1305,7 @@ export default function AddCandidate(props) {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Next Tracking Date"
                                        className="candidateNXD"
                                        sx={{ width: "100%" }}

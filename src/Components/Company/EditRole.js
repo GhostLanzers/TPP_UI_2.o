@@ -93,8 +93,9 @@ export default function EditRole() {
                "/company/" + companyId + "/role/" + id
             );
             const extraRes = await AxiosInstance.get("/extra/all");
-            setCompany(res.data);
-            setRole(roleres.data[0]);
+            setCompany(res.data.data);
+            setRole(roleres.data.data[0]);
+            
             extraRes.data.forEach(({ _id, data }) => {
                if (_id === "Skills") setSkillsList(data);
                else if (_id === "Locations") setLocationList(data);

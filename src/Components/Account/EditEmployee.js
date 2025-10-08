@@ -254,6 +254,7 @@ export default function EditEmployee() {
                         }
                      >
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Date Of Birth"
                            fullWidth
                            sx={{ width: "100%" }}
@@ -435,6 +436,7 @@ export default function EditEmployee() {
                         }
                      >
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Date Of Joining"
                            value={dayjs(employee.DOJ)}
                            sx={{ width: "100%" }}

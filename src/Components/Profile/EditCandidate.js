@@ -682,6 +682,7 @@ export default function EditCandidate() {
                                  fullWidth
                               >
                                  <DatePicker
+                                    format="DD/MM/YYYY"
                                     label="Year of Passing"
                                     views={["year"]}
                                     sx={{ width: "100%" }}
@@ -902,6 +903,7 @@ export default function EditCandidate() {
                                              fullWidth
                                           >
                                              <DatePicker
+                                                format="DD/MM/YYYY"
                                                 label="Start Year"
                                                 className="candidateCompanyStartDate"
                                                 sx={{ width: "100%" }}
@@ -927,6 +929,7 @@ export default function EditCandidate() {
                                              fullWidth
                                           >
                                              <DatePicker
+                                                format="DD/MM/YYYY"
                                                 label="End Year"
                                                 className="candidateCompanyEndDate"
                                                 sx={{ width: "100%" }}
@@ -1208,11 +1211,11 @@ export default function EditCandidate() {
                                  fullWidth
                               >
                                  <DatePicker
+                                    format="DD/MM/YYYY"
                                     label="Interview Date"
                                     className="candidateCompanyEndDate"
                                     sx={{ width: "100%" }}
-                                    fullWidth
-                                    format="DD/MM/YYYY"
+                                    fullWidth                                    
                                     onChange={(e) => {
                                        setCandidate({
                                           ...candidate,
@@ -1298,6 +1301,7 @@ export default function EditCandidate() {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Invoice Date"
                                        className="candidateInvoiceDate"
                                        sx={{ width: "100%" }}
@@ -1367,6 +1371,7 @@ export default function EditCandidate() {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Billing Date"
                                        className="candidateBillingDate"
                                        sx={{ width: "100%" }}
@@ -1388,6 +1393,7 @@ export default function EditCandidate() {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Onboarding Date"
                                        className="candidateonboardingDate"
                                        sx={{ width: "100%" }}
@@ -1409,6 +1415,7 @@ export default function EditCandidate() {
                                     fullWidth
                                  >
                                     <DatePicker
+                                       format="DD/MM/YYYY"
                                        label="Next Tracking Date"
                                        className="candidateNXD"
                                        sx={{ width: "100%" }}

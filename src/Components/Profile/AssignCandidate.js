@@ -443,6 +443,7 @@ export default function AssignCandidate() {
                   <Grid item xs={6} md={3}>
                      <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Minimum Year of Passing"
                            views={["year"]}
                            sx={{ width: "100%" }}
@@ -460,6 +461,7 @@ export default function AssignCandidate() {
                   <Grid item xs={6} md={3}>
                      <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Maximum Year of Passing"
                            views={["year"]}
                            sx={{ width: "100%" }}
@@ -667,6 +669,7 @@ export default function AssignCandidate() {
                   <Grid item xs={6} md={3}>
                      <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Minimum Interview Date"
                            className="candidateCompanyEndDate"
                            sx={{ width: "100%" }}
@@ -684,6 +687,7 @@ export default function AssignCandidate() {
                   <Grid item xs={6} md={3}>
                      <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                         <DatePicker
+                           format="DD/MM/YYYY"
                            label="Maximum Interview Date"
                            className="candidateCompanyEndDate"
                            sx={{ width: "100%" }}
