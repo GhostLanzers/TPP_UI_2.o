@@ -41,6 +41,11 @@ import ChangePassword from "./Components/Main/ChangePassword";
 import AddExtras from "./Components/Main/AddExtra";
 import UnderDevelopment from "./Components/Main/UnderDevelopment";
 import InstitueDashboard from "./Components/Institiue/InstitueDashboard";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
+import DailyGrid from "./Components/Admin/DailyGrid";
+import MonthlyGrid from "./Components/Admin/MonthlyGrid";
+import PieChart from "./Components/Admin/PieChart";
+import BusinessGrid from "./Components/Admin/BusinessGrid";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -122,6 +127,13 @@ function Layout() {
         <Route path="/addaccount" element={<AddAccount />} />
         <Route path="/accountgrid" element={<AccountGrid />} />
         <Route path="/editemployee/:id" element={<EditEmployee />} />
+
+        {/* AdminDashboard Routes */}
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/dailygrid" element={<DailyGrid />} />
+        <Route path="/monthlygrid" element={<MonthlyGrid />} />
+        <Route path="/piechart" element={<PieChart />} />
+        <Route path="/businessgrid" element={<BusinessGrid />} />
       </Routes>
     </>
   );

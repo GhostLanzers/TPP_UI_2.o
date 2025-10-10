@@ -172,6 +172,65 @@
   color: #00FFEF !important;
 }
 
+/*Grid Modified CSS*/
+/* target your grid by adding the class "custom-grid" to the wrapper div */
+.custom-grid .ag-root-wrapper {
+  font-size: 0.80rem !important;
+  color: white !important;
+  --ag-font-size: 0.5rem; /* sometimes helps newer AG versions */
+}
+
+/* header */
+.custom-grid .ag-header-cell,
+.custom-grid .ag-header-cell-label,
+.custom-grid .ag-header-cell-text {
+  font-size: 0.95rem !important;
+  line-height: 1 !important;
+  display: flex;
+  align-items: center;
+}
+
+/* compact header height */
+.custom-grid .ag-header-row {
+  height: 32px !important;
+}
+
+/* body cells: center content vertically and reduce padding */
+.custom-grid .ag-cell {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 0.80rem !important;
+  line-height: 1 !important;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* force row height (AG sometimes inlines height; use !important) */
+.custom-grid .ag-center-cols-container .ag-row,
+.custom-grid .ag-row {
+  height: 28px !important;   /* choose 28, 26, 24 — test which you like */
+  min-height: 0 !important;
+}
+
+/* tighten the cell wrapper used for pinned columns, etc. */
+.custom-grid .ag-cell-wrapper {
+  height: 100% !important;
+}
+
+/* make icon buttons smaller and vertically centered */
+.custom-grid .ag-cell .MuiIconButton-root {
+  padding: 4px !important;
+  height: 20px !important;
+  width: 20px !important;
+  align-self: center !important;
+}
+
+/* if you use icons directly */
+.custom-grid .ag-cell svg {
+  font-size: 0.9rem !important;
+}
 
 
 

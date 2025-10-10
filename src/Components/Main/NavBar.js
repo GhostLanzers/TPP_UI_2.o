@@ -29,6 +29,7 @@ import Logout from "@mui/icons-material/Logout";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from "@mui/icons-material/Close";
 import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Assets/Features/User/userSlice";
 import img from "../../Assets/./Park_Logo.png";
@@ -201,6 +202,22 @@ export default function NavBar(props) {
                   color="inherit"
                   size="small"
                   sx={
+                    location.pathname.toLowerCase().includes("month") ||
+                    location.pathname.toLowerCase().includes("pie") ||
+                    location.pathname.toLowerCase().includes("business") ||
+                    location.pathname.toLowerCase().includes("daily") ||
+                    location.pathname === "/"
+                      ? liveLink
+                      : normalLink
+                  }
+                  onClick={() => navigate("/admindashboard")}
+                >
+                  A-D
+                </Button>
+                <Button
+                  color="inherit"
+                  size="small"
+                  sx={
                     location.pathname.toLowerCase().includes("candidate") ||
                     location.pathname.toLowerCase().includes("profile") ||
                     location.pathname.toLowerCase().includes("leads") ||
@@ -274,7 +291,13 @@ export default function NavBar(props) {
                   color="inherit"
                   sx={{
                     maxWidth: { xs: "20vw", sm: "15vw", md: "12vw", lg: "10vw" },
-                    ...(location.pathname.toLowerCase().includes("development") ||location.pathname.toLowerCase().includes("bulkupload") || location.pathname.toLowerCase().includes("addextras") || location.pathname
+                    ...(location.pathname.toLowerCase().includes("development") ||
+                    location.pathname.toLowerCase().includes("bulkupload") ||
+                    location.pathname.toLowerCase().includes("admindashboard") || 
+                    location.pathname.toLowerCase().includes("daily") || 
+                    location.pathname.toLowerCase().includes("monthly") || 
+                    location.pathname.toLowerCase().includes("piechart") || 
+                    location.pathname.toLowerCase().includes("addextras") || location.pathname
                       .toLowerCase()
                       .includes("changepassword")
                       ? liveLink
@@ -316,7 +339,7 @@ export default function NavBar(props) {
                   </MenuItem>
                   {employeeType === "Admin" && (
                   <>
-                    <MenuItem
+                    {/* <MenuItem
                       onClick={() => navigate("/AddExtras")}
                       sx={{ color: "white" }}
                     >
@@ -339,9 +362,21 @@ export default function NavBar(props) {
                         />
                       </ListItemIcon>
                       Bulk Uploads
+                    </MenuItem> */}
+                    <MenuItem
+                      onClick={() => navigate("/admindashboard")}
+                      sx={{ color: "white" }}
+                    >
+                      <ListItemIcon>
+                        <NotificationsActiveOutlinedIcon
+                          fontSize="small"
+                          sx={{ color: "white" }}
+                        />
+                      </ListItemIcon>
+                      Notifications
                     </MenuItem>
-                      <MenuItem
-                      onClick={() => navigate("/underdevelopment")}
+                    <MenuItem
+                      onClick={() => navigate("/admindashboard")}
                       sx={{ color: "white" }}
                     >
                       <ListItemIcon>
@@ -350,7 +385,7 @@ export default function NavBar(props) {
                           sx={{ color: "white" }}
                         />
                       </ListItemIcon>
-                      Admin Stats
+                      Admin Dashboard
                     </MenuItem>
                   </>
                   )}
