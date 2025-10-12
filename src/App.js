@@ -46,6 +46,8 @@ import DailyGrid from "./Components/Admin/DailyGrid";
 import MonthlyGrid from "./Components/Admin/MonthlyGrid";
 import PieChart from "./Components/Admin/PieChart";
 import BusinessGrid from "./Components/Admin/BusinessGrid";
+import PortalUpdates from "./Components/Admin/PortalUpdates";
+import CompanyContributionP1 from "./Components/Admin/CompanyContributionP1";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -134,6 +136,8 @@ function Layout() {
         <Route path="/monthlygrid" element={<MonthlyGrid />} />
         <Route path="/piechart" element={<PieChart />} />
         <Route path="/businessgrid" element={<BusinessGrid />} />
+        <Route path="/portalupdates" element={<PortalUpdates />} />
+        <Route path="/contributionp1" element={<CompanyContributionP1 />} />
       </Routes>
     </>
   );

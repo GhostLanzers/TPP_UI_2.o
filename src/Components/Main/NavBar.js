@@ -24,9 +24,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { KeyboardDoubleArrowDown } from "@mui/icons-material";
 import Settings from "@mui/icons-material/Settings";
-import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Logout from "@mui/icons-material/Logout";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from "@mui/icons-material/Close";
 import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
@@ -80,10 +78,9 @@ export default function NavBar(props) {
 
   const liveLink = {
     ...baseLink,
-    //color: "rgb(0, 204, 255)",
     color: "#00FFEF",
-    fontWeight: "bold",
-    fontSize: { sm: "2.1vh", md: "3vh" },
+    fontWeight: "light",
+    fontSize: { sm: "2.1vh", md: "2.8vh" },
     overflow: "visible",
     letterSpacing: "1vh",
     transition: "all 0.8s ease",
@@ -96,6 +93,7 @@ export default function NavBar(props) {
     color: "white",
     borderBottom: "none",
     fontWeight: "light",
+    fontSize: { sm: "1.5vh", md: "1.8vh" },
   };
 
   const drawer = (
@@ -205,14 +203,13 @@ export default function NavBar(props) {
                     location.pathname.toLowerCase().includes("month") ||
                     location.pathname.toLowerCase().includes("pie") ||
                     location.pathname.toLowerCase().includes("business") ||
-                    location.pathname.toLowerCase().includes("daily") ||
-                    location.pathname === "/"
+                    location.pathname.toLowerCase().includes("daily")
                       ? liveLink
                       : normalLink
                   }
                   onClick={() => navigate("/admindashboard")}
                 >
-                  A-D
+                  Dev
                 </Button>
                 <Button
                   color="inherit"
@@ -267,23 +264,6 @@ export default function NavBar(props) {
                     Account
                   </Button>
                 )}
-                {/* {employeeType === "Admin" && (
-                  <>
-                    <Divider orientation="vertical" color="white" flexItem />
-                    <Button
-                      color="inherit"
-                      size="small"
-                      sx={
-                        location.pathname === "/bulkupload"
-                          ? liveLink
-                          : normalLink
-                      }
-                      onClick={() => navigate("/bulkupload")}
-                    >
-                      Bulk Upload
-                    </Button>
-                  </>
-                )} */}
                 <Divider orientation="vertical" color="white" flexItem />
 
                 {/* Username Button */}
@@ -296,7 +276,9 @@ export default function NavBar(props) {
                     location.pathname.toLowerCase().includes("admindashboard") || 
                     location.pathname.toLowerCase().includes("daily") || 
                     location.pathname.toLowerCase().includes("monthly") || 
-                    location.pathname.toLowerCase().includes("piechart") || 
+                    location.pathname.toLowerCase().includes("piechart") ||
+                    location.pathname.toLowerCase().includes("portalupdates") || 
+                    location.pathname.toLowerCase().includes("contribution") || 
                     location.pathname.toLowerCase().includes("addextras") || location.pathname
                       .toLowerCase()
                       .includes("changepassword")
@@ -339,32 +321,8 @@ export default function NavBar(props) {
                   </MenuItem>
                   {employeeType === "Admin" && (
                   <>
-                    {/* <MenuItem
-                      onClick={() => navigate("/AddExtras")}
-                      sx={{ color: "white" }}
-                    >
-                      <ListItemIcon>
-                        <GroupAddOutlinedIcon
-                          fontSize="small"
-                          sx={{ color: "white" }}
-                        />
-                      </ListItemIcon>
-                      Add Extras
-                    </MenuItem>
-                      <MenuItem
-                      onClick={() => navigate("/bulkupload")}
-                      sx={{ color: "white" }}
-                    >
-                      <ListItemIcon>
-                        <FileUploadIcon
-                          fontSize="small"
-                          sx={{ color: "white" }}
-                        />
-                      </ListItemIcon>
-                      Bulk Uploads
-                    </MenuItem> */}
-                    <MenuItem
-                      onClick={() => navigate("/admindashboard")}
+                  <MenuItem
+                      onClick={() => navigate("/underdevelopment")}
                       sx={{ color: "white" }}
                     >
                       <ListItemIcon>
@@ -374,8 +332,8 @@ export default function NavBar(props) {
                         />
                       </ListItemIcon>
                       Notifications
-                    </MenuItem>
-                    <MenuItem
+                  </MenuItem>
+                  <MenuItem
                       onClick={() => navigate("/admindashboard")}
                       sx={{ color: "white" }}
                     >
@@ -386,7 +344,7 @@ export default function NavBar(props) {
                         />
                       </ListItemIcon>
                       Admin Dashboard
-                    </MenuItem>
+                  </MenuItem>
                   </>
                   )}
                 </Menu>

@@ -9,25 +9,24 @@ export default function AdminDashboard() {
 
   // Common card style (matches employeeDashboard.js)
   const cardsStyle = {
-    minHeight: "9vh",
-    maxHeight: "13vh",
+    minHeight: "6vh",
+    maxHeight: "10vh",
     backgroundColor: "transparent",
     backdropFilter: "blur(70px)",
     color: "white",
-    borderRadius: "16px",
+    borderRadius: "40px",
     borderLeftStyle: "solid",
-    borderLeftWidth: "0.4vh",
+    borderLeftWidth: "0.5vh",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    padding: "1rem 1.2rem",
+    padding: "1rem 2.2rem",
     boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
     transition: "all 0.4s ease",
     cursor: "pointer",
     "&:hover": {
       transform: "translateY(-6px) scale(1.04)",
-      boxShadow: "0 12px 28px rgba(0,0,0,0.35)",
       background: "rgba(255, 255, 255, 0.1)",
       color: "#00FFEF",
       borderColor: "#FFF700",
@@ -67,7 +66,7 @@ export default function AdminDashboard() {
               component="span"
               sx={{
                 color: "#00FFEF",
-                fontWeight: "bold",
+                fontWeight: "light",
                 textTransform: "uppercase",
                 letterSpacing: "0.9vh",
               }}
@@ -82,14 +81,16 @@ export default function AdminDashboard() {
       {/* Button Cards */}
       <Grid container columnSpacing={5} rowSpacing={3} sx={{ paddingTop: "5vh" }}>
         {[
-          { title: "DAILY PERFORMANCE", color: "#FF00FF", path: "/dailygrid?employeeType=Recruiter" },
-          { title: "MONTHLY PERFORMANCE", color: "#00FFFF", path: "/monthlygrid?employeeType=Recruiter" },
-          { title: "BUSINESS PERFORMANCE", color: "#FF5C00", path: "/businessgrid" },
-          { title: "PIE CHARTS", color: "#FF0000", path: "/underdevelopment" },
-          { title: "ANALYSIS", color: "#00FF00", path: "/piechart?type=L1WD" },
-          { title: "BULK UPLOADS", color:"#00FFFF", path: "/bulkupload"},
-          { title: "ADD EXTRAS", color:"#FF00FF", path: "/AddExtras"},
-          { title: "HOME", color:"#FF5C00", path: "/"},
+          { title: "DAILY PERFORMANCE", color: "#FF5C00", path: "/dailygrid?employeeType=Recruiter" },
+          { title: "MONTHLY PERFORMANCE", color: "#FF0000", path: "/monthlygrid?employeeType=Recruiter" },
+          { title: "BUSINESS PERFORMANCE", color: "#00FF00", path: "/businessgrid" },
+          { title: "PORTAL UPDATES", color:"#00FFFF", path: "/portalupdates?employeeType=Recruiter"},
+          { title: "COMPANY CONTRIBUTION 1", color:"#FF00FF", path: "/contributionp1?companyType=Empanelled"},
+          { title: "COMPANY CONTRIBUTION 2", color:"#FF5C00", path: "/underdevelopment"},
+          { title: "BULK UPLOADS", color:"#FF0000", path: "/bulkupload"},
+          { title: "ADD EXTRAS", color:"#00FF00", path: "/AddExtras"},
+          { title: "PIE CHARTS", color: "#00FFFF", path: "/underdevelopment" },
+          { title: "ANALYSIS", color: "#FF00FF", path: "/piechart?type=L1WD" },
         ].map((item, i) => (
           <Grid item xs={12} sm={6} key={i}>
             <Card
@@ -102,8 +103,10 @@ export default function AdminDashboard() {
               <CardContent>
                 <Typography
                   variant="h6"
-                  fontWeight="bold"
+                  fontWeight="light"
+                  marginTop="1vh"
                   align={item.full ? "center" : "left"}
+                  sx={{fontSize: { sm: "2.2vh", md: "2.8vh" }}}
                 >
                   {item.title}
                 </Typography>
