@@ -58,7 +58,7 @@ export default function InstitueDashboard() {
         <Grid container spacing={1} sx={{ pt: "6vh" }}>
           <Grid item xs={12} md={3} />
           <Grid item xs={6} md={3}>
-            <div className="dbButton" onClick={() => navigate("AddCandidate")}>
+            <div className="dbButton" onClick={() => navigate("/addinstitute")}>
               <Typography
                 variant="subtitle2"
                 color="white"
@@ -82,7 +82,7 @@ export default function InstitueDashboard() {
                 item
                 xs={6}
                 md={3}
-                onClick={() => navigate("SearchProfile")}
+                onClick={() => navigate("/underdevelopment")}
               >
                 <div className="dbButton">
                   <Typography
@@ -163,7 +163,7 @@ export default function InstitueDashboard() {
             <Card
               //className="cardsStyle"
               sx={{ ...cardsStyle, borderLeftColor: card.color }}
-              onClick={() => navigate(`/CandidateGrid?type=${card.key}`)}
+              onClick={() => navigate('/underdevelopment')}
             >
               <Box>
                 <CardContent sx={{ py: 0 }}>

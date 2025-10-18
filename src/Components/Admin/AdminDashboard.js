@@ -85,7 +85,7 @@ export default function AdminDashboard() {
           { title: "MONTHLY PERFORMANCE", color: "#FF0000", path: "/monthlygrid?employeeType=Recruiter" },
           { title: "BUSINESS PERFORMANCE", color: "#00FF00", path: "/businessgrid" },
           { title: "PORTAL UPDATES", color:"#00FFFF", path: "/portalupdates?employeeType=Recruiter"},
-          { title: "COMPANY CONTRIBUTION 1", color:"#FF00FF", path: "/contributionp1?companyType=Empanelled"},
+          { title: "COMPANY CONTRIBUTION 1", color:"#FF00FF", path: "/contributionp1?companyType=Not Intrested"},
           { title: "COMPANY CONTRIBUTION 2", color:"#FF5C00", path: "/underdevelopment"},
           { title: "BULK UPLOADS", color:"#FF0000", path: "/bulkupload"},
           { title: "ADD EXTRAS", color:"#00FF00", path: "/AddExtras"},

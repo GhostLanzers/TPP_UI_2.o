@@ -48,6 +48,7 @@ import PieChart from "./Components/Admin/PieChart";
 import BusinessGrid from "./Components/Admin/BusinessGrid";
 import PortalUpdates from "./Components/Admin/PortalUpdates";
 import CompanyContributionP1 from "./Components/Admin/CompanyContributionP1";
+import AddInstitiue from "./Components/Institiue/AddInstitiue";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -123,7 +124,8 @@ function Layout() {
         <Route path="/editrole/:companyId/:id" element={<EditRole />} />
 
         {/* Institue Routes */}
-        <Route path="/instituedashboard" element={<InstitueDashboard />} />
+        <Route path="/institutedashboard" element={<InstitueDashboard />} />
+        <Route path="/addinstitute" element={<AddInstitiue />} />
 
         {/* Account Routes */}
         <Route path="/addaccount" element={<AddAccount />} />
@@ -137,7 +139,7 @@ function Layout() {
         <Route path="/piechart" element={<PieChart />} />
         <Route path="/businessgrid" element={<BusinessGrid />} />
         <Route path="/portalupdates" element={<PortalUpdates />} />
-        <Route path="/contributionp1" element={<CompanyContributionP1 />} />
+        <Route path="/ccontributionp1" element={<CompanyContributionP1 />} />
       </Routes>
     </>
   );

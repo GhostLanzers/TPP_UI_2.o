@@ -89,8 +89,8 @@ export default function EmployeeDashboard() {
       }}
     >
       {/* Add Employee Button */}
-      <Grid container justifyContent="center">
-        <Grid item xs={12} sm={8}>
+      <Grid container spacing={1} justifyContent="center">
+        <Grid item xs={6}>
           <div
             className="dbButton"
             onClick={() => navigate("/addaccount")}
@@ -113,6 +113,32 @@ export default function EmployeeDashboard() {
               }}
             >
               ADD EMPLOYEE
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={6}>
+          <div
+            className="dbButton"
+            onClick={() => navigate("/underdevelopment")}
+            style={{
+              textAlign: "center",
+              marginBottom: "3vh",
+              cursor: "pointer",
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              color="white"
+              fontWeight="light"
+              letterSpacing={2.5}
+              sx={{
+                fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
+                textAlign: "center",
+                whiteSpace: "normal",
+                lineHeight: 1.2,
+              }}
+            >
+              SEARCH EMPLOYEE
             </Typography>
           </div>
         </Grid>

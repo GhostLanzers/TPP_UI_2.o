@@ -147,7 +147,7 @@ export default function CompanyDashboard() {
             </Typography>
           </div>
         </Grid>
-        <Grid item xs={6} onClick={() => navigate("SearchProfile")}>
+        <Grid item xs={6} onClick={() => navigate("/underdevelopment")}>
           <div className="dbButton">
             <Typography
               variant="subtitle2"

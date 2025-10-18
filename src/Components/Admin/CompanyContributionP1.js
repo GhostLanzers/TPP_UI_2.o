@@ -1,14 +1,10 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import {
-  createTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { createTheme, useMediaQuery } from "@mui/material";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import AxiosInstance from "../Main/AxiosInstance";
 
 export default function CompanyContributionP1() {
@@ -20,7 +16,6 @@ export default function CompanyContributionP1() {
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Build URL
-  const type = searchParams.get("companyType") || "";
   const paramsObj = {};
   if (searchParams.has("companyType")) {
     paramsObj.companyType = searchParams.get("companyType");
@@ -81,19 +76,52 @@ export default function CompanyContributionP1() {
     };
   }, [baseUrl]);
 
-  // Column definitions
+  // Dropdown options for months
+  const statusOptions = ["Active", "In-Active", "Hold", "Blacklist", "Rampdown", "Future Connect"];
+
+  // Columns
   const column = [
     {
       headerName: "Company Name",
       field: "companyName",
-      pinned : "left",
+      pinned: "left",
+      sortable: true,
+      width: 220,
     },
+    // Generate 12 month columns dynamically
+    ...[
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ].map((month) => ({
+      headerName: month,
+      field: month.toLowerCase(),
+      editable: true,
+      cellEditor: "agSelectCellEditor",
+      cellEditorParams: {
+        values: statusOptions,
+      },
+      cellStyle: {
+        textAlign: "center",
+      },
+      width: 120,
+    })),
   ];
 
   const defaultColDef = {
     sortable: true,
     editable: false,
     filter: true,
+    resizable: true,
   };
 
   const selection = useMemo(
@@ -107,7 +135,6 @@ export default function CompanyContributionP1() {
 
   return (
     <div style={{ height: "100vh", width: "100vw", paddingTop: "6.5vh" }}>
-
       {/* Grid */}
       <div
         className="ag-theme-quartz-dark custom-grid"
@@ -131,7 +158,7 @@ export default function CompanyContributionP1() {
           rowSelection={"multiple"}
           maxConcurrentDatasourceRequests={1}
           infiniteInitialRowCount={100}
-          rowHeight={28}      // <-- set row height here
+          rowHeight={28}
           headerHeight={35}
         />
       </div>
