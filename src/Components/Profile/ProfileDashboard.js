@@ -243,9 +243,9 @@ export default function ProfileDashboard() {
                   key: "L1L2WrongNumbers",
                },
                {
-                  label: "L1 & L2 BLACKLIST",
+                  label: "BLACKLIST",
                   color: "#00FFFF",
-                  key: "L1L2Blacklist",
+                  key: "Blacklist",
                },
                {
                   label: "BUSINESS TRACKING",

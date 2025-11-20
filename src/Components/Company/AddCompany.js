@@ -61,12 +61,21 @@ export default function AddCompany() {
    const [company, setCompany] = React.useState({
       companyName: "",
       HRName: "",
-      HR: [{ HRName: "", HRMobile: [""], HREmail: "" }],
+      HR: [
+         {
+            HRName: "",
+            HRMobile: [""],
+            HREmail: "",
+            HRDesignation: "",
+            HRLocation: "",
+         },
+      ],
       about: "",
       remarks: "",
       response: "Empanelled",
       empanelled: true,
       companyType: "",
+      paymentTerms:0,
    });
 
    // FUNCTIONS HANDLING AND SEARCH API CALLS
@@ -194,8 +203,15 @@ export default function AddCompany() {
                         )}
                      </TextField>
                   </Grid>
+                  {/* <Grid item xs={12}> */}
                   {company.HR.map((y, j) => {
                      return (
+                        // <Grid
+                        //    container
+                        //    rowSpacing={2}
+                        //    columnSpacing={1}
+                        //    sx={{ padding: "10px" }}
+                        // >
                         <>
                            <Grid item xs={6}>
                               <TextField
@@ -221,6 +237,34 @@ export default function AddCompany() {
                                  onChange={(e) => {
                                     var HRs = [...company.HR];
                                     HRs[j].HREmail = e.target.value;
+                                    setCompany({ ...company, HR: HRs });
+                                 }}
+                              />
+                           </Grid>
+                           <Grid item xs={6}>
+                              <TextField
+                                 id="HRDesignation"
+                                 label="HR Designation"
+                                 variant="outlined"
+                                 fullWidth
+                                 value={y.HRDesignation}
+                                 onChange={(e) => {
+                                    var HRs = [...company.HR];
+                                    HRs[j].HRDesignation = e.target.value;
+                                    setCompany({ ...company, HR: HRs });
+                                 }}
+                              />
+                           </Grid>
+                           <Grid item xs={6}>
+                              <TextField
+                                 id="HRLocation"
+                                 label="HR Location"
+                                 variant="outlined"
+                                 fullWidth
+                                 value={y.HRLocation}
+                                 onChange={(e) => {
+                                    var HRs = [...company.HR];
+                                    HRs[j].HRLocation = e.target.value;
                                     setCompany({ ...company, HR: HRs });
                                  }}
                               />
@@ -336,8 +380,10 @@ export default function AddCompany() {
                               </Grid>
                            )}
                         </>
+                        // </Grid>
                      );
                   })}
+                  {/* </Grid> */}
                   <Grid item xs={12}>
                      <TextField
                         id="about"
@@ -362,7 +408,7 @@ export default function AddCompany() {
                         }
                      />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={4}>
                      <TextField
                         id="response"
                         select
@@ -380,7 +426,22 @@ export default function AddCompany() {
                         ))}
                      </TextField>
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={4}>
+                     <TextField
+                        id="paymentTerms"
+                        label="Payment Terms"
+                        variant="outlined"
+                        fullWidth
+                        value={company.paymentTerms}
+                        onChange={(e) => {
+                           setCompany({
+                              ...company,
+                              paymentTerms: e.target.value,
+                           });
+                        }}
+                     />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
                      <TextField
                         id="empanelled"
                         select

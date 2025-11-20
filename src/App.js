@@ -49,6 +49,8 @@ import BusinessGrid from "./Components/Admin/BusinessGrid";
 import PortalUpdates from "./Components/Admin/PortalUpdates";
 import CompanyContributionP1 from "./Components/Admin/CompanyContributionP1";
 import AddInstitiue from "./Components/Institiue/AddInstitiue";
+import SearchCompany from "./Components/Company/SearchCompany";
+import SearchAccount from "./Components/Account/SearchAccount";
 
 // Create MUI theme with fonts + responsive typography
 let theme = createTheme({
@@ -89,59 +91,64 @@ function Layout() {
   const location = useLocation();
 
   return (
-    <>
-      {location.pathname !== "/login" && (
-        <ProtectedRoute>
-          <NavBar />
-        </ProtectedRoute>
-      )}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        {/* Navigation Bar Routes */}
-        <Route path="/live" element={<EditRole />} />
-        <Route path="/" element={<ProfileDashboard />} />
-        <Route path="/companydashboard" element={<CompanyDashboard />} />
-        <Route path="/accountdashboard" element={<AccountDashboard />} />
-        <Route path="/bulkupload" element={<Bulkupload />} />
-        <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/addextras" element={<AddExtras />} />
-        <Route path="/underdevelopment" element={<UnderDevelopment />} />
+     <>
+        {location.pathname !== "/login" && (
+           <ProtectedRoute>
+              <NavBar />
+           </ProtectedRoute>
+        )}
+        <Routes>
+           <Route path="/login" element={<Login />} />
+           {/* Navigation Bar Routes */}
+           <Route path="/live" element={<EditRole />} />
+           <Route path="/" element={<ProfileDashboard />} />
+           <Route path="/companydashboard" element={<CompanyDashboard />} />
+           <Route path="/accountdashboard" element={<AccountDashboard />} />
+           <Route path="/bulkupload" element={<Bulkupload />} />
+           <Route path="/changepassword" element={<ChangePassword />} />
+           <Route path="/addextras" element={<AddExtras />} />
+           <Route path="/underdevelopment" element={<UnderDevelopment />} />
 
-        {/* Candidate Routes */}
-        <Route path="/addcandidate" element={<AddCandidate />} />
-        <Route path="/candidategrid" element={<CandidateGrid />} />
-        <Route path="/editcandidate/:id" element={<EditCandidate />} />
-        <Route path="/searchprofile" element={<SearchProfile />} />
-        <Route path="/assigncandidate" element={<AssignCandidate />} />
-        <Route path="/assigncandidategrid" element={<AssignCandidateGrid />} />
-        <Route path="/potentialleads" element={<PotentialLeads />} />
+           {/* Candidate Routes */}
+           <Route path="/addcandidate" element={<AddCandidate />} />
+           <Route path="/candidategrid" element={<CandidateGrid />} />
+           <Route path="/editcandidate/:id" element={<EditCandidate />} />
+           <Route path="/searchprofile" element={<SearchProfile />} />
+           <Route path="/assigncandidate" element={<AssignCandidate />} />
+           <Route
+              path="/assigncandidategrid"
+              element={<AssignCandidateGrid />}
+           />
+           <Route path="/potentialleads" element={<PotentialLeads />} />
 
-        {/* Company Routes */}
-        <Route path="/companygrid" element={<CompanyGrid />} />
-        <Route path="/addcompany" element={<AddCompany />} />
-        <Route path="/editempanelled/:id" element={<EditEmpanelled />} />
-        <Route path="/addrole/:id" element={<AddRole />} />
-        <Route path="/editrole/:companyId/:id" element={<EditRole />} />
+           {/* Company Routes */}
+           <Route path="/companygrid" element={<CompanyGrid />} />
+           <Route path="/searchcompany" element={<SearchCompany />} />
+           <Route path="/addcompany" element={<AddCompany />} />
+           <Route path="/editempanelled/:id" element={<EditEmpanelled />} />
+           <Route path="/addrole/:id" element={<AddRole />} />
+           <Route path="/editrole/:companyId/:id" element={<EditRole />} />
 
-        {/* Institue Routes */}
-        <Route path="/institutedashboard" element={<InstitueDashboard />} />
-        <Route path="/addinstitute" element={<AddInstitiue />} />
+           {/* Institue Routes */}
+           <Route path="/institutedashboard" element={<InstitueDashboard />} />
+           <Route path="/addinstitute" element={<AddInstitiue />} />
 
-        {/* Account Routes */}
-        <Route path="/addaccount" element={<AddAccount />} />
-        <Route path="/accountgrid" element={<AccountGrid />} />
-        <Route path="/editemployee/:id" element={<EditEmployee />} />
+           {/* Account Routes */}
+           <Route path="/addaccount" element={<AddAccount />} />
+           <Route path="/searchaccount" element={<SearchAccount />} />
+           <Route path="/accountgrid" element={<AccountGrid />} />
+           <Route path="/editemployee/:id" element={<EditEmployee />} />
 
-        {/* AdminDashboard Routes */}
-        <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/dailygrid" element={<DailyGrid />} />
-        <Route path="/monthlygrid" element={<MonthlyGrid />} />
-        <Route path="/piechart" element={<PieChart />} />
-        <Route path="/businessgrid" element={<BusinessGrid />} />
-        <Route path="/portalupdates" element={<PortalUpdates />} />
-        <Route path="/ccontributionp1" element={<CompanyContributionP1 />} />
-      </Routes>
-    </>
+           {/* AdminDashboard Routes */}
+           <Route path="/admindashboard" element={<AdminDashboard />} />
+           <Route path="/dailygrid" element={<DailyGrid />} />
+           <Route path="/monthlygrid" element={<MonthlyGrid />} />
+           <Route path="/piechart" element={<PieChart />} />
+           <Route path="/businessgrid" element={<BusinessGrid />} />
+           <Route path="/portalupdates" element={<PortalUpdates />} />
+           <Route path="/contributionp1" element={<CompanyContributionP1 />} />
+        </Routes>
+     </>
   );
 }
 

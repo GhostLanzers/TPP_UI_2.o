@@ -27,6 +27,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExcelExport from "../Main/ExcelExport";
 import { flatten } from "flat";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
@@ -267,7 +268,43 @@ export default function AssignCandidateGrid(props) {
          );
       } catch (error) {}
    };
-
+   const handleExcelExport = async () => {
+      const selectedIds = gridapi.current.api
+         .getSelectedRows()
+         .map((row) => row._id);
+      if (selectedIds.length === 0) {
+         toast.error("No Rows selected");
+         return;
+      }
+      const toastId = toast.loading("Exporting Excel...");
+      try {
+         const response = await AxiosInstance.post(
+            "/candidate/excelExport",
+            { ids: selectedIds, name: fileName },
+            { responseType: "blob" }
+         );
+         const url = window.URL.createObjectURL(new Blob([response.data]));
+         const link = document.createElement("a");
+         link.href = url;
+         link.setAttribute("download", `${fileName || "candidates"}.xlsx`);
+         document.body.appendChild(link);
+         link.click();
+         link.remove();
+         toast.update(toastId, {
+            render: "Excel exported successfully!",
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      } catch (error) {
+         toast.update(toastId, {
+            render: "Failed to export Excel",
+            type: "error",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      }
+   };
    //JSX CODE
    return (
       <>
@@ -397,10 +434,15 @@ export default function AssignCandidateGrid(props) {
                         />
                      </Grid>
                      <Grid item xs={4.5} sm={2.5} md={2}>
-                        <ExcelExport
-                           excelData={potentialLeadList.map((l) => flatten(l))}
-                           fileName={fileName}
-                        />
+                        <Button
+                           fullWidth
+                           variant="contained"
+                           color="inherit"
+                           className="gridButton"
+                           onClick={handleExcelExport}
+                        >
+                           Export Excel
+                        </Button>
                      </Grid>
                      <Grid item xs={12}>
                         {warning && (

@@ -28,7 +28,7 @@ import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import AxiosInstance from "../Main/AxiosInstance";
 
-export default function SearchProfile() {
+export default function SearchCompany() {
    // STATES HANDLING AND VARIABLES
    const { employeeType, userid } = useSelector((state) => state.user);
    const empId = userid;

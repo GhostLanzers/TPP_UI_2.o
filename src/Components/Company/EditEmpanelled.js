@@ -50,12 +50,21 @@ export default function EditEmpanelled() {
    const [company, setCompany] = React.useState({
       companyName: "",
       companyType: "",
-      HR: [{ HRName: "", HRMobile: [""], HREmail: "" }],
+      HR: [
+         {
+            HRName: "",
+            HRMobile: [""],
+            HREmail: "",
+            HRDesignation: "",
+            HRLocation: "",
+         },
+      ],
       about: "",
       remarks: "",
       response: "Empanelled",
       empanelled: true,
       roles: [],
+      paymentTerms:0,
    });
 
    // API CALLS HANDLING
@@ -531,6 +540,41 @@ export default function EditEmpanelled() {
                                           }}
                                        />
                                     </Grid>
+                                    <Grid item xs={6}>
+                                       <TextField
+                                          id="HRDesignation"
+                                          label="HR Designation"
+                                          variant="outlined"
+                                          fullWidth
+                                          value={y.HRDesignation}
+                                          onChange={(e) => {
+                                             var HRs = [...company.HR];
+                                             HRs[j].HRDesignation =
+                                                e.target.value;
+                                             setCompany({
+                                                ...company,
+                                                HR: HRs,
+                                             });
+                                          }}
+                                       />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                       <TextField
+                                          id="HRLocation"
+                                          label="HR Location"
+                                          variant="outlined"
+                                          fullWidth
+                                          value={y.HRLocation}
+                                          onChange={(e) => {
+                                             var HRs = [...company.HR];
+                                             HRs[j].HRLocation = e.target.value;
+                                             setCompany({
+                                                ...company,
+                                                HR: HRs,
+                                             });
+                                          }}
+                                       />
+                                    </Grid>
                                     {y.HRMobile.map((x, i) => (
                                        <>
                                           <Grid item xs={editable ? 9 : 12}>
@@ -668,7 +712,7 @@ export default function EditEmpanelled() {
                               );
                            })}
 
-                           <Grid item xs={6}>
+                           <Grid item xs={4}>
                               <TextField
                                  id="empanelled"
                                  select
@@ -695,7 +739,23 @@ export default function EditEmpanelled() {
                                  ))}
                               </TextField>
                            </Grid>
-                           <Grid item xs={6}>
+                           <Grid item xs={4}>
+                              <TextField
+                                 id="paymentTerms"
+                                 label="Payment Terms"
+                                 variant="outlined"
+                                 fullWidth
+                                 value={company.paymentTerms}
+                                 onChange={(e) => {
+                                    
+                                    setCompany({
+                                       ...company,
+                                       paymentTerms: e.target.value,
+                                    });
+                                 }}
+                              />
+                           </Grid>
+                           <Grid item xs={4}>
                               <TextField
                                  id="response"
                                  select
