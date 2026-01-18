@@ -10,9 +10,18 @@ import {
    Button,
    Grid,
    alpha,
+   Table,
+   TableBody,
+   TableCell,
+   TableContainer,
+   TableHead,
+   TableRow,
+   Paper,
+   IconButton,
 } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -75,7 +84,7 @@ export default function AddCompany() {
       response: "Empanelled",
       empanelled: true,
       companyType: "",
-      paymentTerms:0,
+      paymentTerms: 0,
    });
 
    // FUNCTIONS HANDLING AND SEARCH API CALLS
@@ -203,187 +212,357 @@ export default function AddCompany() {
                         )}
                      </TextField>
                   </Grid>
-                  {/* <Grid item xs={12}> */}
-                  {company.HR.map((y, j) => {
-                     return (
-                        // <Grid
-                        //    container
-                        //    rowSpacing={2}
-                        //    columnSpacing={1}
-                        //    sx={{ padding: "10px" }}
-                        // >
-                        <>
-                           <Grid item xs={6}>
-                              <TextField
-                                 id="HRName"
-                                 label="HR Name"
-                                 variant="outlined"
-                                 fullWidth
-                                 value={y.HRName}
-                                 onChange={(e) => {
-                                    var HRs = [...company.HR];
-                                    HRs[j].HRName = e.target.value;
-                                    setCompany({ ...company, HR: HRs });
+                  {/* HR TABLE VIEW */}
+                  <Grid item xs={12}>
+                     <Card
+                        sx={{
+                           borderRadius: "15px",
+                           backgroundColor: "transparent",
+                           marginTop: "2vh",
+                           boxShadow: "none",
+                        }}
+                     >
+                        <CardHeader
+                           title="HR Details"
+                           titleTypographyProps={{
+                              sx: {
+                                 fontSize: "1.2rem",
+                                 fontWeight: 600,
+                                 color: "#333",
+                              },
+                           }}
+                           sx={{
+                              backgroundColor: "transparent",
+                              borderBottom: "2px solid #e0e0e0",
+                              paddingBottom: "1vh",
+                           }}
+                        />
+                        <CardContent>
+                           <TableContainer
+                              component={Paper}
+                              sx={{
+                                 borderRadius: "10px",
+                                 boxShadow: "none",
+                                 backgroundColor: "transparent",
+                              }}
+                           >
+                              <Table
+                                 sx={{
+                                    "& .MuiTableCell-root": {
+                                       backgroundColor: "transparent",
+                                    },
                                  }}
-                              />
-                           </Grid>
-                           <Grid item xs={6}>
-                              <TextField
-                                 id="HREmail"
-                                 label="HR Email ID"
-                                 variant="outlined"
-                                 fullWidth
-                                 value={y.HREmail}
-                                 onChange={(e) => {
-                                    var HRs = [...company.HR];
-                                    HRs[j].HREmail = e.target.value;
-                                    setCompany({ ...company, HR: HRs });
-                                 }}
-                              />
-                           </Grid>
-                           <Grid item xs={6}>
-                              <TextField
-                                 id="HRDesignation"
-                                 label="HR Designation"
-                                 variant="outlined"
-                                 fullWidth
-                                 value={y.HRDesignation}
-                                 onChange={(e) => {
-                                    var HRs = [...company.HR];
-                                    HRs[j].HRDesignation = e.target.value;
-                                    setCompany({ ...company, HR: HRs });
-                                 }}
-                              />
-                           </Grid>
-                           <Grid item xs={6}>
-                              <TextField
-                                 id="HRLocation"
-                                 label="HR Location"
-                                 variant="outlined"
-                                 fullWidth
-                                 value={y.HRLocation}
-                                 onChange={(e) => {
-                                    var HRs = [...company.HR];
-                                    HRs[j].HRLocation = e.target.value;
-                                    setCompany({ ...company, HR: HRs });
-                                 }}
-                              />
-                           </Grid>
-                           {y.HRMobile.map((x, i) => (
-                              <>
-                                 <Grid item xs={9}>
-                                    <TextField
-                                       className="HRMobile"
-                                       type="number"
-                                       label="HR Mobile Number"
-                                       variant="outlined"
-                                       value={x}
-                                       onChange={(e) => {
-                                          if (!/^\d*$/.test(e.target.value))
-                                             toast.warning(
-                                                "Only Number allowed in Mobile"
-                                             );
-                                          handleMobileChange(e, j, i);
+                              >
+                                 <TableHead>
+                                    <TableRow
+                                       sx={{
+                                          backgroundColor: alpha(
+                                             "#0000FF",
+                                             0.1
+                                          ),
+                                          "& th": {
+                                             fontWeight: 700,
+                                             fontSize: "0.95rem",
+                                             color: "#333",
+                                             borderBottom: "2px solid #0000FF",
+                                             padding: "12px",
+                                          },
                                        }}
-                                       onBlur={(e) => {
-                                          if (
-                                             !/^\d{10}$/.test(e.target.value)
-                                          ) {
-                                             if (e.target.value.length === 0)
-                                                return;
-                                             toast.warning(
-                                                "Mobile number should be 10 digits"
-                                             );
-                                             return;
-                                          }
-                                          checkNumber(e.target.value);
-                                       }}
-                                       fullWidth
-                                    />
-                                 </Grid>
-                                 {i === 0 && (
-                                    <Grid item xs={3}>
-                                       <Button
-                                          fullWidth
-                                          margin="normal"
-                                          variant="outlined"
-                                          size="large"
-                                          style={{ height: "100%" }}
-                                          endIcon={<ControlPointIcon />}
-                                          onClick={() => handleAddMobile(j)}
-                                       >
-                                          Add
-                                       </Button>
-                                    </Grid>
-                                 )}
-                                 {i !== 0 && (
-                                    <Grid item xs={3}>
-                                       <Button
-                                          fullWidth
-                                          margin="normal"
-                                          variant="outlined"
-                                          color="error"
-                                          size="large"
-                                          endIcon={<RemoveCircleOutlineIcon />}
-                                          sx={{ height: "100%" }}
-                                          onClick={() => {
-                                             handleRemoveMobile(j, i);
+                                    >
+                                       <TableCell align="center" width="5%">
+                                          Sr. No
+                                       </TableCell>
+                                       <TableCell width="15%">
+                                          HR Name
+                                       </TableCell>
+                                       <TableCell width="20%">Email</TableCell>
+                                       <TableCell width="15%">
+                                          Designation
+                                       </TableCell>
+                                       <TableCell width="15%">
+                                          Location
+                                       </TableCell>
+                                       <TableCell width="20%">
+                                          Mobile Numbers
+                                       </TableCell>
+                                       <TableCell align="center" width="10%">
+                                          Actions
+                                       </TableCell>
+                                    </TableRow>
+                                 </TableHead>
+                                 <TableBody>
+                                    {company.HR.map((y, j) => (
+                                       <TableRow
+                                          key={j}
+                                          sx={{
+                                             backgroundColor:
+                                                j % 2 === 0
+                                                   ? "transparent"
+                                                   : alpha("#000", 0.01),
+                                             "&:hover": {
+                                                backgroundColor: alpha(
+                                                   "#0000FF",
+                                                   0.02
+                                                ),
+                                             },
+                                             borderBottom: "1px solid #e0e0e0",
+                                             "& td": {
+                                                padding: "12px",
+                                             },
                                           }}
                                        >
-                                          Remove
-                                       </Button>
-                                    </Grid>
-                                 )}
-                              </>
-                           ))}
-                           {j === 0 && (
-                              <Grid item xs={12}>
-                                 <Button
-                                    fullWidth
-                                    margin="normal"
-                                    variant="outlined"
-                                    size="large"
-                                    style={{ height: "100%" }}
-                                    endIcon={<ControlPointIcon />}
-                                    onClick={() => {
-                                       const newHR = [
-                                          ...company.HR,
-                                          {
-                                             HRName: "",
-                                             HRMobile: [""],
-                                             HREmail: "",
-                                          },
-                                       ];
-                                       setCompany({ ...company, HR: newHR });
-                                    }}
-                                 >
-                                    Add HR
-                                 </Button>
-                              </Grid>
-                           )}
-                           {j !== 0 && (
-                              <Grid item xs={12}>
-                                 <Button
-                                    fullWidth
-                                    margin="normal"
-                                    variant="outlined"
-                                    color="error"
-                                    size="large"
-                                    endIcon={<RemoveCircleOutlineIcon />}
-                                    sx={{ height: "100%" }}
-                                    onClick={() => {
-                                       handleDeleteHR(j);
-                                    }}
-                                 >
-                                    Remove HR
-                                 </Button>
-                              </Grid>
-                           )}
-                        </>
-                        // </Grid>
-                     );
-                  })}
-                  {/* </Grid> */}
+                                          <TableCell align="center">
+                                             {j + 1}
+                                          </TableCell>
+                                          <TableCell>
+                                             <TextField
+                                                size="small"
+                                                variant="standard"
+                                                fullWidth
+                                                value={y.HRName}
+                                                onChange={(e) => {
+                                                   var HRs = [...company.HR];
+                                                   HRs[j].HRName =
+                                                      e.target.value;
+                                                   setCompany({
+                                                      ...company,
+                                                      HR: HRs,
+                                                   });
+                                                }}
+                                                sx={{
+                                                   "& .MuiInput-underline:before":
+                                                      {
+                                                         borderBottomColor:
+                                                            "undefined",
+                                                      },
+                                                }}
+                                             />
+                                          </TableCell>
+                                          <TableCell>
+                                             <TextField
+                                                size="small"
+                                                variant="standard"
+                                                fullWidth
+                                                value={y.HREmail}
+                                                onChange={(e) => {
+                                                   var HRs = [...company.HR];
+                                                   HRs[j].HREmail =
+                                                      e.target.value;
+                                                   setCompany({
+                                                      ...company,
+                                                      HR: HRs,
+                                                   });
+                                                }}
+                                                sx={{
+                                                   "& .MuiInput-underline:before":
+                                                      {
+                                                         borderBottomColor:
+                                                            "undefined",
+                                                      },
+                                                }}
+                                             />
+                                          </TableCell>
+                                          <TableCell>
+                                             <TextField
+                                                size="small"
+                                                variant="standard"
+                                                fullWidth
+                                                value={y.HRDesignation}
+                                                onChange={(e) => {
+                                                   var HRs = [...company.HR];
+                                                   HRs[j].HRDesignation =
+                                                      e.target.value;
+                                                   setCompany({
+                                                      ...company,
+                                                      HR: HRs,
+                                                   });
+                                                }}
+                                                sx={{
+                                                   "& .MuiInput-underline:before":
+                                                      {
+                                                         borderBottomColor:
+                                                            "undefined",
+                                                      },
+                                                }}
+                                             />
+                                          </TableCell>
+                                          <TableCell>
+                                             <TextField
+                                                size="small"
+                                                variant="standard"
+                                                fullWidth
+                                                value={y.HRLocation}
+                                                onChange={(e) => {
+                                                   var HRs = [...company.HR];
+                                                   HRs[j].HRLocation =
+                                                      e.target.value;
+                                                   setCompany({
+                                                      ...company,
+                                                      HR: HRs,
+                                                   });
+                                                }}
+                                                sx={{
+                                                   "& .MuiInput-underline:before":
+                                                      {
+                                                         borderBottomColor:
+                                                            "undefined",
+                                                      },
+                                                }}
+                                             />
+                                          </TableCell>
+                                          <TableCell>
+                                             <Grid
+                                                container
+                                                spacing={1}
+                                                alignItems="center"
+                                             >
+                                                {y.HRMobile.map((x, i) => (
+                                                   <Grid item xs={8} key={i}>
+                                                      <TextField
+                                                         size="small"
+                                                         type="number"
+                                                         variant="standard"
+                                                         fullWidth
+                                                         value={x}
+                                                         onChange={(e) => {
+                                                            if (
+                                                               !/^\d*$/.test(
+                                                                  e.target.value
+                                                               )
+                                                            )
+                                                               toast.warning(
+                                                                  "Only numbers allowed"
+                                                               );
+                                                            handleMobileChange(
+                                                               e,
+                                                               j,
+                                                               i
+                                                            );
+                                                         }}
+                                                         onBlur={(e) => {
+                                                            if (
+                                                               !/^\d{10}$/.test(
+                                                                  e.target.value
+                                                               )
+                                                            ) {
+                                                               if (
+                                                                  e.target.value
+                                                                     .length ===
+                                                                  0
+                                                               )
+                                                                  return;
+                                                               toast.warning(
+                                                                  "Mobile number should be 10 digits"
+                                                               );
+                                                               return;
+                                                            }
+                                                            checkNumber(
+                                                               e.target.value
+                                                            );
+                                                         }}
+                                                         sx={{
+                                                            "& .MuiInput-underline:before":
+                                                               {
+                                                                  borderBottomColor:
+                                                                     "undefined",
+                                                               },
+                                                         }}
+                                                      />
+                                                   </Grid>
+                                                ))}
+                                                <Grid item xs={2}>
+                                                   <IconButton
+                                                      size="small"
+                                                      color="primary"
+                                                      onClick={() =>
+                                                         handleAddMobile(j)
+                                                      }
+                                                   >
+                                                      <ControlPointIcon />
+                                                   </IconButton>
+                                                </Grid>
+                                                {y.HRMobile.length > 1 && (
+                                                   <Grid item xs={2}>
+                                                      <IconButton
+                                                         size="small"
+                                                         color="error"
+                                                         onClick={() =>
+                                                            handleRemoveMobile(
+                                                               j,
+                                                               y.HRMobile
+                                                                  .length - 1
+                                                            )
+                                                         }
+                                                      >
+                                                         <RemoveCircleOutlineIcon />
+                                                      </IconButton>
+                                                   </Grid>
+                                                )}
+                                             </Grid>
+                                          </TableCell>
+                                          <TableCell align="center">
+                                             <IconButton
+                                                size="small"
+                                                color="error"
+                                                onClick={() => {
+                                                   if (
+                                                      company.HR.length === 1
+                                                   ) {
+                                                      toast.warning(
+                                                         "At least one HR is required"
+                                                      );
+                                                      return;
+                                                   }
+                                                   const newHR =
+                                                      company.HR.filter(
+                                                         (_, i) => i !== j
+                                                      );
+                                                   setCompany({
+                                                      ...company,
+                                                      HR: newHR,
+                                                   });
+                                                }}
+                                             >
+                                                <DeleteSweepTwoToneIcon />
+                                             </IconButton>
+                                          </TableCell>
+                                       </TableRow>
+                                    ))}
+                                 </TableBody>
+                              </Table>
+                           </TableContainer>
+                           <Button
+                              fullWidth
+                              variant="contained"
+                              startIcon={<ControlPointIcon />}
+                              onClick={() => {
+                                 const newHR = [
+                                    ...company.HR,
+                                    {
+                                       HRName: "",
+                                       HRMobile: [""],
+                                       HREmail: "",
+                                       HRDesignation: "",
+                                       HRLocation: "",
+                                    },
+                                 ];
+                                 setCompany({
+                                    ...company,
+                                    HR: newHR,
+                                 });
+                              }}
+                              sx={{
+                                 marginTop: "2vh",
+                                 backgroundColor: alpha("#0000FF", 0.6),
+                                 padding: "10px 20px",
+                                 fontWeight: 600,
+                              }}
+                           >
+                              Add New HR
+                           </Button>
+                        </CardContent>
+                     </Card>
+                  </Grid>
                   <Grid item xs={12}>
                      <TextField
                         id="about"

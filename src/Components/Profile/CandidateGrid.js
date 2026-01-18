@@ -42,6 +42,8 @@ dayjs.extend(utc);
 export default function CandidateGrid() {
    const [open, setOpen] = useState(false);
    const [deleteData, setDeleteData] = useState({});
+   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+   const [selectedIds, setSelectedIds] = useState([]);
    const { employeeType, userid } = useSelector((state) => state.user);
    const rtAccess = [
       "Recruiter",
@@ -127,6 +129,43 @@ export default function CandidateGrid() {
          setEditData(candidateData.data);
          setEditOpen(true);
       } catch (error) {}
+   };
+
+   const handleBulkDelete = () => {
+      const ids = gridapi.current.api.getSelectedRows().map((row) => row._id);
+      if (ids.length === 0) {
+         toast.error("No Rows selected");
+         return;
+      }
+      setSelectedIds(ids);
+      setBulkDeleteOpen(true);
+   };
+
+   const confirmBulkDelete = async () => {
+      const toastId = toast.loading("Deleting candidates...");
+      try {
+         await AxiosInstance.post("/candidate/bulkDelete", {
+            ids: selectedIds,
+         });
+         setTableData((prev) =>
+            prev.filter((d) => !selectedIds.includes(d._id))
+         );
+         toast.update(toastId, {
+            render: `Successfully deleted ${selectedIds.length} candidate(s)`,
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+         });
+         setBulkDeleteOpen(false);
+         setSelectedIds([]);
+      } catch (error) {
+         toast.update(toastId, {
+            render: "Failed to delete candidates",
+            type: "error",
+            isLoading: false,
+            autoClose: 4000,
+         });
+      }
    };
 
    const handleExcelExport = async () => {
@@ -396,6 +435,19 @@ export default function CandidateGrid() {
                      Export Excel
                   </Button>
                </Grid>
+               {isAdmin && (
+                  <Grid item xs={12} sm={3} md={2}>
+                     <Button
+                        fullWidth
+                        variant="contained"
+                        color="error"
+                        className="gridButton"
+                        onClick={handleBulkDelete}
+                     >
+                        Bulk Delete
+                     </Button>
+                  </Grid>
+               )}
             </Grid>
          )}
 
@@ -633,12 +685,10 @@ export default function CandidateGrid() {
                   sx={{ backgroundColor: alpha("#00FF00", 0.6) }}
                   onClick={async () => {
                      try {
-                        
                         const updatedCandidateRes = await AxiosInstance.patch(
                            "/candidate/" + editData._id,
                            {
                               ...editData,
-                             
                            }
                         );
                         const addedRemarks = await AxiosInstance.post(
@@ -671,6 +721,71 @@ export default function CandidateGrid() {
                   variant="contained"
                   size="large"
                   onClick={() => setEditOpen(false)}
+               >
+                  Cancel
+               </Button>
+            </DialogActions>
+         </Dialog>
+
+         {/* Bulk Delete Dialog */}
+         <Dialog
+            open={bulkDeleteOpen}
+            onClose={() => setBulkDeleteOpen(false)}
+            sx={{
+               backgroundColor: "transparent",
+               "& .MuiDialog-paper": {
+                  backgroundColor: "transparent",
+                  backdropFilter: "blur(2px)",
+                  boxShadow: "none",
+                  color: "white",
+               },
+            }}
+         >
+            <DialogTitle
+               sx={{
+                  textTransform: "uppercase",
+                  letterSpacing: 6,
+               }}
+            >
+               Confirm Bulk Delete
+            </DialogTitle>
+            <IconButton
+               aria-label="close"
+               onClick={() => setBulkDeleteOpen(false)}
+               sx={{
+                  position: "absolute",
+                  right: 8,
+                  top: 8,
+                  color: (theme) => theme.palette.grey[500],
+               }}
+            >
+               <CloseIcon />
+            </IconButton>
+            <DialogContent dividers className="dw">
+               <Typography gutterBottom sx={{ fontWeight: "bold" }}>
+                  Are you sure you want to delete {selectedIds.length}{" "}
+                  candidate(s)?
+               </Typography>
+               <Typography
+                  sx={{ fontWeight: "bold", marginTop: "1vh", color: "red" }}
+               >
+                  This action cannot be undone.
+               </Typography>
+            </DialogContent>
+            <DialogActions>
+               <Button
+                  variant="contained"
+                  size="large"
+                  color="error"
+                  sx={{ backgroundColor: alpha("#FF0000", 0.7) }}
+                  onClick={confirmBulkDelete}
+               >
+                  Delete All
+               </Button>
+               <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => setBulkDeleteOpen(false)}
                >
                   Cancel
                </Button>

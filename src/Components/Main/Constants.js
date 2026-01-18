@@ -101,6 +101,7 @@ export const SELECT_STATUS = [
    "BGV Reject-Post",
    "Tenure-Source Conflict",
    "Billed & Tracking",
+   "Tracking & NR"
 ];
 export const LANGUAGE_LEVEL = [
    "Poor",
