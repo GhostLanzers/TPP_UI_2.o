@@ -148,7 +148,7 @@ export default function CandidateGrid() {
             ids: selectedIds,
          });
          setTableData((prev) =>
-            prev.filter((d) => !selectedIds.includes(d._id))
+            prev.filter((d) => !selectedIds.includes(d._id)),
          );
          toast.update(toastId, {
             render: `Successfully deleted ${selectedIds.length} candidate(s)`,
@@ -181,7 +181,7 @@ export default function CandidateGrid() {
          const response = await AxiosInstance.post(
             "/candidate/excelExport",
             { ids: selectedIds, name: fileName },
-            { responseType: "blob" }
+            { responseType: "blob" },
          );
          const url = window.URL.createObjectURL(new Blob([response.data]));
          const link = document.createElement("a");
@@ -234,8 +234,8 @@ export default function CandidateGrid() {
                            !rtAccess
                               ? false
                               : props.data.assignedEmployee === empId
-                              ? true
-                              : false
+                                ? true
+                                : false
                         }
                      >
                         <BorderColorTwoToneIcon />
@@ -453,9 +453,9 @@ export default function CandidateGrid() {
 
          {/* AG Grid */}
          <div
-            className="ag-theme-quartz-dark"
+            className="ag-theme-quartz-dark custom-grid"
             style={{
-               marginTop: "1vh",
+               marginTop: rtAccess ? "10vh" : "1vh",
                marginLeft: isSmall ? "1%" : "0.2%",
                height: "84vh",
                width: isSmall ? "98%" : "99.6%",
@@ -539,7 +539,7 @@ export default function CandidateGrid() {
                      AxiosInstance.delete("/candidate/" + deleteData._id)
                         .then(() => {
                            setTableData((prev) =>
-                              prev.filter((d) => d._id !== deleteData._id)
+                              prev.filter((d) => d._id !== deleteData._id),
                            );
                            toast.success("Candidate deleted successfully");
                         })
@@ -595,13 +595,13 @@ export default function CandidateGrid() {
             </IconButton>
             <DialogContent dividers className="dw">
                <Typography gutterBottom sx={{ fontWeight: "bold" }}>
-                  Candidate ID : <span>{editData.id}</span>
+                  Candidate ID : <span>{editData.candidateId}</span>
                </Typography>
                <Typography
                   gutterBottom
                   sx={{ fontWeight: "bold", marginBottom: "4vh" }}
                >
-                  Candidate Name : <span>{editData.name}</span>
+                  Candidate Name : <span>{editData.fullName}</span>
                </Typography>
 
                <TextField
@@ -689,7 +689,7 @@ export default function CandidateGrid() {
                            "/candidate/" + editData._id,
                            {
                               ...editData,
-                           }
+                           },
                         );
                         const addedRemarks = await AxiosInstance.post(
                            "/remarks",
@@ -697,15 +697,15 @@ export default function CandidateGrid() {
                               remarks: remarks,
                               employeeId: userid,
                               candidateId: editData._id,
-                           }
+                           },
                         );
                         const updatedCandidateData = updatedCandidateRes.data;
                         setTableData((prev) =>
                            prev.map((d) =>
                               d._id === updatedCandidateData._id
                                  ? { ...d, ...updatedCandidateData }
-                                 : d
-                           )
+                                 : d,
+                           ),
                         );
                         toast.success("Candidate updated successfully");
                      } catch (error) {
