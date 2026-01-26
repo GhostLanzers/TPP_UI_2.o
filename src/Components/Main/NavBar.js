@@ -196,7 +196,7 @@ export default function NavBar(props) {
             {/* Navbar Links */}
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               <Stack direction="row" spacing={1}>
-                <Button
+                {/* <Button
                   color="inherit"
                   size="small"
                   sx={
@@ -210,7 +210,7 @@ export default function NavBar(props) {
                   onClick={() => navigate("/admindashboard")}
                 >
                   Dev
-                </Button>
+                </Button> */}
                 <Button
                   color="inherit"
                   size="small"

@@ -413,7 +413,20 @@ export default function CandidateGrid() {
                      Select
                   </Button>
                </Grid>
-               <Grid item xs={12} sm={2} md={4} />
+               {/* <Grid item xs={12} sm={2} md={4} /> */}
+               {isAdmin && (
+                  <Grid item xs={12} sm={2} md={4}>
+                     <Button
+                        fullWidth
+                        variant="contained"
+                        color="error"
+                        className="gridButton"
+                        onClick={handleBulkDelete}
+                     >
+                        Bulk Delete
+                     </Button>
+                  </Grid>
+               )}
                <Grid item xs={12} sm={3}>
                   <TextField
                      size="small"
@@ -435,19 +448,6 @@ export default function CandidateGrid() {
                      Export Excel
                   </Button>
                </Grid>
-               {isAdmin && (
-                  <Grid item xs={12} sm={3} md={2}>
-                     <Button
-                        fullWidth
-                        variant="contained"
-                        color="error"
-                        className="gridButton"
-                        onClick={handleBulkDelete}
-                     >
-                        Bulk Delete
-                     </Button>
-                  </Grid>
-               )}
             </Grid>
          )}
 
