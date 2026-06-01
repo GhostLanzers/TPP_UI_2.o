@@ -35,34 +35,34 @@ export default function AddCompany() {
    ];
 
    const source = [
-      {
-         value: "Empanelled",
-         label: "Empanelled",
-      },
-      {
-         value: "Not to Approach",
-         label: "Need to Approach",
-      },
-      {
-         value: "In Process",
-         label: "In Process",
-      },
-      {
-         value: "Future",
-         label: "Future",
-      },
-      {
-         value: "Not Intrested",
-         label: "Not Intrested",
-      },
-      {
-         value: "Rejected",
-         label: "Rejected",
-      },
-      {
-         value: "No Response",
-         label: "No Response",
-      },
+     {
+       value: "Empanelled",
+       label: "Empanelled",
+     },
+     {
+       value: "Need to Approach",
+       label: "Need to Approach",
+     },
+     {
+       value: "In Process",
+       label: "In Process",
+     },
+     {
+       value: "Future",
+       label: "Future",
+     },
+     {
+       value: "Not Intrested",
+       label: "Not Intrested",
+     },
+     {
+       value: "Rejected",
+       label: "Rejected",
+     },
+     {
+       value: "No Response",
+       label: "No Response",
+     },
    ];
 
    // STATES HANDLING AND VARIABLES

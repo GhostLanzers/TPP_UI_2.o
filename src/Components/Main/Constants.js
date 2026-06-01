@@ -90,17 +90,18 @@ export const RESPONSE = [
 ].sort();
 export const PROCESS_TYPE = ["International", "Domestic"].sort();
 export const SELECT_STATUS = [
-   "Tracking",
-   "Non Tenure",
-   "Need to Bill",
-   "Billed",
-   "Process Rampdown",
-   "Client Rampdown",
-   "Invoice Processed",
-   "BGV Reject-Post",
-   "Tenure-Source Conflict",
-   "Billed & Tracking",
-   "Tracking & NR",
+  "Tracking",
+  "Non Tenure",
+  "Need to Bill",
+  "Billed",
+  "Process Rampdown",
+  "Client Rampdown",
+  "Invoice Processed",
+  "BGV Reject-Post",
+  "Tenure-Source Conflict",
+  "Billed & Tracking",
+  "Tracking & NR",
+  "Billed & Tracking-NR",
 ].sort();
 export const LANGUAGE_LEVEL = [
    "Poor",

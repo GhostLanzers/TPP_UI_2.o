@@ -223,7 +223,14 @@ export default function EditCandidate() {
          );
          flag = 1;
       }
-
+      if(["WD", "TAC", "GOOD"].includes(candidate.l1Assessment) && !candidate.companyId ){
+         toast.error("Missing Company Selection");     
+         flag = 1; 
+      }
+      if(["WD", "TAC", "GOOD"].includes(candidate.l1Assessment) && !candidate.roleId ){
+         toast.error("Missing Role Selection");     
+         flag = 1; 
+      }
       if (
          ["TAC", "GOOD"].includes(candidate.l2Assessment) &&
          !candidate.interviewStatus
@@ -1513,13 +1520,12 @@ export default function EditCandidate() {
                         candidate.interviewStatus === "Select" &&
                         [
                            "Tracking",
-
                            "Billed & Tracking",
                            "Billed",
                            "Billing",
                            "Need to Bill",
                            "Invoice Processed",
-                           "Billed & Tracking",
+                           "Tracking & NR",
                         ].includes(candidate.select) && (
                            <>
                               <Grid item xs={4}>
@@ -1835,6 +1841,7 @@ export default function EditCandidate() {
                            size="medium"
                            onClick={handleAddRemarks}
                            sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
+                           disabled={!editable &&remarks.trim() === "" ? true : false}
                         >
                            Post
                         </Button>

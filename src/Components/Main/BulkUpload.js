@@ -665,7 +665,10 @@ export default function Bulkupload() {
                try {
                   await AxiosInstance.post(
                      "/candidate/bulkinsert",
-                     { candidates: validCandidates },
+                     {
+                        candidates: validCandidates,
+                        uploadedFileName: file.name,
+                     },
                      { timeout: 60000 }
                   );
                   toast.update(toastId, {

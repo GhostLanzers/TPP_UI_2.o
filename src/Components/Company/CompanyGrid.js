@@ -239,7 +239,7 @@ export default function CompanyGrid() {
                         size="large"
                         onClick={() =>
                            navigate(
-                              `/CandidateGrid?type=${label.replace(" ", "")}&&companyId=${
+                              `/CandidateGrid?type=${label.replace(" ", "")}&companyId=${
                                  props.data._id
                               }`,
                            )
