@@ -1133,7 +1133,9 @@ export default function AddCandidate() {
                 </TextField>
               </Grid>
 
-              {["WD", "TAC", "GOOD"].includes(candidate.l1Assessment) && (
+              {["WD", "TAC", "GOOD", "NE-Fresher","NE-Experienced"].includes(
+                candidate.l1Assessment,
+              ) && (
                 <>
                   <Grid item xs={5}>
                     <Autocomplete
@@ -1442,13 +1444,15 @@ export default function AddCandidate() {
                           className="candidateEXD"
                           sx={{ width: "100%" }}
                           fullWidth
-                          value={dayjs(candidate.endTrackingDate)}
-                          onChange={(e) => {
-                            setCandidate({
-                              ...candidate,
-                              endTrackingDate: e,
-                            });
-                          }}
+                          value={dayjs(
+                            candidate.endTrackingDate
+                              ? candidate.endTrackingDate
+                              : dayjs(candidate.onboardingDate)?.add(
+                                  candidate.roleId?.endTrackingDate || 0,
+                                  "day",
+                                ),
+                          )}
+                          readOnly={true}
                         />
                       </LocalizationProvider>
                     </Grid>
@@ -1463,7 +1467,15 @@ export default function AddCandidate() {
                           className="candidateBillingDate"
                           sx={{ width: "100%" }}
                           fullWidth
-                          value={dayjs(candidate.billingDate?candidate.billingDate:dayjs(candidate.onboardingDate).add(candidate.roleId?.billingTerm || 0, 'day'))}
+                          value={dayjs(
+                            candidate.billingDate
+                              ? candidate.billingDate
+                              : dayjs(candidate.onboardingDate)?.add(
+                                  candidate.roleId?.billingTerm || 0,
+                                  "day",
+                                ),
+                          )}
+                          readOnly={true}
                         />
                       </LocalizationProvider>
                     </Grid>

@@ -102,6 +102,8 @@ export const SELECT_STATUS = [
   "Billed & Tracking",
   "Tracking & NR",
   "Billed & Tracking-NR",
+  "Replacement Done",
+  "Replacement & Tracking",
 ].sort();
 export const LANGUAGE_LEVEL = [
    "Poor",
