@@ -1274,24 +1274,50 @@ export default function AddCandidate() {
               {["TAC", "GOOD"].includes(candidate.l2Assessment) &&
                 candidate.interviewStatus === "Offer Drop" &&
                 !false && (
-                  <Grid item xs={12}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
-                      <DatePicker
-                        format="DD/MM/YYYY"
-                        label="Offer Drop Date"
-                        id="candidateOfferDropDate"
-                        sx={{ width: "100%" }}
+                  <>
+                    <Grid item xs={6}>
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
                         fullWidth
-                        onChange={(e) => {
-                          setCandidate({
-                            ...candidate,
-                            offerDropDate: e,
-                          });
-                        }}
-                        value={dayjs(candidate.offerDropDate)}
-                      />
-                    </LocalizationProvider>
-                  </Grid>
+                      >
+                        <DatePicker
+                          format="DD/MM/YYYY"
+                          label="Offer Drop Date"
+                          id="candidateOfferDropDate"
+                          sx={{ width: "100%" }}
+                          fullWidth
+                          onChange={(e) => {
+                            setCandidate({
+                              ...candidate,
+                              offerDropDate: e,
+                            });
+                          }}
+                          value={dayjs(candidate.offerDropDate)}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        fullWidth
+                      >
+                        <DatePicker
+                          format="DD/MM/YYYY"
+                          label="Selection Date"
+                          id="candidateSelectionDate"
+                          sx={{ width: "100%" }}
+                          fullWidth
+                          onChange={(e) => {
+                            setCandidate({
+                              ...candidate,
+                              selectDate: e,
+                            });
+                          }}
+                          value={dayjs(candidate.selectDate)}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                  </>
                 )}
               {["TAC", "GOOD"].includes(candidate.l2Assessment) &&
                 candidate.interviewStatus === "Select" &&
@@ -1353,6 +1379,7 @@ export default function AddCandidate() {
                   "Need to Bill",
                   "Invoice Processed",
                   "Tracking & NR",
+                  "Billed & Tracking-NR",
                 ].includes(candidate.select) && (
                   <>
                     <Grid item xs={4}>
@@ -1436,7 +1463,7 @@ export default function AddCandidate() {
                           className="candidateBillingDate"
                           sx={{ width: "100%" }}
                           fullWidth
-                          value={dayjs(candidate.billingDate)}
+                          value={dayjs(candidate.billingDate?candidate.billingDate:dayjs(candidate.onboardingDate).add(candidate.roleId?.billingTerm || 0, 'day'))}
                         />
                       </LocalizationProvider>
                     </Grid>

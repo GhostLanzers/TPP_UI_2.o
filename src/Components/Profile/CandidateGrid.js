@@ -209,154 +209,231 @@ export default function CandidateGrid() {
    };
 
    const column = [
-      {
-         headerName: "Actions",
-         width: isAdmin ? 180 : 150,
-         field: "assignedEmployee",
-         pinned: "left",
-         cellRenderer: (props) => {
-            if (!props.data) return null;
-            return (
-               <Grid container columnSpacing={0}>
-                  <Grid item xs={isAdmin ? 3 : 4}>
-                     <IconButton
-                        color="primary"
-                        size="small"
-                        href={`/EditCandidate/${props.data._id}?edit=false`}
-                     >
-                        <VisibilityTwoToneIcon />
-                     </IconButton>
-                  </Grid>
-                  <Grid item xs={isAdmin ? 3 : 4}>
-                     <IconButton
-                        size="small"
-                        color="warning"
-                        href={`/EditCandidate/${props.data._id}?edit=true`}
-                        disabled={
-                           !rtAccess
-                              ? false
-                              : props.data.assignedEmployee === empId
-                                ? true
-                                : false
-                        }
-                     >
-                        <BorderColorTwoToneIcon />
-                     </IconButton>
-                  </Grid>
-                  <Grid item xs={isAdmin ? 3 : 4}>
-                     <IconButton
-                        color="success"
-                        size="small"
-                        onClick={() => handleQuickEditPopup(props.data._id)}
-                     >
-                        <EditAttributesTwoToneIcon />
-                     </IconButton>
-                  </Grid>
-                  {isAdmin && (
-                     <Grid item xs={3}>
-                        <IconButton
-                           size="small"
-                           color="error"
-                           onClick={() => {
-                              setDeleteData({
-                                 name: props.data.fullName,
-                                 id: props.data.candidateId,
-                                 _id: props.data._id,
-                              });
-                              setOpen(true);
-                           }}
-                        >
-                           <DeleteSweepTwoToneIcon />
-                        </IconButton>
-                     </Grid>
-                  )}
+     {
+       headerName: "Actions",
+       width: isAdmin ? 180 : 150,
+       field: "assignedEmployee",
+       pinned: "left",
+       cellRenderer: (props) => {
+         if (!props.data) return null;
+         return (
+           <Grid container columnSpacing={0}>
+             <Grid item xs={isAdmin ? 3 : 4}>
+               <IconButton
+                 color="primary"
+                 size="small"
+                 href={`/EditCandidate/${props.data._id}?edit=false`}
+               >
+                 <VisibilityTwoToneIcon />
+               </IconButton>
+             </Grid>
+             <Grid item xs={isAdmin ? 3 : 4}>
+               <IconButton
+                 size="small"
+                 color="warning"
+                 href={`/EditCandidate/${props.data._id}?edit=true`}
+                 disabled={
+                   !rtAccess
+                     ? false
+                     : props.data.assignedEmployee === empId
+                       ? true
+                       : false
+                 }
+               >
+                 <BorderColorTwoToneIcon />
+               </IconButton>
+             </Grid>
+             <Grid item xs={isAdmin ? 3 : 4}>
+               <IconButton
+                 color="success"
+                 size="small"
+                 onClick={() => handleQuickEditPopup(props.data._id)}
+               >
+                 <EditAttributesTwoToneIcon />
+               </IconButton>
+             </Grid>
+             {isAdmin && (
+               <Grid item xs={3}>
+                 <IconButton
+                   size="small"
+                   color="error"
+                   onClick={() => {
+                     setDeleteData({
+                       name: props.data.fullName,
+                       id: props.data.candidateId,
+                       _id: props.data._id,
+                     });
+                     setOpen(true);
+                   }}
+                 >
+                   <DeleteSweepTwoToneIcon />
+                 </IconButton>
                </Grid>
-            );
-         },
-      },
-      // {
-      //   headerName: "Contacts",
-      //   width: 140,
-      //   pinned: "right",
-      //   cellRenderer: (props) => {
-      //     return (
-      //       <>
-      //         <Grid container columnSpacing={1}>
-      //           <Grid item xs={6}>
-      //             <IconButton
-      //               aria-label="delete"
-      //               color="success"
-      //               href={`https://wa.me/${props.data.mobile[0]}`}
-      //               target="_blank"
-      //             >
-      //               <WhatsAppIcon />
-      //             </IconButton>
-      //           </Grid>
-      //           <Grid item xs={6}>
-      //             <IconButton aria-label="delete" color="warning">
-      //               <CallIcon />
-      //             </IconButton>
-      //           </Grid>
-      //         </Grid>
-      //       </>
-      //     );
-      //   },
-      // },
-      { headerName: "Candidate Name", field: "fullName", pinned: "left" },
-      { headerName: "Candidate Number", field: "mobile", sortable: false },
-      { headerName: "Candidate ID", field: "candidateId" },
-      {
-         headerName: "Created By",
-         field: "createdByEmployee.name",
-         headerCheckboxSelection: true,
-         checkboxSelection: true,
-         headerCheckboxSelectionFilteredOnly: true,
-         width: 200,
-      },
-      { headerName: "Assigned to", field: "assignedEmployee.name" },
-      { headerName: "Candidate Email ID", field: "email" },
-      { headerName: "L1 Assessment", field: "l1Assessment" },
-      { headerName: "L2 Assessment", field: "l2Assessment" },
-      { headerName: "Company", field: "companyId.companyName" },
-      { headerName: "Role", field: "roleId.role" },
-      {
-         headerName: "Interview Date",
-         field: "interviewDate",
-         valueFormatter: (p) =>
-            p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-      },
-      { headerName: "Interview Status", field: "interviewStatus" },
-      { headerName: "Remarks", field: "remarks" },
-      { headerName: "Tenure Status", field: "select" },
-      {
-         headerName: "Onboarding Date",
-         field: "onboardingDate",
-         valueFormatter: (p) =>
-            p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-      },
-      {
-         headerName: "Next Tracking Date",
-         field: "nextTrackingDate",
-         valueFormatter: (p) =>
-            p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-      },
-      { headerName: "Rate", field: "rate", hide: rtAccess },
-      {
-         headerName: "Billing Date",
-         field: "billingDate",
-         valueFormatter: (p) =>
-            p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-      },
-      {
-         headerName: "Invoice Date",
-         field: "invoiceDate",
-         valueFormatter: (p) =>
-            p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-      },
-      {
-         headerName: "Invoice Number",
-         field: "invoiceNumber",
-      },
+             )}
+           </Grid>
+         );
+       },
+     },
+     // {
+     //   headerName: "Contacts",
+     //   width: 140,
+     //   pinned: "right",
+     //   cellRenderer: (props) => {
+     //     return (
+     //       <>
+     //         <Grid container columnSpacing={1}>
+     //           <Grid item xs={6}>
+     //             <IconButton
+     //               aria-label="delete"
+     //               color="success"
+     //               href={`https://wa.me/${props.data.mobile[0]}`}
+     //               target="_blank"
+     //             >
+     //               <WhatsAppIcon />
+     //             </IconButton>
+     //           </Grid>
+     //           <Grid item xs={6}>
+     //             <IconButton aria-label="delete" color="warning">
+     //               <CallIcon />
+     //             </IconButton>
+     //           </Grid>
+     //         </Grid>
+     //       </>
+     //     );
+     //   },
+     // },
+     { headerName: "Candidate Name", field: "fullName", pinned: "left" },
+     { headerName: "Candidate Number", field: "mobile", sortable: false },
+     { headerName: "Candidate ID", field: "candidateId" },
+     {
+       headerName: "Created By",
+       field: "createdByEmployee.name",
+       headerCheckboxSelection: true,
+       checkboxSelection: true,
+       headerCheckboxSelectionFilteredOnly: true,
+       width: 200,
+     },
+     { headerName: "Assigned to", field: "assignedEmployee.name" },
+     { headerName: "Candidate Email ID", field: "email" },
+     { headerName: "L1 Assessment", field: "l1Assessment" },
+     { headerName: "L2 Assessment", field: "l2Assessment" },
+     { headerName: "Company", field: "companyId.companyName" },
+     { headerName: "Role", field: "roleId.role" },
+     {
+       headerName: "Interview Date",
+       field: "interviewDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     { headerName: "Interview Status", field: "interviewStatus" },
+     { headerName: "Remarks", field: "remarks" },
+     { headerName: "Tenure Status", field: "select" },
+     {
+       headerName: "Onboarding Date",
+       field: "onboardingDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Next Tracking Date",
+       field: "nextTrackingDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     { headerName: "Rate", field: "rate", hide: rtAccess },
+     {
+       headerName: "Billing Date",
+       field: "billingDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Invoice Date",
+       field: "invoiceDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Invoice Number",
+       field: "invoiceNumber",
+     },
+     {
+       headerName: "Home Town",
+       field: "homeTown",
+     },
+     {
+       headerName: "Current City",
+       field: "currentCity",
+     },
+     {
+       headerName: "Languages",
+       field: "languages",
+       valueFormatter: (p) =>
+         p.value?.map((lang) => lang.language).join(", ") || "",
+     },
+     {
+       headerName: "Experience",
+       field: "experience",
+       valueFormatter: (p) =>
+         p.value
+           ?.filter((exp) => exp.companyName && exp.role)
+           .map((exp) => `${exp.companyName} (${exp.role})`)
+           .join(", ") || "",
+     },
+     {
+       headerName: "Created On",
+       field: "createdOn",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Last Updated On",
+       field: "lastUpdatedOn",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Assigned On",
+       field: "assignedOn",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "L1 Status Date",
+       field: "l1StatDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "L2 Status Date",
+       field: "l2StatDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Interview Status Date",
+       field: "interviewStatDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Tenure Status Date",
+       field: "tenureStatDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+     },
+     {
+       headerName: "Candidate Email",
+       field: "email",
+     },
+     {
+       headerName: "Tag",
+       field: "tag",
+     },
+     {
+       headerName: "Source",
+       field: "source",
+     },
    ];
 
    const defaultColDef = {
