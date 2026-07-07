@@ -41,7 +41,6 @@ import BorderColorTwoToneIcon from "@mui/icons-material/BorderColorTwoTone";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
-import ExcelExport from "../../Components/Main/ExcelExport";
 import AxiosInstance from "../Main/AxiosInstance";
 
 export default function EditEmpanelled() {
@@ -57,6 +56,7 @@ export default function EditEmpanelled() {
   const editable = searchParams.get("edit") === "true";
   const [deleteData, setDeleteData] = React.useState({});
   const [remarks, setRemarks] = React.useState("");
+  const gridRef = React.useRef(null);
   const [remarksList, setRemarksList] = React.useState([]);
   const [company, setCompany] = React.useState({
     companyName: "",
@@ -161,6 +161,17 @@ export default function EditEmpanelled() {
 
   // GRID HEADER/COLOUMS HANDLING
   const column = [
+    {
+      headerName: "",
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+      width: 60,
+      pinned: "left",
+      suppressMenu: true,
+      sortable: false,
+      filter: false,
+      headerCheckboxSelectionFilteredOnly: true,
+    },
     { headerName: "Role", field: "role", width: "150px" },
     { headerName: "Qualifications", field: "qualification", width: "150px" },
     { headerName: "Salary", field: "salary", width: "150px" },
@@ -205,12 +216,12 @@ export default function EditEmpanelled() {
                 size="small"
                 onClick={() =>
                   navigate(
-                    "/CandidateGrid?type=CompanyInterviewScheduled&&roleId=" +
+                    "/CandidateGrid?type=InterviewScheduled&roleId=" +
                       props.data._id,
                   )
                 }
               >
-                {props.data.inProcess}
+                {props.data.InterviewScheduled}
               </Button>
             </Grid>
           </>
@@ -229,11 +240,11 @@ export default function EditEmpanelled() {
                 size="small"
                 onClick={() =>
                   navigate(
-                    "/CandidateGrid?type=Rejects&&roleId=" + props.data._id,
+                    "/CandidateGrid?type=Rejects&roleId=" + props.data._id,
                   )
                 }
               >
-                {props.data.rejected}
+                {props.data.Rejects}
               </Button>
             </Grid>
           </>
@@ -252,12 +263,12 @@ export default function EditEmpanelled() {
                 size="small"
                 onClick={() =>
                   navigate(
-                    "/CandidateGrid?type=AwaitingJoining&&roleId=" +
+                    "/CandidateGrid?type=AwaitingJoining&roleId=" +
                       props.data._id,
                   )
                 }
               >
-                {props.data.awaiting}
+                {props.data.AwaitingJoining}
               </Button>
             </Grid>
           </>
@@ -276,11 +287,11 @@ export default function EditEmpanelled() {
                 size="small"
                 onClick={() =>
                   navigate(
-                    "/CandidateGrid?type=OfferDrop&&roleId=" + props.data._id,
+                    "/CandidateGrid?type=OfferDrop&roleId=" + props.data._id,
                   )
                 }
               >
-                {props.data.offerDrop}
+                {props.data.OfferDrop}
               </Button>
             </Grid>
           </>
@@ -299,11 +310,11 @@ export default function EditEmpanelled() {
                 size="small"
                 onClick={() =>
                   navigate(
-                    "/CandidateGrid?type=joined&&roleId=" + props.data._id,
+                    "/CandidateGrid?type=Joined&roleId=" + props.data._id,
                   )
                 }
               >
-                {props.data.joined}
+                {props.data.Joined}
               </Button>
             </Grid>
           </>
@@ -456,6 +467,63 @@ export default function EditEmpanelled() {
       handleClose();
     } catch (error) {}
   };
+
+  const handleRoleExcelExport = async () => {
+    const gridApi = gridRef.current?.api;
+    const selectedRows = gridApi?.getSelectedRows?.() || [];
+    const filteredRows = [];
+
+    if (gridApi) {
+      gridApi.forEachNodeAfterFilterAndSort((node) => {
+        if (node.data) filteredRows.push(node.data);
+      });
+    }
+
+    const visibleRows = access
+      ? company.roles
+      : company.roles.filter((role) => role.status === true);
+    const rowsToExport =
+      selectedRows.length > 0
+        ? selectedRows
+        : filteredRows.length > 0
+          ? filteredRows
+          : visibleRows;
+
+    if (!rowsToExport || rowsToExport.length === 0) {
+      toast.error("No roles selected");
+      return;
+    }
+
+    const toastId = toast.loading("Exporting Excel...");
+    try {
+      const response = await AxiosInstance.post(
+        "/company/roles/excelExport",
+        { ids: rowsToExport.map((row) => row._id), name: fileName },
+        { responseType: "blob" },
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${fileName || "roles"}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      toast.update(toastId, {
+        render: "Excel exported successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 4000,
+      });
+    } catch (error) {
+      toast.update(toastId, {
+        render: "Failed to export Excel",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+      });
+    }
+  };
+
   const checkNumber = async (num) => {
     try {
       const res = await AxiosInstance.get("/company/mobile/" + num);
@@ -1065,7 +1133,17 @@ export default function EditEmpanelled() {
                 />
               </Grid>
               <Grid item xs={4} md={2}>
-                <ExcelExport height="100%" excelData={{}} fileName={fileName} />
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    height: "100%",
+                    backgroundColor: alpha("#0000FF", 0.4),
+                  }}
+                  onClick={handleRoleExcelExport}
+                >
+                  Export
+                </Button>
               </Grid>
             </Grid>
             <Grid container xs={12}>
@@ -1080,6 +1158,7 @@ export default function EditEmpanelled() {
                 }}
               >
                 <AgGridReact
+                  ref={gridRef}
                   domLayout="autoHeight"
                   rowData={
                     access
@@ -1090,6 +1169,8 @@ export default function EditEmpanelled() {
                   defaultColDef={defaultColDef}
                   pagination={true}
                   paginationPageSize={100}
+                  rowSelection="multiple"
+                  suppressRowClickSelection={true}
                   selection={selection}
                   paginationPageSizeSelector={paginationPageSizeSelector}
                 />

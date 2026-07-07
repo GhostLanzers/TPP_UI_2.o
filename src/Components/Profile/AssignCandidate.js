@@ -12,6 +12,14 @@ import {
   Autocomplete,
   alpha,
   Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -49,7 +57,7 @@ export default function AssignCandidate() {
     maxYOP: null,
     language: [],
     all: [],
-    any: [],
+    any: [[]],
     companyName: null,
     role: null,
     companyId: null,
@@ -82,7 +90,9 @@ export default function AssignCandidate() {
 
   // Input values for filtered select all
   const [allInputValue, setAllInputValue] = useState("");
-  const [anyInputValue, setAnyInputValue] = useState("");
+  const [anyInputValues, setAnyInputValues] = useState([""]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   // API CALLS HANDLING
   React.useEffect(() => {
@@ -120,13 +130,132 @@ export default function AssignCandidate() {
 
   const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+  const formatPreviewValue = (value) => {
+    if (value === null || value === undefined || value === "") return null;
+    if (Array.isArray(value)) {
+      const filtered = value.filter(
+        (item) => item !== null && item !== undefined && item !== "",
+      );
+      if (filtered.some(Array.isArray)) {
+        return filtered
+          .map((group, index) => {
+            const items = Array.isArray(group)
+              ? group.filter(
+                  (item) => item !== null && item !== undefined && item !== "",
+                )
+              : [];
+            return items.length > 0
+              ? `Set ${index + 1}: ${items.join(", ")}`
+              : null;
+          })
+          .filter(Boolean)
+          .join(" | ");
+      }
+      return filtered.length > 0 ? filtered.join(", ") : null;
+    }
+    if (typeof value?.format === "function") {
+      return value.format("DD/MM/YYYY");
+    }
+    return String(value);
+  };
+
+  const getSelectedFilterSummary = () => {
+    const summary = [];
+
+    const pushField = (label, value) => {
+      const formattedValue = formatPreviewValue(value);
+      if (formattedValue) {
+        summary.push({ label, value: formattedValue });
+      }
+    };
+
+    pushField("Full Name", candidate.fullName);
+    pushField("Mobile Number", candidate.mobile);
+    pushField("Email ID", candidate.email);
+    pushField("Home Town", candidate.homeTown);
+    pushField("Current City", candidate.currentCity);
+    pushField("Qualification", candidate.qualification);
+    pushField("Language", candidate.language);
+    pushField("All Skills", candidate.all);
+    pushField("Any Skills", candidate.any);
+    pushField("Previous Company", candidate.companyName);
+    pushField("Previous Role", candidate.role);
+    pushField("L1 Assessment", candidate.l1Assessment);
+    pushField("L2 Assessment", candidate.l2Assessment);
+    pushField("Remarks", candidate.remarks);
+    pushField("Interview Status", candidate.interviewStatus);
+    pushField("Select Status", candidate.select);
+    pushField("Created By", candidate.createdByEmployee);
+    pushField("Assigned To", candidate.assignedEmployee);
+    pushField("Minimum YOP", candidate.minYOP);
+    pushField("Maximum YOP", candidate.maxYOP);
+    pushField("Minimum Interview Date", candidate.mininterviewDate);
+    pushField("Maximum Interview Date", candidate.maxinterviewDate);
+    pushField("Created On", candidate.createdOn);
+    pushField("Last Updated On", candidate.lastUpdatedOn);
+    pushField("Assigned On", candidate.assignedOn);
+    pushField("L1 Set Date", candidate.l1StatDate);
+    pushField("L2 Set Date", candidate.l2StatDate);
+    pushField("Interview Set Date", candidate.interviewStatDate);
+    pushField("Tenure Set Date", candidate.tenureStatDate);
+    pushField("Select Date", candidate.selectDate);
+    pushField("Offer Drop Date", candidate.offerDropDate);
+    pushField("Non Tenure Date", candidate.nonTenureDate);
+    pushField("Invoice Credit Date", candidate.invoiceCreditDate);
+    pushField("End Tracking Date", candidate.endTrackingDate);
+    pushField("Source", candidate.source);
+    pushField("Tag", candidate.tag);
+    pushField("Uploaded File Name", candidate.uploadedFileName);
+
+    return summary.length > 0
+      ? summary
+      : [
+          {
+            label: "No filters selected",
+            value: "The form is empty. You can still continue.",
+          },
+        ];
+  };
+
+  const handlePreviewSubmit = () => {
+    setSelectedFilters(getSelectedFilterSummary());
+    setPreviewOpen(true);
+  };
+
+  const handleAddAnyGroup = () => {
+    setCandidate({ ...candidate, any: [...candidate.any, []] });
+    setAnyInputValues([...anyInputValues, ""]);
+  };
+
+  const handleRemoveAnyGroup = (groupIndex) => {
+    const updatedGroups = candidate.any.filter(
+      (_, index) => index !== groupIndex,
+    );
+    setCandidate({
+      ...candidate,
+      any: updatedGroups.length > 0 ? updatedGroups : [[]],
+    });
+
+    const updatedInputValues = anyInputValues.filter(
+      (_, index) => index !== groupIndex,
+    );
+    setAnyInputValues(
+      updatedInputValues.length > 0 ? updatedInputValues : [""],
+    );
+  };
+
+  const handleAnyGroupChange = (groupIndex, value) => {
+    const updatedGroups = [...candidate.any];
+    updatedGroups[groupIndex] = value;
+    setCandidate({ ...candidate, any: updatedGroups });
+  };
+
   const handleAssignCandidate = async () => {
     var query = [];
     if (candidate.fullName) {
       const fullNameTerms = candidate.fullName
-            .filter((name) => typeof name === "string" && name.trim())
-            .map((name) => name.trim())
-       
+        .filter((name) => typeof name === "string" && name.trim())
+        .map((name) => name.trim());
 
       if (fullNameTerms.length > 0) {
         const fullNameQueries = fullNameTerms.map((term) => ({
@@ -206,12 +335,25 @@ export default function AssignCandidate() {
           $in: candidate.currentCity,
         },
       });
-    if (candidate.any.length > 0)
-      query.push({
-        skills: {
-          $in: candidate.any,
-        },
-      });
+    const anySkillGroups = (candidate.any || [])
+      .map((group) =>
+        Array.isArray(group)
+          ? group.filter((item) => typeof item === "string" && item.trim())
+          : [],
+      )
+      .filter((group) => group.length > 0);
+
+    if (anySkillGroups.length > 0) {
+      const anySkillQuery =
+        anySkillGroups.length === 1
+          ? { skills: { $in: anySkillGroups[0] } }
+          : {
+              $or: anySkillGroups.map((group) => ({
+                skills: { $in: group },
+              })),
+            };
+      query.push(anySkillQuery);
+    }
     if (candidate.createdByEmployee.length > 0) {
       query.push({
         createdByEmployee: {
@@ -344,6 +486,7 @@ export default function AssignCandidate() {
         finalq = { skills: { $all: [...candidate.all] } };
     }
 
+    setPreviewOpen(false);
     navigate("/AssignCandidateGrid", {
       replace: true,
       state: {
@@ -368,15 +511,23 @@ export default function AssignCandidate() {
 
   const anyFilteredOptions = useMemo(() => {
     return skillsList.filter((option) =>
-      option.toLowerCase().includes(anyInputValue.toLowerCase()),
+      option
+        .toLowerCase()
+        .includes(
+          anyInputValues[anyInputValues.length - 1]?.toLowerCase() || "",
+        ),
     );
-  }, [anyInputValue, skillsList]);
+  }, [anyInputValues, skillsList]);
 
   const handleSelectAnyFiltered = () => {
+    const targetIndex = Math.max(0, candidate.any.length - 1);
     const map = new Map();
-    candidate.any.forEach((item) => map.set(item, item));
+    (candidate.any[targetIndex] || []).forEach((item) => map.set(item, item));
     anyFilteredOptions.forEach((item) => map.set(item, item));
-    setCandidate({ ...candidate, any: Array.from(map.values()) });
+
+    const updatedGroups = [...candidate.any];
+    updatedGroups[targetIndex] = Array.from(map.values());
+    setCandidate({ ...candidate, any: updatedGroups });
   };
 
   // JSX CODE
@@ -664,37 +815,85 @@ export default function AssignCandidate() {
                 <Button variant="contained" onClick={handleSelectAnyFiltered}>
                   Select ANY Filtered
                 </Button>
-                <Autocomplete
-                  multiple
-                  freeSolo
-                  id="candidateSkills"
-                  options={skillsList.map((skill) => skill)}
-                  filterSelectedOptions
-                  value={candidate.any}
-                  inputValue={anyInputValue}
-                  onInputChange={(event, newInputValue) => {
-                    setAnyInputValue(newInputValue);
-                  }}
-                  onChange={(e, v) => setCandidate({ ...candidate, any: v })}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => {
-                      const { key, ...tagProps } = getTagProps({
-                        index,
-                      });
-                      return (
-                        <Chip
+                {candidate.any.map((group, groupIndex) => (
+                  <Grid
+                    container
+                    spacing={1}
+                    key={`any-skill-group-${groupIndex}`}
+                  >
+                    <Grid item xs={9}>
+                      <Autocomplete
+                        multiple
+                        freeSolo
+                        id={`candidateAnySkills-${groupIndex}`}
+                        options={skillsList.map((skill) => skill)}
+                        filterSelectedOptions
+                        value={group}
+                        sx={{
+                          height: "100%",
+                        }}
+                        inputValue={anyInputValues[groupIndex] || ""}
+                        onInputChange={(event, newInputValue) => {
+                          const updatedInputs = [...anyInputValues];
+                          updatedInputs[groupIndex] = newInputValue;
+                          setAnyInputValues(updatedInputs);
+                        }}
+                        onChange={(e, v) => handleAnyGroupChange(groupIndex, v)}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => {
+                            const { key, ...tagProps } = getTagProps({
+                              index,
+                            });
+                            return (
+                              <Chip
+                                variant="outlined"
+                                label={option}
+                                key={key}
+                                {...tagProps}
+                              />
+                            );
+                          })
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={
+                              groupIndex === 0
+                                ? "Any"
+                                : `Any Set ${groupIndex + 1}`
+                            }
+                            sx={{
+                              height: "100%",
+                            }}
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        startIcon={<ControlPointIcon />}
+                        onClick={handleAddAnyGroup}
+                      >
+                        Add
+                      </Button>
+                      {candidate.any.length > 1 && (
+                        <Button
+                          fullWidth
                           variant="outlined"
-                          label={option}
-                          key={key}
-                          {...tagProps}
-                        />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label="Any" />
-                  )}
-                />
+                          color="error"
+                          size="large"
+                          startIcon={<RemoveCircleOutlineIcon />}
+                          onClick={() => handleRemoveAnyGroup(groupIndex)}
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </Grid>
+                  </Grid>
+                ))}
               </Stack>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -1196,7 +1395,7 @@ export default function AssignCandidate() {
                 size="large"
                 variant="contained"
                 sx={{ backgroundColor: alpha("#0000FF", 0.5) }}
-                onClick={handleAssignCandidate}
+                onClick={handlePreviewSubmit}
               >
                 SUBMIT
               </Button>
@@ -1211,6 +1410,37 @@ export default function AssignCandidate() {
           }}
         />
       </Card>
+
+      <Dialog
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Review Selected Filters</DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Please review the selected fields before continuing.
+          </Typography>
+          <List dense>
+            {selectedFilters.map((item) => (
+              <ListItem key={item.label} alignItems="flex-start">
+                <ListItemText
+                  primary={item.label}
+                  secondary={item.value}
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPreviewOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleAssignCandidate}>
+            Confirm & Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

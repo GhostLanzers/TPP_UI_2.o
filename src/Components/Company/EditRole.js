@@ -18,6 +18,9 @@ import {
   alpha,
 } from "@mui/material";
 import { toast } from "react-toastify";
+
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 
 import AxiosInstance from "../Main/AxiosInstance";
@@ -49,7 +52,7 @@ export default function EditRole() {
     happens: "",
     experience: "",
     mandatorySkills: [],
-    optionalSkills: [],
+    optionalSkills: [[]],
     qualification: [],
     shift: "",
     salary: "",
@@ -96,7 +99,12 @@ export default function EditRole() {
         );
         const extraRes = await AxiosInstance.get("/extra/all");
         setCompany(res.data.data);
-        setRole(roleres.data.data[0]);
+        setRole({
+          ...roleres.data.data[0],
+          optionalSkills: normalizeOptionalSkills(
+            roleres.data.data[0]?.optionalSkills,
+          ),
+        });
 
         extraRes.data.forEach(({ _id, data }) => {
           if (_id === "Skills") setSkillsList(data);
@@ -110,6 +118,36 @@ export default function EditRole() {
     fetchData();
   }, []);
 
+  const normalizeOptionalSkills = (value) => {
+    if (Array.isArray(value)) {
+      if (value.every((item) => Array.isArray(item))) {
+        return value.map((group) => (Array.isArray(group) ? group : []));
+      }
+      return [value.filter((item) => typeof item === "string")];
+    }
+    return [[]];
+  };
+
+  const handleAddOptionalSkillsGroup = () => {
+    setRole({ ...role, optionalSkills: [...role.optionalSkills, []] });
+  };
+
+  const handleRemoveOptionalSkillsGroup = (groupIndex) => {
+    const updatedGroups = role.optionalSkills.filter(
+      (_, index) => index !== groupIndex,
+    );
+    setRole({
+      ...role,
+      optionalSkills: updatedGroups.length > 0 ? updatedGroups : [[]],
+    });
+  };
+
+  const handleOptionalSkillsGroupChange = (groupIndex, value) => {
+    const updatedGroups = [...role.optionalSkills];
+    updatedGroups[groupIndex] = value;
+    setRole({ ...role, optionalSkills: updatedGroups });
+  };
+
   const handleEditRole = async () => {
     try {
       await AxiosInstance.patch("/company/" + companyId + "/role/" + id, {
@@ -120,7 +158,7 @@ export default function EditRole() {
         data: [
           ...new Set([
             ...role.mandatorySkills,
-            ...role.optionalSkills,
+            ...role.optionalSkills.flatMap((group) => group || []),
             ...skillsList,
           ]),
         ],
@@ -598,34 +636,109 @@ export default function EditRole() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Autocomplete
-                  multiple
-                  freeSolo
-                  id="roleSkills"
-                  options={skillsList.map((skill) => skill)}
-                  filterSelectedOptions
-                  readOnly={!editable}
-                  value={role.optionalSkills}
-                  onChange={(e, v) => setRole({ ...role, optionalSkills: v })}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => {
-                      const { key, ...tagProps } = getTagProps({
-                        index,
-                      });
-                      return (
-                        <Chip
-                          variant="outlined"
-                          label={option}
-                          key={key}
-                          {...tagProps}
-                        />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label="Optional Skill Requirement" />
-                  )}
-                />
+                <Grid container spacing={1}>
+                  {role.optionalSkills.map((group, groupIndex) => (
+                    <Grid
+                      item
+                      xs={12}
+                      key={`optional-skill-group-${groupIndex}`}
+                    >
+                      <Grid container spacing={1} alignItems="center">
+                        <Grid item xs={9} >
+                          <Autocomplete
+                            multiple
+                            freeSolo
+                            id={`roleOptionalSkills-${groupIndex}`}
+                            options={skillsList.map((skill) => skill)}
+                            filterSelectedOptions
+                            readOnly={!editable}
+                            value={group}
+                            onChange={(e, v) =>
+                              handleOptionalSkillsGroupChange(groupIndex, v)
+                            }
+                            renderTags={(value, getTagProps) =>
+                              value.map((option, index) => {
+                                const { key, ...tagProps } = getTagProps({
+                                  index,
+                                });
+                                return (
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    key={key}
+                                    {...tagProps}
+                                  />
+                                );
+                              })
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Optional Skill Requirement"
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={3} >
+                          {/* <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleAddOptionalSkillsGroup}
+                            disabled={!editable}
+                          >
+                            +
+                          </Button> */}
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            sx={{
+                              backgroundColor: alpha("#0000FF", 0.5),
+                              height: "100%",
+                            }}
+                            endIcon={<ControlPointIcon />}
+                            onClick={handleAddOptionalSkillsGroup}
+                            disabled={!editable}
+                          >
+                            Add
+                          </Button>
+                          {role.optionalSkills.length > 1 && (
+                            // <Button
+                            //   variant="outlined"
+                            //   color="error"
+                            //   size="small"
+                            //   onClick={() =>
+                            //     handleRemoveOptionalSkillsGroup(groupIndex)
+                            //   }
+                            //   disabled={!editable}
+                            //   sx={{ ml: 1 }}
+                            // >
+                            //   -
+                            // </Button>
+                            <Button
+                              fullWidth
+                              variant="contained"
+                              color="error"
+                              size="large"
+                              sx={{
+                                height: "100%",
+                                backgroundColor: alpha("#FF0000", 0.6),
+                              }}
+                              endIcon={<RemoveCircleOutlineIcon />}
+                              onClick={() =>
+                                handleRemoveOptionalSkillsGroup(groupIndex)
+                              }
+                              disabled={!editable}
+                            >
+                              Remove
+                            </Button>
+                          )}
+                        </Grid>
+                        
+                      </Grid>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField

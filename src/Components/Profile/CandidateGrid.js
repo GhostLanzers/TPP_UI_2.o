@@ -70,6 +70,7 @@ export default function CandidateGrid() {
    if (searchParams.has("roleId"))
       paramsObj.roleId = searchParams.get("roleId");
    const urlParams = new URLSearchParams(paramsObj).toString();
+   console.log("urlParams", urlParams);
    const [loadingToastId, setLoadingToastId] = useState(null);
    const url = `/candidate/data/${type}${urlParams ? "?" + urlParams : ""}`;
   const paginationPageSizeSelector = React.useMemo(() => {
@@ -314,7 +315,7 @@ export default function CandidateGrid() {
        width: 200,
      },
      { headerName: "Assigned to", field: "assignedEmployee.name" },
-     { headerName: "Candidate Email ID", field: "email" },
+
      { headerName: "L1 Assessment", field: "l1Assessment" },
      { headerName: "L2 Assessment", field: "l2Assessment" },
      { headerName: "Company", field: "companyId.companyName" },
@@ -323,7 +324,7 @@ export default function CandidateGrid() {
        headerName: "Interview Date",
        field: "interviewDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      { headerName: "Interview Status", field: "interviewStatus" },
      { headerName: "Remarks", field: "remarks" },
@@ -332,26 +333,32 @@ export default function CandidateGrid() {
        headerName: "Onboarding Date",
        field: "onboardingDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Next Tracking Date",
        field: "nextTrackingDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+     },
+     {
+       headerName: "End Tracking Date",
+       field: "endTrackingDate",
+       valueFormatter: (p) =>
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      { headerName: "Rate", field: "rate", hide: rtAccess },
      {
        headerName: "Billing Date",
        field: "billingDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Invoice Date",
        field: "invoiceDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Invoice Number",
@@ -384,43 +391,43 @@ export default function CandidateGrid() {
        headerName: "Created On",
        field: "createdOn",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Last Updated On",
        field: "lastUpdatedOn",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Assigned On",
        field: "assignedOn",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "L1 Status Date",
        field: "l1StatDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "L2 Status Date",
        field: "l2StatDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Interview Status Date",
        field: "interviewStatDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Tenure Status Date",
        field: "tenureStatDate",
        valueFormatter: (p) =>
-         p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
+         p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
      },
      {
        headerName: "Candidate Email",
@@ -709,7 +716,7 @@ export default function CandidateGrid() {
                className="calenderMUI"
                sx={{ width: "100%", marginBottom: "2vh" }}
                fullWidth
-               format="DD/MM/YYYY"
+               format="DD/MM/YYYY:HH:mm:ss"
                value={dayjs(editData.interviewDate)}
                onChange={(e) => {
                  setEditData({
@@ -729,7 +736,7 @@ export default function CandidateGrid() {
                className="calenderMUI"
                sx={{ width: "100%", marginBottom: "2vh" }}
                fullWidth
-               format="DD/MM/YYYY"
+               format="DD/MM/YYYY:HH:mm:ss"
                value={dayjs(editData.nextTrackingDate)}
                onChange={(e) => {
                  setEditData({
