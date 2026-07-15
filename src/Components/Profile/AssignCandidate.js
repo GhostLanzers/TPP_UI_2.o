@@ -185,8 +185,14 @@ export default function AssignCandidate() {
     pushField("Remarks", candidate.remarks);
     pushField("Interview Status", candidate.interviewStatus);
     pushField("Select Status", candidate.select);
-    pushField("Created By", candidate.createdByEmployee);
-    pushField("Assigned To", candidate.assignedEmployee);
+    pushField("Created By", candidate.createdByEmployee.map((empId) => {
+      const employee = employeeList.find((emp) => emp._id === empId);
+      return employee ? employee.name : empId;
+    }));
+    pushField("Assigned To", candidate.assignedEmployee.map((empId) => {
+      const employee = employeeList.find((emp) => emp._id === empId);
+      return employee ? employee.name : empId;
+    }));
     pushField("Minimum YOP", candidate.minYOP);
     pushField("Maximum YOP", candidate.maxYOP);
     pushField("Minimum Interview Date", candidate.mininterviewDate);

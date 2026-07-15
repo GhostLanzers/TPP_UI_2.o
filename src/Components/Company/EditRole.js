@@ -237,7 +237,7 @@ export default function EditRole() {
                 <TextField
                   id="rolePeriod"
                   select
-                  label="Job Type"
+                  label="Notice Period/ Buyout"
                   fullWidth
                   InputProps={{
                     readOnly: !editable,
@@ -271,7 +271,7 @@ export default function EditRole() {
                 <TextField
                   id="processWorkType"
                   select
-                  label="Notice Period/ Buyout"
+                  label="Job Type"
                   fullWidth
                   InputProps={{
                     readOnly: !editable,
@@ -644,7 +644,7 @@ export default function EditRole() {
                       key={`optional-skill-group-${groupIndex}`}
                     >
                       <Grid container spacing={1} alignItems="center">
-                        <Grid item xs={9} >
+                        <Grid item xs={9}>
                           <Autocomplete
                             multiple
                             freeSolo
@@ -679,7 +679,7 @@ export default function EditRole() {
                             )}
                           />
                         </Grid>
-                        <Grid item xs={3} >
+                        <Grid item xs={3}>
                           {/* <Button
                             variant="outlined"
                             size="small"
@@ -734,7 +734,6 @@ export default function EditRole() {
                             </Button>
                           )}
                         </Grid>
-                        
                       </Grid>
                     </Grid>
                   ))}

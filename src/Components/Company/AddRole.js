@@ -402,7 +402,7 @@ export default function AddRole() {
                 <TextField
                   id="rolePeriod"
                   select
-                  label="Job Type"
+                  label="Notice Period/ Buyout"
                   fullWidth
                   value={role.period}
                   onChange={(e) => setRole({ ...role, period: e.target.value })}
@@ -429,7 +429,7 @@ export default function AddRole() {
               <Grid item xs={12} md={6}>
                 <TextField
                   id="processWorkType"
-                  label="Notice Period/ Buyout"
+                  label="Job Type"
                   variant="outlined"
                   fullWidth
                   value={role.processWorkType}
@@ -745,7 +745,7 @@ export default function AddRole() {
                       key={`optional-skill-group-${groupIndex}`}
                     >
                       <Grid container spacing={1} alignItems="center">
-                        <Grid item xs={9} >
+                        <Grid item xs={9}>
                           <Autocomplete
                             multiple
                             freeSolo
@@ -779,7 +779,7 @@ export default function AddRole() {
                             )}
                           />
                         </Grid>
-                        <Grid item xs={3} >
+                        <Grid item xs={3}>
                           {/* <Button
                             variant="outlined"
                             size="small"
@@ -796,40 +796,38 @@ export default function AddRole() {
                             }}
                             endIcon={<ControlPointIcon />}
                             onClick={handleAddOptionalSkillsGroup}
-                            
                           >
                             Add
                           </Button>
 
                           {role.optionalSkills.length > 1 && (
-                           //  <Button
-                           //    variant="outlined"
-                           //    color="error"
-                           //    size="small"
-                           //    onClick={() =>
-                           //      handleRemoveOptionalSkillsGroup(groupIndex)
-                           //    }
-                           //    sx={{ ml: 1 }}
-                           //  >
-                           //    -
-                           //  </Button>
+                            //  <Button
+                            //    variant="outlined"
+                            //    color="error"
+                            //    size="small"
+                            //    onClick={() =>
+                            //      handleRemoveOptionalSkillsGroup(groupIndex)
+                            //    }
+                            //    sx={{ ml: 1 }}
+                            //  >
+                            //    -
+                            //  </Button>
                             <Button
-                            fullWidth
-                            variant="contained"
-                            color="error"
-                            size="large"
-                            sx={{
-                              height: "100%",
-                              backgroundColor: alpha("#FF0000", 0.6),
-                            }}
-                            endIcon={<RemoveCircleOutlineIcon />}
-                            onClick={() =>
-                              handleRemoveOptionalSkillsGroup(groupIndex)
-                            }
-                            
-                          >
-                            Remove
-                          </Button>
+                              fullWidth
+                              variant="contained"
+                              color="error"
+                              size="large"
+                              sx={{
+                                height: "100%",
+                                backgroundColor: alpha("#FF0000", 0.6),
+                              }}
+                              endIcon={<RemoveCircleOutlineIcon />}
+                              onClick={() =>
+                                handleRemoveOptionalSkillsGroup(groupIndex)
+                              }
+                            >
+                              Remove
+                            </Button>
                           )}
                         </Grid>
                       </Grid>

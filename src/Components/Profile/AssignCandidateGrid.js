@@ -138,60 +138,144 @@ export default function AssignCandidateGrid(props) {
         );
       },
     },
-    {
-      headerName: "Created By",
-      field: "createdByEmployee.name",
-      headerCheckboxSelection: true,
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-    },
-    { headerName: "Assigned to", field: "assignedEmployee.name" },
-    { headerName: "Candidate Name", field: "fullName" },
-    { headerName: "Candidate ID", field: "candidateId" },
-    { headerName: "Candidate Number", field: "mobile", sortable: false },
-    { headerName: "Candidate Email ID", field: "email" },
-    { headerName: "L1 Assessment", field: "l1Assessment" },
-    { headerName: "L2 Assessment", field: "l2Assessment" },
-    { headerName: "Company", field: "companyId.companyName" },
-    { headerName: "Role", field: "roleId.role" },
-    {
-      headerName: "Interview Date",
-      field: "interviewDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    { headerName: "Interview Status", field: "interviewStatus" },
-    { headerName: "Remarks", field: "remarks" },
-    { headerName: "Tenure Status", field: "select" },
-    {
-      headerName: "Onboarding Date",
-      field: "onboardingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Next Tracking Date",
-      field: "nextTrackingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    { headerName: "Rate", field: "rate", hide: !isAdmin },
-    {
-      headerName: "Billing Date",
-      field: "billingDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Invoice Date",
-      field: "invoiceDate",
-      valueFormatter: (p) =>
-        p.value ? dayjs(p.value).format("DD/MM/YYYY") : p.value,
-    },
-    {
-      headerName: "Invoice Number",
-      field: "invoiceNumber",
-    },
+    { headerName: "Candidate Name", field: "fullName", pinned: "left" },
+         { headerName: "Candidate Number", field: "mobile", sortable: false },
+         { headerName: "Candidate ID", field: "candidateId" },
+         {
+           headerName: "Created By",
+           field: "createdByEmployee.name",
+           headerCheckboxSelection: true,
+           checkboxSelection: true,
+           headerCheckboxSelectionFilteredOnly: true,
+           width: 200,
+         },
+         { headerName: "Assigned to", field: "assignedEmployee.name" },
+    
+         { headerName: "L1 Assessment", field: "l1Assessment" },
+         { headerName: "L2 Assessment", field: "l2Assessment" },
+         { headerName: "Company", field: "companyId.companyName" },
+         { headerName: "Role", field: "roleId.role" },
+         {
+           headerName: "Interview Date",
+           field: "interviewDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         { headerName: "Interview Status", field: "interviewStatus" },
+         { headerName: "Remarks", field: "remarks" },
+         { headerName: "Tenure Status", field: "select" },
+         {
+           headerName: "Onboarding Date",
+           field: "onboardingDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Next Tracking Date",
+           field: "nextTrackingDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "End Tracking Date",
+           field: "endTrackingDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         { headerName: "Rate", field: "rate", hide: rtAccess },
+         {
+           headerName: "Billing Date",
+           field: "billingDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Invoice Date",
+           field: "invoiceDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Invoice Number",
+           field: "invoiceNumber",
+         },
+         {
+           headerName: "Home Town",
+           field: "homeTown",
+         },
+         {
+           headerName: "Current City",
+           field: "currentCity",
+         },
+         {
+           headerName: "Languages",
+           field: "languages",
+           valueFormatter: (p) =>
+             p.value?.map((lang) => lang.language).join(", ") || "",
+         },
+         {
+           headerName: "Experience",
+           field: "experience",
+           valueFormatter: (p) =>
+             p.value
+               ?.filter((exp) => exp.companyName && exp.role)
+               .map((exp) => `${exp.companyName} (${exp.role})`)
+               .join(", ") || "",
+         },
+         {
+           headerName: "Created On",
+           field: "createdOn",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Last Updated On",
+           field: "lastUpdatedOn",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Assigned On",
+           field: "assignedOn",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "L1 Status Date",
+           field: "l1StatDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "L2 Status Date",
+           field: "l2StatDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Interview Status Date",
+           field: "interviewStatDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Tenure Status Date",
+           field: "tenureStatDate",
+           valueFormatter: (p) =>
+             p.value ? dayjs(p.value).format("DD/MM/YYYY:HH:mm:ss") : p.value,
+         },
+         {
+           headerName: "Candidate Email",
+           field: "email",
+         },
+         {
+           headerName: "Tag",
+           field: "tag",
+         },
+         {
+           headerName: "Source",
+           field: "source",
+         },
   ];
 
   const defaultColDef = {
